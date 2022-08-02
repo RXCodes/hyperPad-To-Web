@@ -1867,6 +1867,12 @@ Creeper kingdom stars <a style="color:black" href="https://youtube.com/channel/U
     if (internalData.authorized) {
 	  document.getElementById("loggedInNav").style.display = "block";
       document.getElementById("registerNav").style.display = "none";
+      
+      // display discord profile
+      document.getElementById("discordUsername").innerHTML = discordAcc.username + "#" + discordAcc.discriminator;
+      document.getElementById("discordContributions").innerHTML = "0 Contributions - 0 Verified"
+      document.getElementById("userIcon").src = "https://discord.com/avatars/" + discordAcc.id + "/" + discordAcc.avatar + ".png";
+      
     } else {
 	  document.getElementById("loggedInNav").style.display = "none";
       document.getElementById("registerNav").style.display = "block";
@@ -1912,19 +1918,34 @@ Creeper kingdom stars <a style="color:black" href="https://youtube.com/channel/U
     const params = new URLSearchParams(query);
     var accessToken = params.get('access_token');
     var tokenType = params.get('token_type');
+    let token = tokenType + " " + accessToken;
+    console.log(token);
     if (accessToken === null) {
       accessToken = localStorage.getItem("accessToken");
       tokenType = localStorage.getItem("tokenType");
     }
     if (accessToken == "null" || !accessToken) {
-  	  internalData.authorized = false;
+  	  if (internalData.authorized) {
+        try {
+          let data = await (await fetch('https://discord.com/api/users/@me', {
+            headers: { authorization: internalData.auth },
+            method: "GET"
+          })).json();
+          if (data.code == 0) {
+            throw data.message;
+          }
+          discordAcc = data;
+          console.debug(data);
+          internalData.authorized = true;
+        } catch(e) {
+          internalData.authorized = false;
+        }
+      }
 	} else {
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("tokenType", tokenType);
       
       // fetch discord account
-      let token = tokenType + " " + accessToken;
-      console.log(token);
       try {
         let data = await (await fetch('https://discord.com/api/users/@me', {
           headers: { authorization: token },
@@ -1933,6 +1954,7 @@ Creeper kingdom stars <a style="color:black" href="https://youtube.com/channel/U
         if (data.code == 0) {
           throw data.message;
 		}
+        await fetch("https://hyperpadtoweb.rxcodes.repl.co/authorize?token=" + tokenType + "%20" + accessToken);
         discordAcc = data;
         console.debug(data);
         internalData.authorized = true;
@@ -1945,6 +1967,8 @@ Creeper kingdom stars <a style="color:black" href="https://youtube.com/channel/U
     if (!internalData.authorized) {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('tokenType');
+    } else {
+      
     }
     
     finishLoad();
