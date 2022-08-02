@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<html>
+  <head>
+   <meta name="title" content="hyperPad to Web Project">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <title>hyperPad to Web Project</title>
+  <meta name="description" content="Contribute to pushing hyperPad to the web! Created by RXCodes." />
+  <meta property="fb:app_id" content="735878343101853" />
+  <meta property="og:title" content="hyperPad to Web" />
+  <meta property="og:site_name" content="hyperPad to Web" />
+  <meta property="og:description" content="Contribute to pushing hyperPad to the web! Created by RXCodes." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://www.hyperpad.com/assets/iPadCaro1-4b90a75a25fcaba04fa511201f9e61d46ff02473980b562e2a6ba46be027a472.png" />
+  <meta name="twitter:card" content="app" />
+  <meta name="twitter:app:country" content="US" />
+  <meta name="twitter:app:name:ipad" content="Revamped hyperPad Hub - Emulator" />
+  <meta name="twitter:app:id:ipad" content="886106438" />
+  <meta name="twitter:app:url:ipad" content="hyperpad://" />
+  <meta name="twitter:site" content="@hyperpadapp" />
+  <meta name="twitter:description" content="Create media rich interactive apps like Mobile Games, Interactive Books, and more with no coding. Make native media rich apps by importing custom graphics, drag and drop behaviors, and then submit to the App Store!" />
+
+    <meta name="viewport" content="width=320, initial-scale=1, maximum-scale=1, user-scalable=1">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    
+    <!-- start of glyphicons & custom styles -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    
+    <!-- end of glyphicons & custom styles -->
+
+    <style>
+      
+      /* -- Import Fonts */
+      @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700,300);
+      
+      body, html {
+        min-width: 800px;
+        min-height: 100%;
+        margin: 0;
+        padding: 0;
+        font: Arial 14px;
+        background-color: #00000000;
+      }
+      
+      * {
+        overflow-x: hidden;
+      }
+      
+      html {
+        background-color: #aeaeae;
+        animation-name: fadeIn;
+        animation-duration: 0.2s;
+      }
+      
+      @keyframes fadeIn {
+        from {
+          opacity: 0%;
+        }
+        to {
+          opacity: 100%;
+        }
+      }
+      
+      @keyframes scaleIn {
+        from {
+          transform: scale(0)
+        }
+        to {
+          transform: scale(1)
+        }
+      }
+      
+      /* selection */
+      input:focus {
+        background-color: #00000000;
+      }
+      
+      /* Hide scrollbar for Chrome, Safari and Opera */
+      *::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* Hide scrollbar for IE, Edge and Firefox */
+      * {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+      }
+
+      /* styling elements */
+      .displayRow {
+        width: 100%;
+        display: block;
+        top: 0px;
+        padding: 0px;
+        font-size: 0px;
+        overflow: hidden;
+        margin: auto;
+        white-space: nowrap;
+      }
+      
+      .button:hover {
+        text-decoration: none;
+        color: white;
+      }
+      
+      .button {
+        all: initial;
+        background-color: #00BB78;
+        border-radius: 5px;
+        display: block;
+        position: relative;
+        text-decoration: none;
+        color:white;
+        font-family: 'Helvetica';
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        padding: 5px;
+        margin: auto;
+        bottom: -8px;
+        height: 25px; 
+        text-decoration: none;
+        width: 10%;
+        min-width: 125px;
+        overflow: hidden;
+      }
+      
+      input {
+        all: initial;
+        visibility: none;
+        border: 0px;
+        font-size: 15px;
+        font-weight: bold;
+        color: grey;
+        padding: 10px;
+        display: block;
+        margin: auto;
+        margin-top: -10px;
+        height: 100%;
+        width: 100%;
+        outline: none;
+      }
+      
+      ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: #bfbfbf;
+        opacity: 1; /* Firefox */
+      }
+
+      :-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: #bfbfbf;
+      }
+
+      ::-ms-input-placeholder { /* Microsoft Edge */
+        color: #bfbfbf;
+      }
+      
+      p {
+        color: #4d4d4d;
+        font-family: 'Helvetica';
+        font-size: 15px;
+        display: block;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        margin-left: 0;
+        margin-right: 0;
+        letter-spacing: normal;
+        padding: 0px;
+        line-height: normal;
+      }
+      
+      .container {
+        background-color: transparent;
+        height: 100%;
+        padding: 0px;
+        display: inline-block;
+        margin: 0px;
+        overflow: hidden;
+      }
+      
+      .containerDisplay {
+        background-color: white;
+        display: block;
+        position: relative;
+        padding: 0px;
+        border-radius: 15px;
+        width: calc(100% - 20px);
+        height: calc(100% - 20px);
+        margin: 10px;
+        overflow: hidden;
+        box-shadow: 0px 5px 5px rgba(0,0,0,.39);
+        animation-name: scaleIn;
+        animation-duration: 0.3s;
+      }
+      
+      .containerMargin {
+        height: calc(100% - 10px);
+        width: calc(100% - 10px);
+        margin: auto;
+        overflow: hidden;
+      }
+      
+      .containerPlaceholder {
+        height: 100%;
+        width: 100%;
+        display: block;
+        position: absolute;
+        background-color: rgb(0.1,0.1,0.1,0);
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      
+      .inline {
+        position: absolute;
+        display: block;
+        color: #7f7f7f;
+        text-align: center;
+        margin: auto;
+      }
+      
+      .icon {
+        position: absolute;
+        display: block;
+        background-color: #434343;
+        width: 45px;
+        height: 45px;
+        border-radius: 5px;
+        white-space: nowrap;
+        margin-left: 10px;
+        margin-top: 5px;
+      }
+      
+      .projectFeature {
+        position: absolute;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -o-user-select: none;
+        user-select: none;
+        align-self: ;
+        display: block;
+        background-color: #8e8e8e;
+        width: 200px;
+        height: 60px;
+        border-radius: 15px;
+        white-space: nowrap;
+        right: 20px;
+        margin-top: 5px;
+        box-shadow: 0px 5px 5px rgba(0,0,0,.39);
+      }
+      
+      .dot {
+        height: 10px;
+        width: 10px;
+        background-color: rgba(114,114,114,.66);
+        border-radius: 50%;
+        display: inline-block;
+        margin-bottom: 0px;
+        margin-top: 0px;
+        margin-left: 5px;
+        margin-right: 5px;
+      }
+      
+      .loading {
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        margin-top: 50px;
+      }
+      
+      @keyframes fire {
+        0% {
+          color: orange;
+          
+        }
+        30% {
+          color: #ffb418;
+          font-size: 27.5px;
+          left: 11.5px;
+        }
+        65% {
+          color: #ffa500;
+          font-size: 25px;
+          left: 12.5px;
+        }
+        100% {
+          color: #ffb813;
+          
+        }
+      }
+      
+        .lds-ring {
+          margin: auto;
+          position: block;
+          width: 80px;
+          height: 80px;
+        }
+        .lds-ring div {
+          box-sizing: border-box;
+          display: block;
+          position: absolute;
+          width: 60px;
+          height: 60px;
+          margin: 8px;
+          border: 7px solid #00BB78;
+          border-radius: 50%;
+          animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+          border-color: #00BB78 transparent transparent transparent;
+        }
+        .lds-ring div:nth-child(1) {
+          animation-delay: -0.45s;
+        }
+        .lds-ring div:nth-child(2) {
+          animation-delay: -0.3s;
+        }
+        .lds-ring div:nth-child(3) {
+          animation-delay: -0.15s;
+        }
+        @keyframes lds-ring {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+      
+      #rowScroll {
+        overflow-x: scroll;
+      }
+
+      
+       #flameIcon {
+        font-size: 25px;
+        color: orange;
+        position: absolute;
+        display: inline;
+        top: 10.5px;
+        left: 12.5px;
+        text-align: center;
+        animation-name: fire;
+        animation-duration: 0.75s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+        transform-origin: center center;
+      }
+      
+      .rowScroll {
+        overflow-x: scroll;
+        margin-right: 50px;
+        border-radius: 25px;
+      }
+      
+      .area{
+    width: 100%;
+    height: 100%;
+}
+
+.circles{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.circles li{
+    position: absolute;
+    display: block;
+    list-style: none;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.5);
+    animation: animate 25s linear infinite;
+    bottom: -150px;
+    
+}
+
+.circles li:nth-child(1){
+    left: 25%;
+    width: 80px;
+    height: 80px;
+    animation-delay: 0s;
+}
+
+
+.circles li:nth-child(2){
+    left: 10%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 2s;
+    animation-duration: 12s;
+}
+
+.circles li:nth-child(3){
+    left: 70%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 4s;
+}
+
+.circles li:nth-child(4){
+    left: 40%;
+    width: 60px;
+    height: 60px;
+    animation-delay: 0s;
+    animation-duration: 18s;
+}
+
+.circles li:nth-child(5){
+    left: 65%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 0s;
+}
+
+.circles li:nth-child(6){
+    left: 75%;
+    width: 110px;
+    height: 110px;
+    animation-delay: 3s;
+}
+
+.circles li:nth-child(7){
+    left: 35%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 7s;
+}
+
+.circles li:nth-child(8){
+    left: 50%;
+    width: 25px;
+    height: 25px;
+    animation-delay: 15s;
+    animation-duration: 45s;
+}
+
+.circles li:nth-child(9){
+    left: 20%;
+    width: 15px;
+    height: 15px;
+    animation-delay: 2s;
+    animation-duration: 35s;
+}
+
+.circles li:nth-child(10){
+    left: 85%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 0s;
+    animation-duration: 11s;
+}
+
+  .projectThumbnail {
+    height: 100%;
+    width: 100%;
+    animation-name: thumbnail;
+    animation-duration: 5s;
+    animation-iteration-count:infinite;
+    z-index: -99;
+  }
+      
+      .creatorAvatar {
+        width: 100%;
+        height: 100%;
+      }
+
+@keyframes animate {
+
+    0%{
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+        border-radius: 0;
+    }
+
+    100%{
+        transform: translateY(-1000px) rotate(720deg);
+        opacity: 0;
+        border-radius: 50%;
+    }
+
+}
+
+    </style>
+       
+  </head>
+  <body>
+   
+    <!-- loading screen -->
+    <div style="width: 75px; height:200px; margin: auto; margin-top: calc(50vh - 50px); margin-left: calc(50vw - 50px); transform: scale(1.25); position: absolute;" id="menuLoading">
+      <div class="lds-ring" style="margin: auto; margin-top: 12px;"><div></div><div></div><div></div><div></div></div>
+      
+      <p style="margin: auto; text-align: center; color: white;" id="loadingText">Loading</p>
+    </div>
+    <style>
+      .lds-ring {
+          margin: auto;
+          position: block;
+          width: 80px;
+          height: 80px;
+        }
+        .lds-ring div {
+          box-sizing: border-box;
+          display: block;
+          position: absolute;
+          width: 60px;
+          height: 60px;
+          margin: 8px;
+          border: 7px solid white;
+          border-radius: 50%;
+          animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+          border-color: white transparent transparent transparent;
+        }
+        .lds-ring div:nth-child(1) {
+          animation-delay: -0.45s;
+        }
+        .lds-ring div:nth-child(2) {
+          animation-delay: -0.3s;
+        }
+        .lds-ring div:nth-child(3) {
+          animation-delay: -0.15s;
+        }
+        @keyframes lds-ring {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+      
+        .lds-ring2 {
+          margin: auto;
+          position: block;
+          width: 80px;
+          height: 80px;
+        }
+        .lds-ring2 div {
+          box-sizing: border-box;
+          display: block;
+          position: absolute;
+          width: 60px;
+          height: 60px;
+          margin: 8px;
+          border: 7px solid #2896ff;
+          border-radius: 50%;
+          animation: lds-ring2 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+          border-color: #2896ff transparent transparent transparent;
+        }
+        .lds-ring2 div:nth-child(1) {
+          animation-delay: -0.45s;
+        }
+        .lds-ring2 div:nth-child(2) {
+          animation-delay: -0.3s;
+        }
+        .lds-ring2 div:nth-child(3) {
+          animation-delay: -0.15s;
+        }
+        @keyframes lds-ring2 {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+</style>
+    
+    <div style="box-shadow: 0px 5px 5px rgba(0,0,0,.39); height: 60px; border-radius: 0px; margin: 0px; width: 100%; margin-bottom: 10px; background-color: white;">
+   <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/58F445EA-B5D0-46E0-930E-256E991E7E4C.png" style="height: 100%; margin-left: 10px">
+      
+   <p class="inline" style="top: 5px; position: absolute; margin-left: 75px; font-size: 15px; text-align:left; color:black; font-size: 40px; font-weight: bold;">
+                hyperPad to Web
+              </p>
+      
+      <p class="inline" style="top: 30px; position: absolute; right: 0px; margin-right: 10px; font-size: 15px; text-align:right; color:grey; font-size: 20px; font-weight: normal;">
+                Organized by RXCodes
+              </p>
+      
+      </div>
+    
+    <!-- main menu -->
+    <div class="hideAllMenu" id="mainMenu">
+    
+    <!-- contribute menu -->
+    <div class="hideAll" id="contributeMenu">
+     
+      
+      <!-- register -->
+<div id="registerNav">
+  <div class="displayRow" style="height: 95px;">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: calc((100%)); overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+         
+            <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px">
+              <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/D71B2E45-BC8A-4CEA-8126-2A0DDDB37C6D.png" style="width:50px; z-index:3; position: absolute; left: 10px; bottom: 10px;">
+              
+              <p class="inline" style="margin-top: 10px; margin-left: 65px; font-size: 17.5px; color:black">
+                You <b>must</b> sign in via Discord to make contributions.
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 65px; font-size: 15px; color:black">
+                You cannot write code, conduct tests or make comments when logged out.
+              </p>
+              
+              <a class="button" id="signIn" onclick="logIn()" style="min-width: 150px; margin-right: 15px;
+              padding-top: 8.5px; padding-bottom: 8.5px">SIGN IN</a>
+              
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+</div>
+      </div>   
+      
+      <!-- logged in -->
+<div id="loggedInNav">
+  <div class="displayRow" style="height: 95px;">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: calc((100%)); overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+         
+            <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px">
+              <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/1C66F923-373B-4A7D-B3BB-C0F0192E4AC7.png" style="width:50px; z-index:3; position: absolute; left: 10px; bottom: 10px; border-radius: 100%" id="userIcon">
+              
+              <p class="inline" id="discordUsername" style="margin-top: 10px; margin-left: 65px; font-size: 17.5px; color:black">
+                Logged in as: <b>Username#0000</b>
+              </p>
+              <p class="inline" id="discordContributions" style="margin-top: 30px; margin-left: 65px; font-size: 15px; color:black">
+                0 Verified Contributions
+              </p>
+              
+              <a class="button" id="logOut" onclick="logOut()" style="min-width: 150px; margin-right: 15px;
+              padding-top: 8.5px; padding-bottom: 8.5px; background-color: #ff5050">LOG OUT</a>
+              
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+</div>
+      </div>
+      
+      <!-- login and log out -->
+      <script>
+       var preventClick = false;
+       var loaderButton = '<div class="lds-ring" style="height: 80px; transform: scale(0.5); position: absolute; margin-top: -16.5px; top: 0px; margin-left: 15px; width: 100%"><div></div><div></div><div></div><div></div></div>';
+       async function logIn() {
+         if (preventClick) {
+           return;
+         }
+         preventClick = true;
+         document.getElementById("signIn").innerHTML = loaderButton;
+         window.location.replace("https://discord.com/api/oauth2/authorize?client_id=898783878230192188&redirect_uri=https%3A%2F%2Frxcodes.github.io%2FhyperPad-To-Web%2F&response_type=token&scope=identify")
+       } 
+       async function logOut() {
+         if (preventClick) {
+           return;
+         }
+         preventClick = true;
+         document.getElementById("logOut").innerHTML = loaderButton;
+         await fetch("https://hyperpadtoweb.rxcodes.repl.co/log-out");
+         document.getElementById("logOut").innerHTML = "LOG OUT";
+         preventClick = false;
+         internalData.authorized = false;
+         finishLoad();
+       }
+      </script>
+      
+      <!-- select -->
+      <div id="selectMenu">
+
+    <!-- 1st row -->  
+    <div class="displayRow" style="height: 350px;">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: calc((100%) / 2); overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px);" id="codeBehaviorsBG">
+      <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/9A4F5D2C-E5C6-4508-A1B8-30B9E9F0AC88.png" style="width:75px; z-index:3; position: absolute; right: 10px; top: 10px;">
+             
+           
+      <div id="codeBehaviorsIMG">
+           
+           <style>
+             @keyframes behaviorSlide {
+                0% {
+                  transform: translate(0px, 0px) rotate(0);alignment-baseline
+                }
+                100% {
+                  transform: translate(-100px, -100px) rotate(0);
+                }
+              }
+             #codeBehaviorsBG {
+               background: linear-gradient(to top right, #ce52a6 0.0%, #804277 100.0%); 
+               border-collapse: separate; 
+               overflow: hidden;
+             }
+             #codeBehaviorsIMG {
+               height: 500%;
+               width: 500%;
+               position: relative;
+               opacity: 0.1;
+               border-collapse: separate; 
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+               border-radius: 15px;
+               overflow: hidden;
+             }
+           </style>
+             
+           </div>  
+           <p class="inline" style="bottom: 20px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                PROGRAM<br>BEHAVIORS
+              </p>
+           
+        <!-- Search -->
+      <div class="containerDisplay"style="height: 45px; top: 7px; left: 7px; width: calc(100% - 130px); position: absolute">
+        <div style="width: 80px; height: 50px; position: absolute; left: 0px;">
+           <i class="fa fa-search" style="font-size: 25px; position: relative; color: #bfbfbf; left: 15px; padding-top: 12.5px;"></i>
+        </div>
+          <input placeholder="Search for a behavior..." style="width:calc(100% - 60px); right: 0px; position:absolute">
+      </div>
+      
+           
+            </div>
+            <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+              <p class="inline" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                0 Code Submissions
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                Scripting using Javascript
+              </p>
+              
+              <a class="button" style="min-width: 120px; margin-right: 15px;
+              padding-top: 8.5px; padding-bottom: 8.5px">VIEW</a>
+              
+              
+            </div>
+        
+      </div>
+        </div>
+    <div class="container" style="width: calc((100%) / 2);">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); background: linear-gradient(to top right, #ce7454 0.0%, #80513f 100.0%);">
+           <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/7E3D242B-027D-4D85-B99A-151013D08C6D.png" style="width:75px; z-index:3; position: absolute; right: 10px; top: 10px;">
+             <div id="testBG">
+           
+           <style>
+             #testBG {
+               height: 500%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+              
+           <p class="inline" style="bottom: 20px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                TESTING<br>SITE
+              </p>
+        
+            </div>
+            <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+              <p class="inline" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                0 Tests Conducted
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                Error and Crash Tracking
+              </p>
+              
+              <a class="button" style="min-width: 120px; margin-right: 15px;
+              padding-top: 8.5px; padding-bottom: 8.5px">GO TRY</a>
+              
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+</div>
+    
+    <!-- 2nd row -->
+    <div class="displayRow" style="height: 350px;">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: calc((100%) / 2);">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); background: linear-gradient(to top right, #53ce6f 0.0%, #368034 100.0%); ">
+              <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/524703EA-17E7-41D2-8D64-7F915A0FA489.png" style="width:75px; z-index:3; position: absolute; right: 10px; top: 8px;">
+             <div id="devicesBG">
+           
+           <style>
+             #devicesBG {
+               height: 500%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+           <p class="inline" style="bottom: 20px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                DEVICE<br>SUPPORT
+              </p>
+           
+           <p class="inline" style="top: 15px; left: 20px; font-size: 22px; color:white; font-weight: bold" id="deviceAspectRatio">
+                Using Aspect Ratio
+              </p>
+           <p class="inline" style="top: 40px; left: 20px; font-size: 16px; color:white; width: calc(100% - 180px); word-wrap: normal; height: 300px; text-align: left" id="deviceName">
+                Device Name
+              </p>
+           
+           <!-- closest aspect ratio -->
+        <script>
+			
+          // get closest aspect ratio
+          let supportedAspectRatios = {
+            "4:3": 4/3,
+            "16:9": 15/9,
+            "19.5:9": 19.5/9,
+            "199:139": 199/139,
+            "3:2": 3/2,
+            "16:10": 16/10
+          };
+          let diff = 999;
+          let currentAspectRatio;
+          let aspectRatio = screen.width / screen.height;
+          Object.keys(supportedAspectRatios).forEach(function(ratio) {
+            let value = supportedAspectRatios[ratio];
+            if ((Math.abs(value - aspectRatio)) < diff) {
+              diff = Math.abs(value - aspectRatio);
+              currentAspectRatio = ratio;
+            }
+          });
+          document.getElementById("deviceAspectRatio").innerHTML = "Current Aspect Ratio: " + currentAspectRatio;
+          document.getElementById("deviceName").innerHTML = navigator.userAgent.replaceAll(")", ")<br>")
+          console.log(navigator.userAgent)
+          
+        </script>
+            </div>
+            <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+              <p class="inline" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                0 Devices Confirmed
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                Keyboard and Controller
+              </p>
+              
+              <a class="button" style="min-width: 120px; margin-right: 15px;
+              padding-top: 8.5px; padding-bottom: 8.5px">GO TEST</a>
+              
+              
+            </div>
+        
+      </div>
+        </div>
+          
+     <div class="container" style="width: calc((100%) / 2);">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); background: linear-gradient(to top right, #cbce46 0.0%, #806431 100.0%); ">
+              <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png" style="width:110px; z-index:3; position: absolute; right: 4px; top: -10px;">
+             <div id="devicesBG">
+           
+           <style>
+             #devicesBG {
+               height: 500%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+           <p class="inline" style="bottom: 20px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                BEHAVIOR<br>RELATIONS
+              </p>
+        
+            </div>
+            <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+              <p class="inline" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                0 Code Submissions
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                Loops and Tags
+              </p>
+              
+              <a class="button" style="min-width: 120px; margin-right: 15px;
+              padding-top: 8.5px; padding-bottom: 8.5px">VIEW</a>
+              
+              
+            </div>
+        
+      </div>
+        </div>
+    
+      </div>
+</div>
+      
+    <!-- 3rd row -->
+    <div class="displayRow" style="height: 350px;">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: calc((100%) / 2);">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); background: linear-gradient(to top right, #ce4747 0.0%, #803232 100.0%); ">
+              <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/8D0E8C34-6F70-4DA3-8EA7-9852F36701E1.png" style="width:75px; z-index:3; position: absolute; right: 10px; top: 8px;">
+             <div id="devicesBG">
+           
+           <style>
+             #betaTestBG {
+               height: 500%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+           <p class="inline" style="bottom: 20px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                INPUT<br>FIELDS
+              </p>
+           <p class="inline" style="top: 15px; left: 20px; font-size: 22px; color:white; font-weight: bold">
+                0/218 Behaviors Validated
+              </p>
+           <p class="inline" style="top: 40px; left: 20px; font-size: 16px; color:white;">
+                0 Total Input Fields
+              </p>
+        
+            </div>
+            <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+              <p class="inline" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                0 Input Submissions
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                Behavior Input Validation
+              </p>
+              
+              <a class="button" style="min-width: 140px; margin-right: 15px;
+              padding-top: 8.5px; padding-bottom: 8.5px" onclick="">VALIDATE</a>
+              
+              
+            </div>
+        
+      </div>
+        </div>
+    <div class="container" style="width: calc((100%) / 2);">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); background: linear-gradient(to top right, #50a1ce 0.0%, #384080 100.0%); ">
+              <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/93451CBD-A163-46F2-8FE2-83AD599A0FA3.png" style="width:75px; z-index:3; position: absolute; right: 10px; top: 5px;">
+             <div id="statsBG">
+           
+           <style>
+             #statsBG {
+               height: 500%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+           <p class="inline" style="top: 20px; left: 20px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+               STATISTICS
+              </p>
+           
+           <!-- Stats -->
+          <p id="statsShow" class="inline" style="color:white; top: 80px; left: 20px; text-align:left; font-size:25px">
+            
+           </p>
+           
+           <script>
+           
+        var stats = {
+          "Code Submissions": 0,
+          "Tests Conducted": 0,
+          "Comments": 0,
+          "Total Upvotes": 0
+        };
+        
+        var globalStats = {
+          "Total Code Submissions": 0,
+          "Total Tests Conducted": 0,
+          "Total Comments": 0,
+          "All-time Participants": 0,
+          "All-time Visits": 0
+        };
+        
+        function loadStats(stats) {
+          let text = "";
+          Object.keys(stats).forEach(function(key) {
+            text += "<b>" + key + "</b> ";
+            text += "<span style='color:black'>- </span>"
+            text += stats[key] + "<br>";
+          })
+          document.getElementById("statsShow").innerHTML = text;
+        }
+          
+        var personal = true;
+        function toggleStats() {
+          if (personal) {
+            personal = false;
+            document.getElementById("statTypeButton").innerHTML = "GLOBAL";
+            loadStats(globalStats);
+          } else {
+            personal = true;
+            document.getElementById("statTypeButton").innerHTML = "PERSONAL";
+            loadStats(stats);
+          }
+        }     
+             
+        loadStats(stats);
+           </script>
+           
+            </div>
+        <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+              <p class="inline" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                See All Contribution
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                View Statistics
+              </p>
+              
+              <a id="statTypeButton" class="button" style="min-width: 160px; margin-right: 15px;
+              padding-top: 8.5px; padding-bottom: 8.5px" onclick="toggleStats()">PERSONAL</a>
+              
+              
+            </div>
+      </div>
+        </div>
+      </div>
+</div>
+      </div>
+      
+      <div style="height:30px">
+        
+      </div>
+      
+    </div>
+    
+    <!-- about menu -->
+    <div id="aboutMenu" class="hideAll">
+      <div class="displayRow" style="height: 400px;">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: calc(100%);">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); bottom: 0px;" id="aboutUsBG" >
+
+        
+           
+      <div id="aboutUsIMG">
+           
+           <style>
+             #aboutUsBG {
+               background: linear-gradient(to top right, #00bb78 0.0%, #408049 100.0%); 
+             }
+             #aboutUsIMG {
+               height: 1000%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+
+<p class="inline" style="top: 8px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                ABOUT US
+              </p>        
+           
+           <div style="width: 250px; height: 5px; background-color: white; top: 55px; left: 20px; position: absolute"></div>
+   <p class="inline" style="top: 70px; left: 20px; font-size: 19px; text-align:left; color:white; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px;">
+     We, hyperPad users, want to push hyperPad to its limit! hyperPad is the best game creation app on iOS - and we want to make it <b>even better</b>. This project's goal is to create a way to port hyperPad projects into the web by converting them to HTML that can work in any browser and on any device. The project will be run by the community with supervising from an experienced programmer, <i>RXCodes</i>. People can contribute by testing, programming and sharing open source code.<br><br>This project is not endorsed nor sponsored by hyperPad or its affiliates; all the work being done are from awesome hyperPad users! <b>Once hyperPad launches on the web, we will dominate the internet! <i>-RXCodes</i></b>
+              </p>       
+           </div>
+            
+            <div class="containerPlaceholder" style="height: 60px; top: 0px; left: 0px; margin-left: 0px">
+                         
+              <a class="button" style="display: block; min-width: 150px; margin-left: 15px; float:left; left: 0px;
+              padding-top: 8.5px; padding-bottom: 8.5px" onclick="navMenu('contributeMenu', 'CONTRIBUTE')">CONTRIBUTE</a>
+              
+              <a class="button" style="display: block; min-width: 125px; margin-left: 10px; float:left; left: 0px;
+              padding-top: 8.5px; padding-bottom: 8.5px" onclick="navMenu('betaTestMenu', 'BETA TEST')">BETA TEST</a>
+              
+              <a class="button" style="display: block; min-width: 215px; margin-left: 10px; float:left; left: 0px;
+              padding-top: 8.5px; padding-bottom: 8.5px" onclick="navMenu('roadmapMenu', 'ROADMAP')">SEE OUR ROADMAP</a>
+              
+             
+              <a class="button" style="display: block; min-width: 190px; margin-right: 10px; float:rught; right: 0px;
+              padding-top: 8.5px; padding-bottom: 8.5px" href="https://hyperPad.com">VISIT HYPERPAD</a>
+              
+              
+            </div>
+        
+      </div>
+        </div>
+ 
+              
+      </div>
+                
+</div>
+              
+      <div class="displayRow" style="height: 350px; margin-left: 5px">
+       <div class="container" style="width: calc((100% - 5px) / 2);">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); background: linear-gradient(to top right, #ffd15e 0.0%, #d92727 100.0%); ">
+              <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/0EE4FF51-6876-431C-A002-D1C7ED859B56.png" style="width:75px; z-index:3; position: absolute; right: 10px; top: 8px;">
+             <div id="supportBG">
+           
+           <style>
+             #supportBG {
+               height: 500%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+           <p class="inline" style="top: 20px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                YOUTUBE<br>MEMBERS
+              </p>
+         <div style="width: 250px; height: 5px; background-color: white; top: 115px; left: 20px; position: absolute"></div>
+            </div>
+         
+         <p class="inline" style="top: 140px; left: 20px; font-size: 22px; text-align:left; color:white; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px;">
+Ten Studios <a style="color:black" href="https://youtube.com/channel/UCDA3TAMajZ_vUOTuGgQmCjA">(View)</a><br>
+Creeper kingdom stars <a style="color:black" href="https://youtube.com/channel/UCTUzIrfAe_KTMPraxYHaSkg">(View)</a><br>
+           
+         </p>
+         
+            <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+              <p class="inline" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                2 Members
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                Thanks for supporting me!
+              </p>
+              
+              <a class="button" style="min-width: 140px; margin-right: 15px;
+              padding-top: 8.5px; padding-bottom: 8.5px" href="https://m.youtube.com/c/rxcodes/join">SUPPORT</a>
+              
+         </div>
+            </div>
+        
+      </div>
+       <div class="container" style="margin-left: -8px; width: calc((100%) / 2);">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); background: linear-gradient(to top right, #7289da 0.0%, #d92fcb 100.0%); ">
+              <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/1C66F923-373B-4A7D-B3BB-C0F0192E4AC7.png" style="width:100px; z-index:3; position: absolute; right: 3px; top: 2px;">
+             <div id="discordBG">
+           
+           <style>
+             #discordBG {
+               height: 500%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+           <p class="inline" style="top: 20px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                LET'S<br>CHAT
+              </p>
+         <div style="width: 250px; height: 5px; background-color: white; top: 115px; left: 20px; position: absolute"></div>
+            </div>
+         
+         <p class="inline" style="top: 140px; left: 20px; font-size: 22px; text-align:left; color:white; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px;">
+      Feel free to come and ask questions - You can get feedback on your code and get guidance on what you can do next!
+         </p>
+         
+            <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+              <p class="inline" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                Chat and Chill
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                Feel free to ask for help!
+              </p>
+              
+              <a class="button" style="min-width: 170px; margin-right: 15px;
+              padding-top: 8.5px; padding-bottom: 8.5px" href="https://discord.io/hyperPad">JOIN DISCORD</a>
+              
+         </div>
+            </div>
+        
+      </div>
+      </div>
+      <div style="height:40px">
+        
+      </div>
+    </div>
+    
+    <!-- beta test menu -->
+    <div id="betaTestMenu" class="hideAll">
+         <div class="displayRow" style="height: 410px;">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: calc(100% - 290px);">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); bottom: 0px;" id="betaTestingMenuBG" >
+
+        
+           
+      <div id="betaTestingMenuIMG">
+           
+           <style>
+             #betaTestingMenuBG {
+               background: linear-gradient(to top right, #ff5959 0.0%, #802d2d 100.0%); 
+             }
+             #betaTestingMenuIMG {
+               height: 1000%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+
+<p class="inline" style="top: 8px; left: 20px; font-size: 14px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                BETA TESTING
+              </p>        
+           
+           <div style="width: 300px; height: 5px; background-color: white; top: 55px; left: 20px; position: absolute"></div>
+   <p class="inline" style="top: 70px; left: 20px; font-size: 18px; text-align:left; color:white; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px; max-width: 100%">
+     <b>Import your hyperPad Project to test it!</b><br><br>
+     <b>Setting your Build: </b>If you want to test the public beta with some of your code or other peoples' code, you can press the wrench icon on code snippets to overwrite existing behaviors - this will make the compiler use newer unverified code over other code.<br><br>
+     <b>Testing Normally: </b>If you wish to test the unmodified public beta, press <i>Reset Build</i>. Note that public betas may not contain everyone's most recent code.
+              </p>       
+           </div>
+         <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/7E3D242B-027D-4D85-B99A-151013D08C6D.png" style="width:75px; z-index:3; position: absolute; right: 10px; top: 75px;">
+            
+            <div class="containerPlaceholder" style="height: 60px; top: 0px; left: 0px; margin-left: 0px">
+                         
+              <a class="button" style="display: block; min-width: 175px; margin-left: 15px; float:left; left: 0px;
+              padding-top: 8.5px; padding-bottom: 8.5px">RESET BUILD</a>
+             
+              <a class="button" style="display: block; min-width: 250px; margin-right: 10px; float:rught; right: 0px;
+              padding-top: 8.5px; padding-bottom: 8.5px">IMPORT PROJECT <span style="font-weight: normal;color:#d2d2d2">(.tap)</span></a>
+              
+            </div>
+        
+      </div>
+        </div>
+ 
+          <div class="container" style="width: 290px">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); background: linear-gradient(to top right, #ce7454 0.0%, #80513f 100.0%);">
+           
+             <div id="testBG2">
+           
+           <style>
+             #testBG2 {
+               height: 500%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+              
+           
+            </div>
+            <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+              <p class="inline" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                0 Public Betas
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                Select Public Beta
+              </p>
+             
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+                
+</div>
+      
+      <div class="displayRow" style="height: 500px">
+            <div class="container" style="width: calc(100% - 10px); margin-left:5px">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); bottom: 0px;" id="betaTestingMenuBG2" >
+
+        
+           
+      <div id="betaTestingMenuIMG2">
+           
+           <style>
+             #betaTestingMenuBG2 {
+               background: linear-gradient(to top right, #e346ff 0.0%, #363e80 100.0%); 
+             }
+             #betaTestingMenuIMG2 {
+               height: 1000%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+
+<p class="inline" style="top: 8px; left: 20px; font-size: 14px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                BUILD MODS
+              </p>        
+           
+           <div style="width: 300px; height: 5px; background-color: white; top: 55px; left: 20px; position: absolute"></div>
+   <p class="inline" style="top: 70px; left: 20px; font-size: 18px; text-align:left; color:white; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px; max-width: 100%">
+     <b style="color:#fffa8e">You currently have 0 build mods</b><br>
+     You can add a build mod by pressing the wrench icon on a code snippet.<br>Your build mods will appear below as you add mods.
+              </p>       
+           </div>
+         <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png" style="width:140px; z-index:3; position: absolute; right: 5px; top: 40px;">
+            
+   
+        
+      </div>
+        </div>
+      </div>
+      <div style="height: 50px">
+        
+      </div>
+    </div>
+    
+    <!-- roadmap menu -->
+    <div id="roadmapMenu" class="hideAll">
+      
+      <div class="displayRow" style="height: 200px;">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: calc(100%);">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); bottom: 0px;" id="aboutUsBG2" >
+
+        
+           
+      <div id="aboutUsIMG2">
+           
+           <style>
+             #aboutUsBG2 {
+               background: linear-gradient(to top right, #00bb78 0.0%, #408049 100.0%); 
+             }
+             #aboutUsIMG2 {
+               height: 1000%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+           
+   <p class="inline" style="top: 15px; left: 20px; font-size: 23px; text-align:left; color:white; font-weight: normal; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px;">
+     The website base functionality will be created and the bare-bones code base of the compiler will be put into place. All the menus will be functional and users are able to make contributions. Though, the beta testing won't work at this stage.
+              </p>       
+           </div>
+            
+            <div class="containerPlaceholder" style="height: 60px; top: 0px; left: 0px; margin-left: 0px">
+                         
+           <p class="inline" style="top: 8px; left: 20px; text-align:left; color:#00bb78; font-size: 35px; font-weight: bold;">
+   <span style="color:black">STAGE 1:</span> GETTING STARTED <span style="color:grey; font-weight:normal"> - CURRENT</span>
+              </p>        
+              
+            </div>
+        
+      </div>
+        </div>
+ 
+          
+      </div>
+                
+</div>
+      
+      <div class="displayRow" style="height: 200px;">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: calc(100%);">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); bottom: 0px;" id="aboutUsBG3" >
+
+        
+           
+      <div id="aboutUsIMG3">
+           
+           <style>
+             #aboutUsBG3 {
+               background: linear-gradient(to top right, #00bb78 0.0%, #408049 100.0%); 
+             }
+             #aboutUsIMG3 {
+               height: 1000%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+           
+   <p class="inline" style="top: 15px; left: 20px; font-size: 23px; text-align:left; color:white; font-weight: normal; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px;">
+     The first ever beta test will go live once the foundation code has been developed - all aspect ratios should be supported and objects should render in the canvas. Basic behavior functionality is added.
+              </p>       
+           </div>
+            
+            <div class="containerPlaceholder" style="height: 60px; top: 0px; left: 0px; margin-left: 0px">
+                         
+           <p class="inline" style="top: 8px; left: 20px; text-align:left; color:#00bb78; font-size: 35px; font-weight: bold;">
+   <span style="color:black">STAGE 2:</span> FIRST BETA TEST <span style="color:grey; font-weight:normal"> - FUTURE</span>
+              </p>        
+              
+            </div>
+        
+      </div>
+        </div>
+ 
+          
+      </div>
+                
+</div>
+      
+<div class="displayRow" style="height: 200px;">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: calc(100%);">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); bottom: 0px;" id="aboutUsBG4" >
+
+        
+           
+      <div id="aboutUsIMG4">
+           
+           <style>
+             #aboutUsBG4 {
+               background: linear-gradient(to top right, #00bb78 0.0%, #408049 100.0%); 
+             }
+             #aboutUsIMG4 {
+               height: 1000%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+           
+   <p class="inline" style="top: 15px; left: 20px; font-size: 23px; text-align:left; color:white; font-weight: normal; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px;">
+     A new beta test will include physics interactions, accounting for layers, physical properties and world gravity. Majority, if not all, of the touch controls will work. The screen is movable and can be zoomed, allowing for playable demos. Scene functionality is also implemented.
+              </p>       
+           </div>
+            
+            <div class="containerPlaceholder" style="height: 60px; top: 0px; left: 0px; margin-left: 0px">
+                         
+           <p class="inline" style="top: 8px; left: 20px; text-align:left; color:#00bb78; font-size: 35px; font-weight: bold;">
+   <span style="color:black">STAGE 3:</span> PLAYABLE DEMOS <span style="color:grey; font-weight:normal"> - FUTURE</span>
+              </p>        
+              
+            </div>
+        
+      </div>
+        </div>
+ 
+          
+      </div>
+                
+</div>
+ 
+<div class="displayRow" style="height: 200px;">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: calc(100%);">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); bottom: 0px;" id="aboutUsBG4" >
+
+        
+           
+      <div id="aboutUsIMG4">
+           
+           <style>
+             #aboutUsBG4 {
+               background: linear-gradient(to top right, #00bb78 0.0%, #408049 100.0%); 
+             }
+             #aboutUsIMG4 {
+               height: 1000%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+           
+   <p class="inline" style="top: 15px; left: 20px; font-size: 23px; text-align:left; color:white; font-weight: normal; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px;">
+     New beta releases featuring the functionality of object tags and attributes. All transform behaviors will function on all supported devices.
+              </p>       
+           </div>
+            
+            <div class="containerPlaceholder" style="height: 60px; top: 0px; left: 0px; margin-left: 0px">
+                         
+           <p class="inline" style="top: 8px; left: 20px; text-align:left; color:#00bb78; font-size: 35px; font-weight: bold;">
+   <span style="color:black">STAGE 4:</span> OBJECT MANIPULATION <span style="color:grey; font-weight:normal"> - FUTURE</span>
+              </p>        
+              
+            </div>
+        
+      </div>
+        </div>
+ 
+          
+      </div>
+                
+</div>      
+      
+<div class="displayRow" style="height: 200px;">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: calc(100%);">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); bottom: 0px;" id="aboutUsBG4" >
+
+        
+           
+      <div id="aboutUsIMG4">
+           
+           <style>
+             #aboutUsBG4 {
+               background: linear-gradient(to top right, #00bb78 0.0%, #408049 100.0%); 
+             }
+             #aboutUsIMG4 {
+               height: 1000%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+           
+   <p class="inline" style="top: 15px; left: 20px; font-size: 23px; text-align:left; color:white; font-weight: normal; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px;">
+     New betas will be pushed containing functionality of arrays, dictionaries, values, box containers and of all logic behaviors. Majority, if not all, screen behaviors will be functional.
+              </p>       
+           </div>
+            
+            <div class="containerPlaceholder" style="height: 60px; top: 0px; left: 0px; margin-left: 0px">
+                         
+           <p class="inline" style="top: 8px; left: 20px; text-align:left; color:#00bb78; font-size: 35px; font-weight: bold;">
+   <span style="color:black">STAGE 5:</span> TECHNICAL ADVANCEMENTS <span style="color:grey; font-weight:normal"> - FUTURE</span>
+              </p>        
+              
+            </div>
+        
+      </div>
+        </div>
+ 
+          
+      </div>
+                
+</div>   
+      
+<div class="displayRow" style="height: 200px;">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: calc(100%);">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); bottom: 0px;" id="aboutUsBG4" >
+
+        
+           
+      <div id="aboutUsIMG4">
+           
+           <style>
+             #aboutUsBG4 {
+               background: linear-gradient(to top right, #00bb78 0.0%, #408049 100.0%); 
+             }
+             #aboutUsIMG4 {
+               height: 1000%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+           
+   <p class="inline" style="top: 15px; left: 20px; font-size: 23px; text-align:left; color:white; font-weight: normal; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px;">
+     The community will test the compiler and will program in inputs for other external devices. Keyboard input will definitely be possible - additional candidates are controller support and computer cursor support.
+              </p>       
+           </div>
+            
+            <div class="containerPlaceholder" style="height: 60px; top: 0px; left: 0px; margin-left: 0px">
+                         
+           <p class="inline" style="top: 8px; left: 20px; text-align:left; color:#00bb78; font-size: 35px; font-weight: bold;">
+   <span style="color:black">STAGE 6:</span> CROSS-COMPATIBILITY <span style="color:grey; font-weight:normal"> - FUTURE</span>
+              </p>        
+              
+            </div>
+        
+      </div>
+        </div>
+ 
+          
+      </div>
+                
+</div>
+
+<div class="displayRow" style="height: 200px;">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: calc(100%);">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); bottom: 0px;" id="aboutUsBG4" >
+
+        
+           
+      <div id="aboutUsIMG4">
+           
+           <style>
+             #aboutUsBG4 {
+               background: linear-gradient(to top right, #00bb78 0.0%, #408049 100.0%); 
+             }
+             #aboutUsIMG4 {
+               height: 1000%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+           
+   <p class="inline" style="top: 15px; left: 20px; font-size: 23px; text-align:left; color:white; font-weight: normal; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px;">
+     The community will scour for unedited behaviors - Every single behavior and object type will be functional. Though the exceptions are Ad-related features and OAuth credentials. Beta tests will release with new behaviors added each time.
+              </p>       
+           </div>
+            
+            <div class="containerPlaceholder" style="height: 60px; top: 0px; left: 0px; margin-left: 0px">
+                         
+           <p class="inline" style="top: 8px; left: 20px; text-align:left; color:#00bb78; font-size: 35px; font-weight: bold;">
+   <span style="color:black">STAGE 7:</span> NITTY GRITTY <span style="color:grey; font-weight:normal"> - FUTURE</span>
+              </p>        
+              
+            </div>
+        
+      </div>
+        </div>
+ 
+          
+      </div>
+                
+</div> 
+      
+      <div class="displayRow" style="height: 200px;">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: calc(100%);">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px); bottom: 0px;" id="aboutUsBG4" >
+
+        
+           
+      <div id="aboutUsIMG4">
+           
+           <style>
+             #aboutUsBG4 {
+               background: linear-gradient(to top right, #00bb78 0.0%, #408049 100.0%); 
+             }
+             #aboutUsIMG4 {
+               height: 1000%;
+               width: 500%;
+               opacity: 0.1;
+               background:url("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/A0EDE2E4-CBFE-44A6-ACB1-ED7FACC4FA47.png") repeat;
+               animation: behaviorSlide 3s linear infinite;
+               background-size: 50px;
+             }
+           </style>
+           </div>  
+           
+   <p class="inline" style="top: 15px; left: 20px; font-size: 23px; text-align:left; color:white; font-weight: normal; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px;">
+     After lots of testing and bug fixing, the hyperPad compiler will be finished! Any new behaviors that were added will be implemented and the project will have general improvements and adaptions over time. Users' projects are 100% ready to be sent to others as an HTML file - projects can also be hosted online.
+              </p>       
+           </div>
+            
+            <div class="containerPlaceholder" style="height: 60px; top: 0px; left: 0px; margin-left: 0px">
+                         
+           <p class="inline" style="top: 8px; left: 20px; text-align:left; color:#00bb78; font-size: 35px; font-weight: bold;">
+   <span style="color:black">STAGE 8:</span> GRAND REVEAL <span style="color:grey; font-weight:normal"> - FUTURE</span>
+              </p>        
+              
+            </div>
+        
+      </div>
+        </div>
+ 
+          
+      </div>
+                
+</div>
+      <div style="height: 60px">
+   
+          </div>
+    </div>
+    
+    
+    
+    <!-- navigation bar -->
+    <div id="navBar" class="displayRow" style="height: 70px; bottom: 0px; position: fixed; margin-bottom: 0px; background: linear-gradient(0deg, #202020bb, transparent); z-index: 20;">
+    
+    <div class="containerDisplay" style="width: calc(100% - 30px); margin-left: auto; margin-right: auto; white-space: nowrap;">
+           <p style="font-size: 20px; left: 8px; margin-top:13px; position: absolute; color:#acacac; font-weight: bold; display: inline;">
+        <span value="ABOUT US" class="navTexts" onclick="navMenu('aboutMenu', 'ABOUT US')">ABOUT US</span>
+      </p>
+      
+                 <p style="font-size: 20px; right: 8px; margin-top:13px; position: absolute; color:#acacac; font-weight: bold; display: inline;">
+                   <span class="navTexts" value="CONTRIBUTE" onclick="navMenu('contributeMenu', 'CONTRIBUTE')"><b style="color:#00BB78">CONTRIBUTE</b></span> / <span value="BETA TEST" class="navTexts" onclick="navMenu('betaTestMenu', 'BETA TEST')">BETA TEST</span> / <span value="ROADMAP" class="navTexts" onclick="navMenu('roadmapMenu', 'ROADMAP')">ROADMAP</span>
+           <script>
+             function hideAllMenus() {
+               document.querySelectorAll('.hideAll').forEach(function(element) {
+				 element.style.display = "none";
+			   });
+             }
+             
+             function navMenu(menu, text) {
+               hideAllMenus();
+               window.scrollTo(0, 0);
+               document.getElementById(menu).style.display = "block";
+               document.querySelectorAll('.navTexts').forEach(function(element) {
+				 element.innerHTML = element.getAttribute("value");
+                 if (element.getAttribute("value") == text) {
+                   element.innerHTML = "<b style='color:#00BB78'>" + text + "</b>"; 
+                 }
+			   });
+             }
+             
+             navMenu("aboutMenu", "ABOUT US")
+           </script>
+      </p>
+    </div> 
+    </div>
+          </div>
+    
+    <!-- additional page length -->
+<div style="height:30px"></div>
+    
+    <!-- cool background -->
+    <div class="area" style="position:fixed; top: 0px; right: 0px; z-index: -1; height: 100%;">
+            <ul class="circles">
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+            </ul>
+    </div>
+    
+  </body>
+</html>
+
+<!-- Page Loading -->
+<script>
+  function hideAllMenuDivs() {
+    document.querySelectorAll('.hideAllMenu').forEach(function(element) {
+      element.style.display = "none";
+    });
+  }
+  
+  function finishLoad() {
+    document.getElementById("menuLoading").style.display = "none";
+    document.getElementById("mainMenu").style.display = "block";
+    if (internalData.authorized) {
+	  document.getElementById("loggedInNav").style.display = "block";
+      document.getElementById("registerNav").style.display = "none";
+    } else {
+	  document.getElementById("loggedInNav").style.display = "none";
+      document.getElementById("registerNav").style.display = "block";
+    }
+    globalStats = internalData.statistics || {};
+    stats = internalData.personalStatistics || {      
+      "Code Submissions": "?",
+      "Tests Conducted": "?",
+      "Comments": "?",
+      "Total Upvotes": "?"
+    };
+    toggleStats();
+  }
+
+  var internalData = {};
+  var discordAcc = {};
+  async function initialize() {
+    
+    // load data
+    hideAllMenuDivs();
+    document.getElementById("menuLoading").style.display = "block";
+    document.getElementById("loadingText").innerHTML = "Initializing";
+    res = await fetch("https://hyperpadtoweb.rxcodes.repl.co/initialize?visit=1");
+    res = await res.json();
+    if (res.behaviorBase == {}) {
+      document.getElementById("loadingText").innerHTML = "Booting Up";
+      res = await fetch("https://hyperpadtoweb.rxcodes.repl.co/initialize?visit=1");
+      res = await res.json();
+    }
+    if (!res.success) {
+      console.error("Error contacting server.")
+      return;
+    }
+    internalData = res;
+    console.debug(res);
+    
+    // fetch discord account
+    document.getElementById("loadingText").innerHTML = "Logging In";
+    let query = window.location.href.split("#")[1];
+  
+    // inject
+    console.log("query: " + query);
+    const params = new URLSearchParams(query);
+    var accessToken = params.get('access_token');
+    var tokenType = params.get('token_type');
+    if (accessToken === null) {
+      accessToken = localStorage.getItem("accessToken");
+      tokenType = localStorage.getItem("tokenType");
+    }
+    if (accessToken == "null" || !accessToken) {
+  	  internalData.authorized = false;
+	} else {
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("tokenType", tokenType);
+      
+      // fetch discord account
+      let token = tokenType + " " + accessToken;
+      console.log(token);
+      try {
+        let data = await (await fetch('https://discord.com/api/users/@me', {
+          headers: { authorization: token },
+          method: "GET"
+        })).json();
+        if (data.code == 0) {
+          throw data.message;
+		}
+        discordAcc = data;
+        console.debug(data);
+        internalData.authorized = true;
+      } catch(e) {
+        internalData.authorized = false;
+      }
+      
+    }
+    
+    if (!internalData.authorized) {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('tokenType');
+    }
+    
+    finishLoad();
+  };
+  initialize();
+</script>
+
+<!-- Button interaction -->
+<script>
+  
+  document.body.onclick = function(e) {   //when the document body is clicked
+    if (window.event) {
+        e = event.srcElement;           //assign the element clicked to e (IE 6-8)
+    }
+    else {
+        e = e.target;                   //assign the element clicked to e
+    }
+
+    if (e.className && e.className.indexOf('button') != -1) {
+        //if the element has a class name, and that is 'someclass' then...
+      	e["text-decoration"] = "none";
+        e.animate([
+        // keyframes
+        { transform: 'scale(1.1)' },
+        { transform: 'scale(1)' }
+      ], {
+        // timing options
+        duration: 250
+      });
+    }
+  }
+
+
+</script>
