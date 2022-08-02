@@ -1869,8 +1869,10 @@ Creeper kingdom stars <a style="color:black" href="https://youtube.com/channel/U
       document.getElementById("registerNav").style.display = "none";
       
       // display discord profile
-      document.getElementById("discordUsername").innerHTML = discordAcc.username + "#" + discordAcc.discriminator;
-      document.getElementById("discordContributions").innerHTML = "0 Contributions - 0 Verified";
+      document.getElementById("discordUsername").innerHTML = "Logged in as: <b>" + discordAcc.username + "#" + discordAcc.discriminator + "</b>";
+      let contribTxt = internalData.account.contributions + " Total Contributions <i>(";
+      contribTxt += internalData.account.verifiedContributions + " Verified)</i>";
+      document.getElementById("discordContributions").innerHTML = contribTxt;
       let avatar = "https://cdn.discordapp.com/avatars/" + discordAcc.id + "/" + discordAcc.avatar + ".png";
       document.getElementById("userIcon").src = avatar;
       console.info(avatar);
@@ -1878,6 +1880,7 @@ Creeper kingdom stars <a style="color:black" href="https://youtube.com/channel/U
     } else {
 	  document.getElementById("loggedInNav").style.display = "none";
       document.getElementById("registerNav").style.display = "block";
+      delete internalData.personalStatistics;
     }
     globalStats = internalData.statistics || {};
     stats = internalData.personalStatistics || {      
