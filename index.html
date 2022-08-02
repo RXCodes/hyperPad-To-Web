@@ -14,7 +14,7 @@
   <meta property="og:image" content="https://www.hyperpad.com/assets/iPadCaro1-4b90a75a25fcaba04fa511201f9e61d46ff02473980b562e2a6ba46be027a472.png" />
   <meta name="twitter:card" content="app" />
   <meta name="twitter:app:country" content="US" />
-  <meta name="twitter:app:name:ipad" content="Revamped hyperPad Hub - Emulator" />
+  <meta name="twitter:app:name:ipad" content="hyperPad to Web" />
   <meta name="twitter:app:id:ipad" content="886106438" />
   <meta name="twitter:app:url:ipad" content="hyperpad://" />
   <meta name="twitter:site" content="@hyperpadapp" />
@@ -1870,8 +1870,10 @@ Creeper kingdom stars <a style="color:black" href="https://youtube.com/channel/U
       
       // display discord profile
       document.getElementById("discordUsername").innerHTML = discordAcc.username + "#" + discordAcc.discriminator;
-      document.getElementById("discordContributions").innerHTML = "0 Contributions - 0 Verified"
-      document.getElementById("userIcon").src = "https://discord.com/avatars/" + discordAcc.id + "/" + discordAcc.avatar + ".png";
+      document.getElementById("discordContributions").innerHTML = "0 Contributions - 0 Verified";
+      let avatar = "https://cdn.discordapp.com/avatars/" + discordAcc.id + "/" + discordAcc.avatar + ".png";
+      document.getElementById("userIcon").src = avatar;
+      console.info(avatar);
       
     } else {
 	  document.getElementById("loggedInNav").style.display = "none";
