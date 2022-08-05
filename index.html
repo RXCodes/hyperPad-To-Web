@@ -681,7 +681,7 @@
        }
       </script>
       
-      <!-- select -->
+      <!-- select module (main menu) -->
       <div id="selectMenu">
 
     <!-- 1st row -->  
@@ -751,8 +751,8 @@
                 Scripting using Javascript
               </p>
               
-              <a class="button" style="min-width: 120px; margin-right: 15px;
-              padding-top: 8.5px; padding-bottom: 8.5px">VIEW</a>
+              <a class="button" onclick="openInternalMenu('Program Behaviors')" style="min-width: 120px; margin-right: 15px;
+              padding-top: 8.5px; padding-bottom: 8.5px;">VIEW</a>
               
               
             </div>
@@ -792,8 +792,8 @@
                 Error and Crash Tracking
               </p>
               
-              <a class="button" style="min-width: 120px; margin-right: 15px;
-              padding-top: 8.5px; padding-bottom: 8.5px">GO TRY</a>
+              <a class="button" onclick="openInternalMenu('Testing Site')" style="min-width: 120px; margin-right: 15px;
+              padding-top: 8.5px; padding-bottom: 8.5px;">GO TRY</a>
               
               
             </div>
@@ -876,8 +876,8 @@
                 Keyboard and Controller
               </p>
               
-              <a class="button" style="min-width: 120px; margin-right: 15px;
-              padding-top: 8.5px; padding-bottom: 8.5px">GO TEST</a>
+              <a class="button" onclick="openInternalMenu('Device Support')" style="min-width: 120px; margin-right: 15px;
+              padding-top: 8.5px; padding-bottom: 8.5px;">GO TEST</a>
               
               
             </div>
@@ -917,8 +917,8 @@
                 Loops and Tags
               </p>
               
-              <a class="button" style="min-width: 120px; margin-right: 15px;
-              padding-top: 8.5px; padding-bottom: 8.5px">VIEW</a>
+              <a class="button" onclick="openInternalMenu('Behavior Relations')" style="min-width: 120px; margin-right: 15px;
+              padding-top: 8.5px; padding-bottom: 8.5px;">VIEW</a>
               
               
             </div>
@@ -973,8 +973,8 @@
                 Behavior Input Validation
               </p>
               
-              <a class="button" style="min-width: 140px; margin-right: 15px;
-              padding-top: 8.5px; padding-bottom: 8.5px" onclick="">VALIDATE</a>
+              <a class="button" onclick="openInternalMenu('Input Fields')" style="min-width: 140px; margin-right: 15px;
+              padding-top: 8.5px; padding-bottom: 8.5px;">VALIDATE</a>
               
               
             </div>
@@ -1070,6 +1070,891 @@
         </div>
       </div>
 </div>
+      </div>
+      
+      <!-- coming soon -->
+      <div id="Coming Soon" class="inMenuDoc" style="display: none">
+        <div class="displayRow" style="height: 95px;">
+           <div class="containerMargin">
+        <div class="container" style="width: calc((100%)); overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+         
+            <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px">
+              <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/D71B2E45-BC8A-4CEA-8126-2A0DDDB37C6D.png" style="width:50px; z-index:3; position: absolute; left: 10px; bottom: 10px;">
+              
+              <p class="inline" style="margin-top: 10px; margin-left: 65px; font-size: 17.5px; color:black">
+                This module is <b>coming in the future</b>!
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 65px; font-size: 15px; color:black">
+                I'm still working on this page - come back soon!
+              </p>
+              
+              <a class="button" onclick="exitMenu()" style="min-width: 150px; margin-right: 15px;
+              padding-top: 8.5px; padding-bottom: 8.5px">GO BACK</a>
+              
+         </div>
+            </div>
+          </div>
+      </div>
+        </div>
+      </div>
+      
+      <!-- program behaviors -->
+      <div id="Program Behaviors" class="inMenuDoc" style="display: none">
+      <div id="behaviorList1" class="hideInternal">
+        
+        <!-- instructions -->
+        <div class="displayRow" style="height: 365px;">
+      
+        <div class="containerMargin">
+          
+    <div class="container" style="width: 100%; overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+            <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px">
+              
+              <p class="inline" style="top: 10px; left: 20px; text-align:left; color:black; font-size: 40px; font-weight: bold;">
+               INSTRUCTIONS
+              </p>
+              <div style="width: 350px; height: 5px; background-color: black; top: 55px; left: 20px; position: absolute"></div>
+   <p class="inline" style="top: 70px; left: 20px; font-size: 19px; text-align:left; color:black; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px;">
+     In this module, you can select a behavior to program - the way you program a behavior will determine its <b>functionality</b>. Once you select a behavior, you will be taken a page where you can see comments and code submissions from other users. At the top of the page, select <b>Program Behavior</b> to open it in a code editor. Documentation on how to use the behavior system will be in the <b>Documentations tab</b> - you may access it anytime.<br><br>
+     <u>In the code editor, you can write and run your code. To submit it, your code must follow certain criteria:<br></u>
+              
+              • Code cannot throw errors or have invalid syntax.<br>
+              • Code must use all input fields - <i>if any</i>.<br>
+              • Code must use all output fields - <i>if any</i>.<br>
+              • Code cannot contain malware, bloatware or irrelevant functions.
+              
+              </p>
+                     
+           </div>
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+        
+        <!-- status keys -->
+        <div class="displayRow" style="height: 365px; overflow: hidden">
+      
+        <div class="containerMargin">
+          
+    <div class="container" style="width: 100%; overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+            <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px">
+              
+              <p class="inline" style="top: 10px; left: 20px; text-align:left; color:black; font-size: 40px; font-weight: bold;">
+               STATUS KEYS
+              </p>
+              <div style="width: 350px; height: 5px; background-color: black; top: 55px; left: 20px; position: absolute"></div>
+   <p class="inline" style="top: 70px; left: 20px; font-size: 19px; text-align:left; color:black; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px; overflow: hidden">
+     Each behavior on this page has a status indicated by a small colored circle.<br>
+     
+     <span style="color:#ff5050; font-size: 75px; margin-bottom: -160px; line-height: 35px; height: 30px; vertical-align: middle;">•</span>
+              <b>No Progress</b>: No one has started working on the behavior yet.<br>
+          <span style="color:#ffda42; font-size: 75px; line-height: 35px; margin-bottom: -160px; margin-top: -100px; vertical-align: middle;">•</span>
+              <b>In-Progress</b>: Users have submitted code that is awaiting verification.<br>
+     <span style="color:#ff89fe; font-size: 75px; margin-bottom: -160px; line-height: 35px; vertical-align: middle;">•</span>
+              <b>Verified</b>: A code snippet has been verified and will be implemented soon.<br>
+     <span style="color:#00bb78; font-size: 75px; margin-bottom: -160px; line-height: 35px; vertical-align: middle;">•</span>
+              <b>Implemented</b>: The behavior has been 100% implemented in the latest version.<br>
+     <span style="color:grey; font-size: 75px; margin-bottom: -160px; line-height: 35px; vertical-align: middle;">•</span>
+              <b>Cancelled</b>: The behavior cannot be replicated on the web due to limitations.<br>
+     <span style="color:#ff8058; font-size: 75px; margin-bottom: -160px; line-height: 35px; vertical-align: middle;">•</span>
+              <b>Deprecated</b>: Behavior is outdated and does not work in the latest version.<br>
+     
+              </p>
+                     
+           </div>
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+        
+        <!-- interaction -->      
+        <div class="displayRow" style="height: 165px;">
+      
+        <div class="containerMargin">
+          
+    <div class="container" style="width: 100%; overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px);" id="interactionBG">
+      
+      <div id="codeBehaviorsIMG">
+           
+           <style>
+             #interactionBG {
+               background: linear-gradient(to top right, #8274a4 0.0%, #574e6e 100.0%); 
+               border-collapse: separate; 
+               overflow: hidden;
+             }
+           </style>
+             
+           </div>  
+           <p class="inline" style="top: 13px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                INTERACTION
+              </p>
+           
+            </div>
+            <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+     <p class="inline" id="InteractionCount" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                0 Behaviors in this Category
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                Touch Input, Drag & Drop, Joystick, etc.
+              </p>
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+</div> 
+        <div id="InteractionList"></div>
+
+        <!-- object -->      
+        <div class="displayRow" style="height: 165px;">
+      
+        <div class="containerMargin">
+          
+    <div class="container" style="width: 100%; overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px);" id="objectBG">
+      
+      <div id="codeBehaviorsIMG">
+           
+           <style>
+             #objectBG {
+               background: linear-gradient(to top right, #f7979a 0.0%, #a06264 100.0%); 
+               border-collapse: separate; 
+               overflow: hidden;
+             }
+           </style>
+             
+           </div>  
+           <p class="inline" style="top: 13px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                OBJECT
+              </p>
+           
+            </div>
+            <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+     <p class="inline" id="ObjectCount" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                0 Behaviors in this Category
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                Tags, Object Collisions, Attributes, etc.
+              </p>
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+</div> 
+        <div id="ObjectList"></div>
+        
+        <!-- screen -->      
+        <div class="displayRow" style="height: 165px;">
+      
+        <div class="containerMargin">
+          
+    <div class="container" style="width: 100%; overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px);" id="screenBG">
+      
+      <div id="codeBehaviorsIMG">
+           
+           <style>
+             #screenBG {
+               background: linear-gradient(to top right, #e2bb6d 0.0%, #9c814b 100.0%); 
+               border-collapse: separate; 
+               overflow: hidden;
+             }
+           </style>
+             
+           </div>  
+           <p class="inline" style="top: 13px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                SCREEN
+              </p>
+           
+            </div>
+            <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+     <p class="inline" id="ScreenCount" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                0 Behaviors in this Category
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                Screen Position, Rotation, Zoom, etc.
+              </p>
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+</div> 
+        <div id="ScreenList"></div>
+        
+        <!-- transform -->      
+        <div class="displayRow" style="height: 165px;">
+      
+        <div class="containerMargin">
+          
+    <div class="container" style="width: 100%; overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px);" id="transformBG">
+      
+      <div id="codeBehaviorsIMG">
+           
+           <style>
+             #transformBG {
+               background: linear-gradient(to top right, #60a0ab 0.0%, #396067 100.0%); 
+               border-collapse: separate; 
+               overflow: hidden;
+             }
+           </style>
+             
+           </div>  
+           <p class="inline" style="top: 13px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                TRANSFORM
+              </p>
+           
+            </div>
+            <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+     <p class="inline" id="TransformCount" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                0 Behaviors in this Category
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                Object Position, Scale, Rotation, etc.
+              </p>
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+</div> 
+        <div id="TransformList"></div>
+        
+        <!-- ui -->      
+        <div class="displayRow" style="height: 165px;">
+      
+        <div class="containerMargin">
+          
+    <div class="container" style="width: 100%; overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px);" id="uiBG">
+      
+      <div id="codeBehaviorsIMG">
+           
+           <style>
+             #uiBG {
+               background: linear-gradient(to top right, #7d6275 0.0%, #4d3d48 100.0%); 
+               border-collapse: separate; 
+               overflow: hidden;
+             }
+           </style>
+             
+           </div>  
+           <p class="inline" style="top: 13px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                UI
+              </p>
+           
+            </div>
+            <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+     <p class="inline" id="UICount" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                0 Behaviors in this Category
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                Text, Popups, Life Indicators, Health Bars, etc.
+              </p>
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+</div> 
+        <div id="UIList"></div>
+        
+        <!-- fx -->      
+        <div class="displayRow" style="height: 165px;">
+      
+        <div class="containerMargin">
+          
+    <div class="container" style="width: 100%; overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px);" id="fxBG">
+      
+      <div id="codeBehaviorsIMG">
+           
+           <style>
+             #fxBG {
+               background: linear-gradient(to top right, #d36451 0.0%, #8a4135 100.0%); 
+               border-collapse: separate; 
+               overflow: hidden;
+             }
+           </style>
+             
+           </div>  
+           <p class="inline" style="top: 13px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                FX
+              </p>
+           
+            </div>
+            <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+     <p class="inline" id="FXCount" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                0 Behaviors in this Category
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                Particle FX, Sound FX, Animation, etc.
+              </p>
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+</div> 
+        <div id="FXList"></div>
+        
+        <!-- scene -->      
+        <div class="displayRow" style="height: 165px;">
+      
+        <div class="containerMargin">
+          
+    <div class="container" style="width: 100%; overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px);" id="sceneBG">
+      
+      <div id="codeBehaviorsIMG">
+           
+           <style>
+             #sceneBG {
+               background: linear-gradient(to top right, #52bfb5 0.0%, #37817a 100.0%); 
+               border-collapse: separate; 
+               overflow: hidden;
+             }
+           </style>
+             
+           </div>  
+           <p class="inline" style="top: 13px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                Scene
+              </p>
+           
+            </div>
+            <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+     <p class="inline" id="SceneCount" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                0 Behaviors in this Category
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                Scenes, Overlay, Time Scale, etc.
+              </p>
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+</div> 
+        <div id="SceneList"></div>
+        
+        <!-- physics -->      
+        <div class="displayRow" style="height: 165px;">
+      
+        <div class="containerMargin">
+          
+    <div class="container" style="width: 100%; overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px);" id="physicsBG">
+      
+      <div id="codeBehaviorsIMG">
+           
+           <style>
+             #physicsBG {
+               background: linear-gradient(to top right, #af7a5f 0.0%, #714e3d 100.0%); 
+               border-collapse: separate; 
+               overflow: hidden;
+             }
+           </style>
+             
+           </div>  
+           <p class="inline" style="top: 13px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                Physics
+              </p>
+           
+            </div>
+            <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+     <p class="inline" id="PhysicsCount" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                0 Behaviors in this Category
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                Physical Properties, Attachments, Modes, etc.
+              </p>
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+</div> 
+        <div id="PhysicsList"></div>
+        
+        <!-- logic -->      
+        <div class="displayRow" style="height: 165px;">
+      
+        <div class="containerMargin">
+          
+    <div class="container" style="width: 100%; overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px);" id="logicBG">
+      
+      <div id="codeBehaviorsIMG">
+           
+           <style>
+             #logicBG {
+               background: linear-gradient(to top right, #6b9e6e 0.0%, #4a6d4c 100.0%); 
+               border-collapse: separate; 
+               overflow: hidden;
+             }
+           </style>
+             
+           </div>  
+           <p class="inline" style="top: 13px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                Logic
+              </p>
+           
+            </div>
+            <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+     <p class="inline" id="LogicCount" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                0 Behaviors in this Category
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                Math, Loops, Conditionals, etc.
+              </p>
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+</div> 
+        <div id="LogicList"></div>
+        
+        <!-- custom -->      
+        <div class="displayRow" style="height: 165px;">
+      
+        <div class="containerMargin">
+          
+    <div class="container" style="width: 100%; overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+         
+         <div class="containerPlaceholder" style="height:calc(100% - 60px);" id="customBG">
+      
+      <div id="codeBehaviorsIMG">
+           
+           <style>
+             #customBG {
+               background: linear-gradient(to top right, #506e95 0.0%, #2f4158 100.0%); 
+               border-collapse: separate; 
+               overflow: hidden;
+             }
+           </style>
+             
+           </div>  
+           <p class="inline" style="top: 13px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
+                Custom
+              </p>
+           
+            </div>
+            <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
+              
+     <p class="inline" id="CustomCount" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+                0 Behaviors in this Category
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
+                Networking, Storage, Timers, etc.
+              </p>
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+</div> 
+        <div id="CustomList"></div>
+        
+        <!-- initialize -->
+        <script>
+        
+          function loadBehaviorList1() {
+            let behaviors = internalData.behaviorBase;
+            let internal = internalData.behaviors;
+            let categories = {};
+            let categoryColor = {
+              Interaction: "8274a4",
+              Object: "f58184",
+              Custom: "506e95",
+              Screen: "e2bb6d",
+              UI: "806377",
+              Logic: "6b9e6c",
+              FX: "d36451",
+              Physics: "af7a5f",
+              Scene: "52bfb5",
+              Transform: "60a0ab"
+            }
+            
+            Object.keys(behaviors).forEach(function(behavior) {
+              let data = behaviors[behavior] || {};
+              if (!data.category) {
+                return;
+              }
+              categories[data.category] = categories[data.category] || [];
+              categories[data.category].push(data);
+            });
+            Object.keys(categories).forEach(function(category) {
+              let count = categories[category].length;
+              document.getElementById(category + "Count").innerHTML = count + " Behaviors in this Category";
+              let left = "";
+              let right = "";
+              let i = 0;
+              categories[category].forEach(function(behavior) {
+                try {
+                let content = '<div class="displayRow" style="height: 130px; margin-bottom: -10px; overflow: hidden"><div class="containerMargin"><div class="container" style="width: 100%; height: 85px; border-radius: 10px;"><div class="containerDisplay" style="border-radius: 10px 10px 0px 0px"><div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px"><p class="inline" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:black">BehaviorName</p><p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:black">Description</p><a class="button" onclick="programBehavior(\"BehaviorName\")" style="min-width: 90px; margin-right: 15px; padding-top: 8.5px; padding-bottom: 8.5px">VIEW</a></div></div></div>  <div class="containerDisplay" style="background-color: #e9e9e9; height: 35px; border-radius: 0px 0px 10px 10px; width: calc(100% - 20px); margin-top: -15px; border-top: 10px solid BGColor"><div style="background-color: $StatusColor; border-radius: 100%; width: 11.5px; height: 11.5px; margin-left: 10px; position: absolute; margin-top: 6px;"></div><p class="inline" style="margin-top: 3px; margin-left: 25px; font-size: 13.5px; color:black">$Status</p></div></div></div>';
+                internal[behavior] = internal[behavior] || {};
+                let s = internal.status || "No Progress";
+                if (s == "No Progress") {
+                  content = content.replace("$StatusColor", "#ff5050");
+                }
+                if (s == "In-Progress") {
+                  content = content.replace("$StatusColor", "#ffda42");
+                }
+                if (s == "Verified") {
+                  content = content.replace("$StatusColor", "#ff89fe");
+                }
+                if (s == "Implemented") {
+                  content = content.replace("$StatusColor", "#00bb78");
+                }
+                if (s == "Deprecated") {
+                  content = content.replace("$StatusColor", "#ff8058");
+                }  
+                if (s == "Cancelled") {
+                  content = content.replace("$StatusColor", "gray");
+                }  
+                let status = "<b>" + s + "</b> • " + (internal.viewCount || 0) + " Views • ";
+                status += (internal.codeSubmissions || 0) + " Submissions";
+                content = content.replace("$Status", status);
+                content = content.replace("BehaviorName", "<b>" + behavior.alias + "</b>");
+                content = content.replace("BGColor", "#" + categoryColor[behavior.category]);
+                
+                let desc = Object.keys(behavior.inputs).length;
+                if (Object.keys(behavior.inputs).length == 1) {
+                  desc += " Input - ";
+                } else {
+                  desc += " Inputs - ";
+                }
+                
+                if (behavior.outputs.length == 1) {
+                  desc += behavior.outputs.length + " Output";
+                } else {
+                  desc += behavior.outputs.length + " Outputs";
+                }
+                
+                content = content.replace("Description", desc);
+                if (i % 2 == 0) {
+                  left += content;
+                } else {
+                  right += content; 
+                }
+                i++;
+                } catch(e) {
+                  console.error(e);
+                }
+              });
+              
+              let c = "<div style='width:50%; float: left; overflow: hidden'>" + left;
+              c += "</div><div style='width:50%; float: right; overflow: hidden'>" + right;
+              c += "</div>";
+              document.getElementById(category + "List").innerHTML = c;
+              
+            });
+            
+          }
+          
+        </script>
+        
+      </div>
+        
+        
+      <div id="codeIDE" class="hideInternal">
+           
+        
+                        <div class="container" style="width: calc((100%)); overflow: hidden; border-radius: 10px; top: 50px">
+       <div class="containerDisplay">
+         
+            <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px">
+             
+              
+              <p class="inline" style="margin-top: 10px; margin-left: 65px; font-size: 17.5px; color:black">
+                Code IDE
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 65px; font-size: 15px; color:black">
+                On Execute
+              </p>
+              
+              <a class="button" onclick="codeSet('On Enable')" style="min-width: 150px; margin-right: 5px; float:right;
+              padding-top: 8.5px; padding-bottom: 8.5px; background-color: #4982bb">Console Log</a>
+              <a class="button" onclick="codeSet('On Enable')" style="min-width: 150px; margin-right: 5px; float:right;
+              padding-top: 8.5px; padding-bottom: 8.5px; background-color: #00bb78">On Enable</a>
+              <a class="button" onclick="codeSet('On Disable')" style="min-width: 150px; margin-right: 5px; float:right;
+              padding-top: 8.5px; padding-bottom: 8.5px; background-color: #00bb78">On Disable</a>
+              <a class="button" onclick="codeSet('On Execute')" style="min-width: 150px; margin-right: 15px;
+              padding-top: 8.5px; padding-bottom: 8.5px; background-color: #00bb78">On Execute</a>
+              
+              
+            </div>
+         
+
+      </div>
+        </div>
+        
+        
+        
+      </div>
+        
+        
+      <div id="codeDoc" class="hideInternal">
+        <div class="displayRow" style="height: 450px; overflow: hidden">
+      
+        <div class="containerMargin">
+          
+    <div class="container" style="width: 100%; overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+            <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px">
+              
+              <p class="inline" style="top: 10px; left: 20px; text-align:left; color:black; font-size: 40px; font-weight: bold;">
+               UNDERSTANDING THE SYSTEM
+              </p>
+              <div style="width: 650px; height: 5px; background-color: black; top: 55px; left: 20px; position: absolute"></div>
+   <p class="inline" style="top: 70px; left: 20px; font-size: 19px; text-align:left; color:black; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px; overflow: hidden">
+     The behavior system uses <b>Javascript</b> as the primary programming language.<br>There are <i>3</i> snippets of code you will see in the editor: <br><br>
+<b>On Execute</b> - This piece of code will run when the behavior is executed. It can be triggered by other behaviors or be triggered automatically on launch if no behavior is on the top <i>(Root Behaviors)</i>.<br><br>
+<b>On Disable</b> - This piece of code will run when the behavior is disabled. The code will also be executed on launch when the behavior is initially disabled. Note that the "On Execute" script cannot be executed when the behavior is disabled - you may leave this blank if the behavior doesn't do anything when disabled. <br><br>
+<b>On Enable</b> - This piece of code will only execute when the behavior transitions from being disabled to being enabled via the <i>Behavior On</i> behavior. You may leave this blank if the behavior doesn't do anything when enabled - though, note that the behavior can trigger the "On Execute" script when enabled.
+              </p>
+                     
+           </div>
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+        <div class="displayRow" style="height: 3000px; overflow: hidden">
+      
+        <div class="containerMargin">
+          
+    <div class="container" style="width: 100%; overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+            <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px">
+              
+              <p class="inline" style="top: 10px; left: 20px; text-align:left; color:black; font-size: 40px; font-weight: bold;">
+               CODE DOCUMENTATION
+              </p>
+              <div style="width: 650px; height: 5px; background-color: black; top: 55px; left: 20px; position: absolute"></div>
+   <p class="inline" style="top: 70px; left: 20px; font-size: 19px; text-align:left; color:black; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px; overflow: hidden">
+     
+     <b style="font-size: 25px">input[ <i style="color:#00bb78">inputField: <span style="color:#ffad32">STRING</span></i> ]</b>
+        <br>      
+        The <i>input</i> variable is a dictionary containing the input fields of the behavior. The editor will show all existing input fields at the top of the page. Don't worry about data types or dynamic input fields - the system automatically converts them.<br><br>
+     <b>Example</b></p>
+              <div style="border-radius: 10px; overflow: hidden; top: 195px; height: 80px; width: calc(100% - 40px); margin-left: 20px; display: inline-block; position: absolute;">
+                
+              <div class="editor" readonly id="example1" style="border-radius: 10px; width: 100%; height: 100%; left: 0px; right: 0px; top: 0px; bottom: 0px; position: absolute">// add two values together in the Add Values behavior
+let sum = input.numberA + input.numberB;</div>
+                </div>
+              
+ <p class="inline" style="top: 300px; left: 20px; font-size: 19px; text-align:left; color:black; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px; overflow: hidden">
+ <b style="font-size: 25px">yield( <i style="color:#00bb78">outputFields: <span style="color:#ff725c">DICTIONARY</span></i> )</b>
+        <br>      
+        The <i>yield</i> function updates the output fields of the behavior using a dictionary where the keys are the output fields and the values are the values to update with. All output fields are shown at the top of the editor and must be all referenced in one call.<br><br>
+     <b>Example</b></p>
+              <div style="border-radius: 10px; overflow: hidden; top: 425px; height: 150px; width: calc(100% - 40px); margin-left: 20px; display: block; position: absolute;">
+                
+              <div class="editor" readonly id="example2" style="border-radius: 10px; width: 100%; height: 100%; left: 0px; right: 0px; top: 0px; bottom: 0px; position: absolute">// add two values together in the Add Values behavior
+let sum = input.numberA + input.numberB;
+                
+// update the behavior's output fields
+yield({
+  result: sum               
+});</div>
+                </div>
+              
+              <p class="inline" style="top: 590px; left: 20px; font-size: 19px; text-align:left; color:black; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px; overflow: hidden">
+ <b style="font-size: 25px">trigger( <i style="color:#00bb78">force: <span style="color:#6a71ff">BOOLEAN</span></i> )</b>
+        <br>      
+        The <i>trigger</i> function executes <i>all</i> child behaviors. If <i>force</i> is enabled, the behaviors will be executed from left to right as used with <b>Behavior Bundle</b>. For behaviors like <b>Loop</b> and <b>If</b>, the function can be optional or be executed multiple times.<br><br>
+     <b>Example</b></p>
+              <div style="border-radius: 10px; overflow: hidden; top: 715px; height: 220px; width: calc(100% - 40px); margin-left: 20px; display: block; position: absolute;">
+                
+              <div class="editor" readonly id="example3" style="border-radius: 10px; left: 0px; right: 0px; top: 0px; bottom: 0px; position: absolute">// add two values together in the Add Values behavior
+let sum = input.numberA + input.numberB;
+                
+// update the behavior's output fields
+yield({
+  result: sum               
+});
+                
+// trigger other behaviors when after yielding outputs
+trigger();</div>
+                </div>
+              
+<p class="inline" style="top: 950px; left: 20px; font-size: 19px; text-align:left; color:black; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px; overflow: hidden">
+ <b style="font-size: 25px">internal[ <i style="color:#00bb78">key: <span style="color:#ffad32">STRING</span></i> ]</b>
+        <br>      
+        The <i>internal</i> variable is a dictionary containing the behavior's internal data - this is a way that behaviors can <i>"remember"</i> their previous state and can act differently for each execution.<br><br>
+  
+  <b style="font-size: 25px">childrenCount</b>
+        <br>      
+        The <i>childrenCount</i> variable is a number representing the amount of child behaviors the behavior has.<br><br>
+   
+ <b style="font-size: 25px">triggerNode( <i style="color:#00bb78">node: <span style="color:#66cbff">NUMBER</span></i> )</b>
+        <br>      
+        The <i>triggerNode</i> function executes a single child behavior. 0 will be the first child behavior. Exceeding the number of child behaviors will result in an error.<br><br>
+     <b>Example</b></p>
+              <div style="border-radius: 10px; overflow: hidden; top: 1253px; height: 300px; width: calc(100% - 40px); margin-left: 20px; display: block; position: absolute;">
+                
+              <div class="editor" readonly id="example4" style="border-radius: 10px; left: 0px; right: 0px; top: 0px; bottom: 0px; position: absolute">// in an execute sequence behavior
+// initialize a variable inside the behavior
+internal.sequence = internal.sequence || 0;
+                
+// execute a child behavior
+triggerNode(internal.sequence);
+                
+// increment the variable in the behavior
+internal.sequence++;
+                
+// reset it if it exceeds the child behaviors count
+if (internal.sequence > childrenCount) {
+  internal.sequence = 0;                
+}</div>
+                </div>
+              
+<p class="inline" style="top: 1580px; left: 20px; font-size: 19px; text-align:left; color:black; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px; overflow: hidden">
+  <b style="font-size: 25px">behaviors[ <i style="color:#00bb78">name: <span style="color:#ffad32">STRING</span></i> ][<i style="color:#00bb78"> function: <span style="color:#ffad32">STRING </span></i>]()</b>
+        <br>      
+  The <i>behaviors</i> variable is a dictionary where the key is the behaviorID and the value will contain functions. You can access other behaviors if necessary and perform actions on them.<br><br>
+     <b>All Usage Cases</b></p>
+              <div style="border-radius: 10px; overflow: hidden; top: 1705px; height: 700px; width: calc(100% - 40px); margin-left: 20px; display: block; position: absolute;">
+                
+              <div class="editor" readonly id="example5" style="border-radius: 10px; left: 0px; right: 0px; top: 0px; bottom: 0px; position: absolute">// enable a behavior
+behaviors[input.behaviorA].enable();
+                
+// disable a behavior
+behaviors[input.behaviorA].disable();
+                
+// execute a behavior
+behaviors[input.behaviorA].execute();
+                
+// get a behavior's input field
+behaviors[input.behaviorA].inputs;
+                
+// get a behavior's output field
+behaviors[input.behaviorA].outputs;
+                
+// set a behavior's input field
+behaviors[input.behaviorA].inputs.numberA = input.text;
+                
+// set a behavior's output field
+behaviors[input.behaviorA].outputs.numberA = input.text;
+                
+// get a behavior's input field type
+behaviors[input.behaviorA].inputs.numberA.type;
+                
+// get a behavior's input field key
+behaviors[input.behaviorA].inputs.numberA.key;
+                
+// get a behavior's input field controller
+behaviors[input.behaviorA].inputs.numberA.controller;
+                
+// dynamically set a behavior's input field
+behaviors[input.behaviorA].setInput("numberA", {
+  key: "result",
+  controller: input.behaviorB
+};</div>
+                </div>
+              
+              <p class="inline" style="top: 2420px; left: 20px; font-size: 19px; text-align:left; color:black; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px; overflow: hidden">
+  <b style="font-size: 25px">global</b>
+        <br>      
+  The <i>global</i> variable is a <b>boolean</b> that is only true if the behavior is in the global world object.<br><br>
+                <b style="font-size: 25px">root</b>
+        <br>      
+  The <i>root</i> variable is a <b>boolean</b> that is only true if the behavior is a root behavior. Root behaviors have no behaviors connected from the top, therefore the behavior executes on launch and can function differently.<br><br>
+     <b>Example</b>
+              </p>
+              
+              <div style="border-radius: 10px; overflow: hidden; top: 2620px; height: 320px; width: calc(100% - 40px); margin-left: 20px; display: block; position: absolute;">
+                
+              <div class="editor" readonly id="example6" style="border-radius: 10px; left: 0px; right: 0px; top: 0px; bottom: 0px; position: absolute">// check if the behavior is global
+if (global) {
+  console.log("I'm a global behavior.");
+} else {
+  console.log("I'm NOT a global behavior.");
+}
+             
+// check if the behavior is root
+if (root) {
+  console.log("I'm a root behavior.");
+} else {
+  console.log("I'm NOT a root behavior.");
+}
+                
+                </div>
+                </div>
+              
+           </div>
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+      </div>
       </div>
       
       <div style="height:30px">
@@ -1193,7 +2078,7 @@
               
              
               <a class="button" id="hyperButton" style="display: block; min-width: 190px; margin-right: 10px; float:right; right: 0px;
-              padding-top: 8.5px; padding-bottom: 8.5px" onclick="document.getElementById('hyperButton').innerHTML = loaderButton;" href="https://hyperPad.com">VISIT HYPERPAD</a>
+              padding-top: 8.5px; padding-bottom: 8.5px" href="https://hyperPad.com">VISIT HYPERPAD</a>
               
               
             </div>
@@ -1852,9 +2737,7 @@ Creeper kingdom stars <a style="color:black" href="https://youtube.com/channel/U
       <div style="height: 60px">
    
           </div>
-    </div>
-    
-    
+    </div>  
     
     <!-- navigation bar -->
     <div id="navBar" class="displayRow" style="height: 70px; bottom: 0px; position: fixed; margin-bottom: 0px; background: linear-gradient(0deg, #202020bb, transparent); z-index: 20;">
@@ -1890,6 +2773,33 @@ Creeper kingdom stars <a style="color:black" href="https://youtube.com/channel/U
       </p>
     </div> 
     </div>
+      
+    <!-- in nav bar (inside a menu) -->  
+    <div id="inMenuBar" class="displayRow" style="display: none; height: 70px; bottom: 0px; position: fixed; margin-bottom: 0px; background: linear-gradient(0deg, #202020bb, transparent); z-index: 20;">
+    
+    <div class="containerDisplay" style="width: calc(100% - 30px); margin-left: auto; margin-right: auto; white-space: nowrap;">
+           <p style="font-size: 20px; left: 8px; margin-top:13px; position: absolute; color:#acacac; font-weight: bold; display: inline;">
+        <span value="EXIT MENU" class="navTexts" onclick="exitMenu()">EXIT MENU</span>
+         <script>
+         	function exitMenu() {
+              document.getElementById("navBar").style.display = "block";
+              document.getElementById("inMenuBar").style.display = "none";
+              document.getElementById("selectMenu").style.display = "block";
+              document.querySelectorAll('.inMenuDoc').forEach(function(element) {
+	 	     	element.style.display = "none";
+			  });
+              navMenu('contributeMenu', 'CONTRIBUTE')
+            }    
+         </script>
+      </p>
+      
+                 <p style="font-size: 20px; right: 8px; margin-top:13px; position: absolute; color:#acacac; font-weight: bold; display: inline;" id="inMenuBarText">
+                   
+           
+      </p>
+    </div> 
+    </div>
+      
           </div>
     
     <!-- additional page length -->
@@ -1914,6 +2824,55 @@ Creeper kingdom stars <a style="color:black" href="https://youtube.com/channel/U
   </body>
 </html>
 
+<!-- Menu Navigation -->
+<script>
+  function inNavMenu(menu, text) {
+    document.querySelectorAll('.hideInternal').forEach(function(element) {
+	  element.style.display = "none";
+    });
+    window.scrollTo(0, 0);
+    document.getElementById(menu).style.display = "block";
+    document.querySelectorAll('.navTexts').forEach(function(element) {
+      element.innerHTML = element.getAttribute("value");
+      if (element.getAttribute("value") == text) {
+        element.innerHTML = "<b style='color:#00BB78'>" + text + "</b>"; 
+      }
+	});
+    try {
+      eval(internalFunct[menu]);
+    } catch(e) {};
+    document.getElementById(inMenu).style.display = "block";
+  }
+const internalMenuNavs = {
+          "Program Behaviors": '<span class="navTexts" value="BEHAVIORS" onclick="inNavMenu(\'behaviorList1\', \'BEHAVIORS\')"><b style="color:#00BB78">BEHAVIORS</b></span> / <span value="CODE IDE" class="navTexts" onclick="inNavMenu(\'codeIDE\', \'CODE IDE\')">BETA TEST</span> / <span value="DOCUMENTATION" class="navTexts" onclick="inNavMenu(\'codeDoc\', \'DOCUMENTATION\')">ROADMAP</span>'
+        };
+        const internalCall = {
+          "Program Behaviors": "inNavMenu('behaviorList1', 'BEHAVIORS')"
+        };
+  		const internalFunct = {
+          "behaviorList1": "loadBehaviorList1();"
+        }
+  		var inMenu = "";
+        function openInternalMenu(id) {
+          document.getElementById("selectMenu").style.display = "none";
+          document.getElementById("navBar").style.display = "none";
+          document.getElementById("inMenuBar").style.display = "block";
+          document.querySelectorAll('.inMenuDoc').forEach(function(element) {
+	 	    element.style.display = "none";
+	      });
+          try {
+            document.getElementById("inMenuBarText").innerHTML = internalMenuNavs[id] || "";
+            document.getElementById(id).style.display = "block";
+            inMenu = id;
+            console.debug(id)
+            eval(internalCall[id] || "");
+          } catch(e) {}
+          if (internalCall[id] === undefined) {
+            document.getElementById("Coming Soon").style.display = "block";
+          }
+        }    
+</script>
+
 <!-- Page Loading -->
 <script>
   function hideAllMenuDivs() {
@@ -1923,6 +2882,10 @@ Creeper kingdom stars <a style="color:black" href="https://youtube.com/channel/U
   }
   
   function finishLoad() {
+    history.pushState({
+      time: Date.now(),
+      discord: discordAcc
+    }, "", "");
     document.getElementById("menuLoading").style.display = "none";
     document.getElementById("mainMenu").style.display = "block";
     if (internalData.authorized) {
@@ -2067,5 +3030,102 @@ Creeper kingdom stars <a style="color:black" href="https://youtube.com/channel/U
     }
   }
 
+  async function initEditor() {
+  console.log("running editors")
+  fetch("https://cdnjs.cloudflare.com/ajax/libs/ace/1.7.1/ace.js")
+  .then(res => res.text())
+  .then(res => {   
+    console.log("1st test")
+    eval(res)
+    
+  fetch("https://raw.githubusercontent.com/ajaxorg/ace/master/lib/ace/range.js")
+  .then(res => res.text())
+  .then(res => {   
+    console.log("2nd test")
+    try {
+      eval(res)
+    } catch(e) {
+      console.error(e)
+    }
+    console.log("ready")
+    
+    setTimeout(function() {
+      console.log("initialized editors")
+      document.querySelectorAll('.editor').forEach(function(element) {
+        try {
+        let editor = ace.edit(element.id);
+        console.info(element.id)
+        window[element.id + "-editor"] = editor;
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/javascript");
+        editor.setOptions({
+  	      fontSize: "16px"
+		});
+        let readonly = element.getAttribute("readonly");
+        if (readonly) {
+          editor.setReadOnly(true);
+        }
+        } catch(e) {
+          console.error(e)
+        }
+        
+      });
+    }, 10)
+    
+  try {
+    ace.define("ace/theme/monokai",["require","exports","module","ace/lib/dom"],function(e,t,n){t.isDark=!0,t.cssClass="ace-monokai",t.cssText=".ace-monokai .ace_gutter {background: #2F3129;color: #8F908A}.ace-monokai .ace_print-margin {width: 1px;background: #555651}.ace-monokai {background-color: #272822;color: #F8F8F2}.ace-monokai .ace_cursor {color: #F8F8F0}.ace-monokai .ace_marker-layer .ace_selection {background: #49483E}.ace-monokai.ace_multiselect .ace_selection.ace_start {box-shadow: 0 0 3px 0px #272822;}.ace-monokai .ace_marker-layer .ace_step {background: rgb(102, 82, 0)}.ace-monokai .ace_marker-layer .ace_bracket {margin: -1px 0 0 -1px;border: 1px solid #49483E}.ace-monokai .ace_marker-layer .ace_active-line {background: #202020}.ace-monokai .ace_gutter-active-line {background-color: #272727}.ace-monokai .ace_marker-layer .ace_selected-word {border: 1px solid #49483E}.ace-monokai .ace_invisible {color: #52524d}.ace-monokai .ace_entity.ace_name.ace_tag,.ace-monokai .ace_keyword,.ace-monokai .ace_meta.ace_tag,.ace-monokai .ace_storage {color: #F92672}.ace-monokai .ace_punctuation,.ace-monokai .ace_punctuation.ace_tag {color: #fff}.ace-monokai .ace_constant.ace_character,.ace-monokai .ace_constant.ace_language,.ace-monokai .ace_constant.ace_numeric,.ace-monokai .ace_constant.ace_other {color: #AE81FF}.ace-monokai .ace_invalid {color: #F8F8F0;background-color: #F92672}.ace-monokai .ace_invalid.ace_deprecated {color: #F8F8F0;background-color: #AE81FF}.ace-monokai .ace_support.ace_constant,.ace-monokai .ace_support.ace_function {color: #66D9EF}.ace-monokai .ace_fold {background-color: #A6E22E;border-color: #F8F8F2}.ace-monokai .ace_storage.ace_type,.ace-monokai .ace_support.ace_class,.ace-monokai .ace_support.ace_type {font-style: italic;color: #66D9EF}.ace-monokai .ace_entity.ace_name.ace_function,.ace-monokai .ace_entity.ace_other,.ace-monokai .ace_entity.ace_other.ace_attribute-name,.ace-monokai .ace_variable {color: #A6E22E}.ace-monokai .ace_variable.ace_parameter {font-style: italic;color: #FD971F}.ace-monokai .ace_string {color: #E6DB74}.ace-monokai .ace_comment {color: #75715E}.ace-monokai .ace_indent-guide {background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWPQ0FD0ZXBzd/wPAAjVAoxeSgNeAAAAAElFTkSuQmCC) right repeat-y}";var r=e("../lib/dom");r.importCssString(t.cssText,t.cssClass,!1)});                (function() {
+                    ace.require(["ace/theme/monokai"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+   ace.define("ace/mode/doc_comment_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"],function(e,t,n){"use strict";var r=e("../lib/oop"),i=e("./text_highlight_rules").TextHighlightRules,s=function(){this.$rules={start:[{token:"comment.doc.tag",regex:"@[\\w\\d_]+"},s.getTagRule(),{defaultToken:"comment.doc",caseInsensitive:!0}]}};r.inherits(s,i),s.getTagRule=function(e){return{token:"comment.doc.tag.storage.type",regex:"\\b(?:TODO|FIXME|XXX|HACK)\\b"}},s.getStartRule=function(e){return{token:"comment.doc",regex:"\\/\\*(?=\\*)",next:e}},s.getEndRule=function(e){return{token:"comment.doc",regex:"\\*\\/",next:e}},t.DocCommentHighlightRules=s}),ace.define("ace/mode/javascript_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/doc_comment_highlight_rules","ace/mode/text_highlight_rules"],function(e,t,n){"use strict";function a(){var e=o.replace("\\d","\\d\\-"),t={onMatch:function(e,t,n){var r=e.charAt(1)=="/"?2:1;if(r==1)t!=this.nextState?n.unshift(this.next,this.nextState,0):n.unshift(this.next),n[2]++;else if(r==2&&t==this.nextState){n[1]--;if(!n[1]||n[1]<0)n.shift(),n.shift()}return[{type:"meta.tag.punctuation."+(r==1?"":"end-")+"tag-open.xml",value:e.slice(0,r)},{type:"meta.tag.tag-name.xml",value:e.substr(r)}]},regex:"</?"+e+"",next:"jsxAttributes",nextState:"jsx"};this.$rules.start.unshift(t);var n={regex:"{",token:"paren.quasi.start",push:"start"};this.$rules.jsx=[n,t,{include:"reference"},{defaultToken:"string"}],this.$rules.jsxAttributes=[{token:"meta.tag.punctuation.tag-close.xml",regex:"/?>",onMatch:function(e,t,n){return t==n[0]&&n.shift(),e.length==2&&(n[0]==this.nextState&&n[1]--,(!n[1]||n[1]<0)&&n.splice(0,2)),this.next=n[0]||"start",[{type:this.token,value:e}]},nextState:"jsx"},n,f("jsxAttributes"),{token:"entity.other.attribute-name.xml",regex:e},{token:"keyword.operator.attribute-equals.xml",regex:"="},{token:"text.tag-whitespace.xml",regex:"\\s+"},{token:"string.attribute-value.xml",regex:"'",stateName:"jsx_attr_q",push:[{token:"string.attribute-value.xml",regex:"'",next:"pop"},{include:"reference"},{defaultToken:"string.attribute-value.xml"}]},{token:"string.attribute-value.xml",regex:'"',stateName:"jsx_attr_qq",push:[{token:"string.attribute-value.xml",regex:'"',next:"pop"},{include:"reference"},{defaultToken:"string.attribute-value.xml"}]},t],this.$rules.reference=[{token:"constant.language.escape.reference.xml",regex:"(?:&#[0-9]+;)|(?:&#x[0-9a-fA-F]+;)|(?:&[a-zA-Z0-9_:\\.-]+;)"}]}function f(e){return[{token:"comment",regex:/\/\*/,next:[i.getTagRule(),{token:"comment",regex:"\\*\\/",next:e||"pop"},{defaultToken:"comment",caseInsensitive:!0}]},{token:"comment",regex:"\\/\\/",next:[i.getTagRule(),{token:"comment",regex:"$|^",next:e||"pop"},{defaultToken:"comment",caseInsensitive:!0}]}]}var r=e("../lib/oop"),i=e("./doc_comment_highlight_rules").DocCommentHighlightRules,s=e("./text_highlight_rules").TextHighlightRules,o="[a-zA-Z\\$_\u00a1-\uffff][a-zA-Z\\d\\$_\u00a1-\uffff]*",u=function(e){var t=this.createKeywordMapper({"variable.language":"Array|internal|childrenCount|Boolean|Date|Function|Iterator|Number|Object|RegExp|String|Proxy|Namespace|QName|XML|XMLList|ArrayBuffer|Float32Array|Float64Array|Int16Array|Int32Array|Int8Array|Uint16Array|Uint32Array|Uint8Array|Uint8ClampedArray|Error|EvalError|InternalError|RangeError|ReferenceError|StopIteration|SyntaxError|TypeError|URIError|decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|eval|isFinite|global|root|isNaN|parseFloat|parseInt|JSON|Math|this|arguments|prototype|window|document",keyword:"const|import|get|set|async|await|break|case|catch|continue|default|delete|do|else|finally|for|function|if|in|of|instanceof|new|return|switch|throw|try|typeof|let|var|while|with|debugger|__parent__|__count__|escape|unescape|with|__proto__|class|enum|extends|super|export|implements|private|public|interface|package|protected|static","storage.type":"const|let|var|function","constant.language":"null|Infinity|NaN|undefined|yield|triggerNode|trigger","support.function":"alert","constant.language.boolean":"true|false|behaviors|experimental|objects|db|database"},"identifier"),n="case|do|else|finally|in|instanceof|return|throw|try|typeof|void|input|isRoot|isGlobal",r="\\\\(?:x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|u{[0-9a-fA-F]{1,6}}|[0-2][0-7]{0,2}|3[0-7][0-7]?|[4-7][0-7]?|.)";this.$rules={no_regex:[i.getStartRule("doc-start"),f("no_regex"),{token:"string",regex:"'(?=.)",next:"qstring"},{token:"string",regex:'"(?=.)',next:"qqstring"},{token:"constant.numeric",regex:/0(?:[xX][0-9a-fA-F]+|[oO][0-7]+|[bB][01]+)\b/},{token:"constant.numeric",regex:/(?:\d\d*(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+\b)?/},{token:["storage.type","punctuation.operator","support.function","punctuation.operator","entity.name.function","text","keyword.operator"],regex:"("+o+")(\\.)(prototype)(\\.)("+o+")(\\s*)(=)",next:"function_arguments"},
+   
+      // behaviors & objects
+	{
+                token : ["constant.language", "punctuation.operator", "support.function"],
+                regex : /(behavior)(\.)(inputFields|internals|isGlobal|inherit|yield)\b/
+            },
+          {
+                token : ["constant.language", "punctuation.operator", "support.function"],
+                regex : /(objects)(\.)(search|all|create|clipboard)\b/
+            },
 
+   {token:["storage.type","punctuation.operator","entity.name.function","text","keyword.operator","text","storage.type","text","paren.lparen"],regex:"("+o+")(\\.)("+o+")(\\s*)(=)(\\s*)(function)(\\s*)(\\()",next:"function_arguments"},{token:["entity.name.function","text","keyword.operator","text","storage.type","text","paren.lparen"],regex:"("+o+")(\\s*)(=)(\\s*)(function)(\\s*)(\\()",next:"function_arguments"},{token:["storage.type","punctuation.operator","entity.name.function","text","keyword.operator","text","storage.type","text","entity.name.function","text","paren.lparen"],regex:"("+o+")(\\.)("+o+")(\\s*)(=)(\\s*)(function)(\\s+)(\\w+)(\\s*)(\\()",next:"function_arguments"},{token:["storage.type","text","entity.name.function","text","paren.lparen"],regex:"(function)(\\s+)("+o+")(\\s*)(\\()",next:"function_arguments"},{token:["entity.name.function","text","punctuation.operator","text","storage.type","text","paren.lparen"],regex:"("+o+")(\\s*)(:)(\\s*)(function)(\\s*)(\\()",next:"function_arguments"},{token:["text","text","storage.type","text","paren.lparen"],regex:"(:)(\\s*)(function)(\\s*)(\\()",next:"function_arguments"},{token:"keyword",regex:"from(?=\\s*('|\"))"},{token:"keyword",regex:"(?:"+n+")\\b",next:"start"},{token:["support.constant"],regex:/that\b/},{token:["storage.type","punctuation.operator","support.function.firebug"],regex:/(console)(\.)(warn|info|log|error|time|trace|timeEnd|assert|debug)\b/},
+   
+   // behaviors and object functions
+               {
+                token : ["punctuation.operator", "keyword"],
+                regex : /(\.)(withName|categoryOf|notCategoryOf|typeOf|notTypeOf|isNotRoot|isRoot|all|sceneIndexOf|objectOf|notObjectOf|isEnabled|isDisabled|includeChildren|sceneIndexOf|withZPK|isPassable|notGlobal|isNotPassable|isPhysics|inputFieldCount|isWall|isScenery|includesName|global|in)\b/
+            },
+                           {
+                token : ["punctuation.operator", "variable.language"],
+                regex : /(\.)(copy|paste|destroy|disableAliasChange|hide|show|setType|disableInputChange|enable|disable|execute|sceneIndexOf|moveBy|moveToObject|setName|connectTo|disconnectFrom|setInput|moveToObject|moveBy|moveToPoint|getInputs|getInputNames|setName|setType|loop|forEach|moveToGlobal|setPhysicsMode|secureInputField|secureAllInputFields|format|connectOutput|connectInput|disconnectOutput|disconnectInput|disconnectAllOutputs|disconnectAllInputs|clear)\b/
+            },
+            
+                                       {
+                token : ["punctuation.operator", "variable.parameter"],
+                regex : /(\.)(listInternal|list|count|log|logInternal|inputOf|inputs|outputs|inputFieldCount|childrenCount|childrenZPKs|children|ZTAG|xPosition|yPosition|name|type|ZPK|category|root|object|objectZPK)\b/
+            },
+   
+   {token:t,regex:o},{token:"punctuation.operator",regex:/[.](?![.])/,next:"property"},{token:"storage.type",regex:/=>/,next:"start"},{token:"keyword.operator",regex:/--|\+\+|\.{3}|===|==|=|!=|!==|<+=?|>+=?|!|&&|\|\||\?:|[!$%&*+\-~\/^]=?/,next:"start"},{token:"punctuation.operator",regex:/[?:,;.]/,next:"start"},{token:"paren.lparen",regex:/[\[({]/,next:"start"},{token:"paren.rparen",regex:/[\])}]/},{token:"comment",regex:/^#!.*$/}],property:[{token:"text",regex:"\\s+"},{token:["storage.type","punctuation.operator","entity.name.function","text","keyword.operator","text","storage.type","text","entity.name.function","text","paren.lparen"],regex:"("+o+")(\\.)("+o+")(\\s*)(=)(\\s*)(function)(?:(\\s+)(\\w+))?(\\s*)(\\()",next:"function_arguments"},{token:"punctuation.operator",regex:/[.](?![.])/},{token:"support.function",regex:/(s(?:h(?:ift|ow(?:Mod(?:elessDialog|alDialog)|Help))|croll(?:X|By(?:Pages|Lines)?|Y|To)?|t(?:op|rike)|i(?:n|zeToContent|debar|gnText)|ort|u(?:p|b(?:str(?:ing)?)?)|pli(?:ce|t)|e(?:nd|t(?:Re(?:sizable|questHeader)|M(?:i(?:nutes|lliseconds)|onth)|Seconds|Ho(?:tKeys|urs)|Year|Cursor|Time(?:out)?|Interval|ZOptions|Date|UTC(?:M(?:i(?:nutes|lliseconds)|onth)|Seconds|Hours|Date|FullYear)|FullYear|Active)|arch)|qrt|lice|avePreferences|mall)|h(?:ome|andleEvent)|navigate|c(?:har(?:CodeAt|At)|o(?:s|n(?:cat|textual|firm)|mpile)|eil|lear(?:Timeout|Interval)?|a(?:ptureEvents|ll)|reate(?:StyleSheet|Popup|EventObject))|t(?:o(?:GMTString|S(?:tring|ource)|U(?:TCString|pperCase)|Lo(?:caleString|werCase))|est|a(?:n|int(?:Enabled)?))|i(?:s(?:NaN|Finite)|ndexOf|talics)|d(?:isableExternalCapture|ump|etachEvent)|u(?:n(?:shift|taint|escape|watch)|pdateCommands)|j(?:oin|avaEnabled)|p(?:o(?:p|w)|ush|lugins.refresh|a(?:ddings|rse(?:Int|Float)?)|r(?:int|ompt|eference))|e(?:scape|nableExternalCapture|val|lementFromPoint|x(?:p|ec(?:Script|Command)?))|valueOf|UTC|queryCommand(?:State|Indeterm|Enabled|Value)|f(?:i(?:nd|le(?:ModifiedDate|Size|CreatedDate|UpdatedDate)|xed)|o(?:nt(?:size|color)|rward)|loor|romCharCode)|watch|l(?:ink|o(?:ad|g)|astIndexOf)|a(?:sin|nchor|cos|t(?:tachEvent|ob|an(?:2)?)|pply|lert|b(?:s|ort))|r(?:ou(?:nd|teEvents)|e(?:size(?:By|To)|calc|turnValue|place|verse|l(?:oad|ease(?:Capture|Events)))|andom)|g(?:o|et(?:ResponseHeader|M(?:i(?:nutes|lliseconds)|onth)|Se(?:conds|lection)|Hours|Year|Time(?:zoneOffset)?|Da(?:y|te)|UTC(?:M(?:i(?:nutes|lliseconds)|onth)|Seconds|Hours|Da(?:y|te)|FullYear)|FullYear|A(?:ttention|llResponseHeaders)))|m(?:in|ove(?:B(?:y|elow)|To(?:Absolute)?|Above)|ergeAttributes|a(?:tch|rgins|x))|b(?:toa|ig|o(?:ld|rderWidths)|link|ack))\b(?=\()/},{token:"support.function.dom",regex:/(s(?:ub(?:stringData|mit)|plitText|e(?:t(?:NamedItem|Attribute(?:Node)?)|lect))|has(?:ChildNodes|Feature)|namedItem|c(?:l(?:ick|o(?:se|neNode))|reate(?:C(?:omment|DATASection|aption)|T(?:Head|extNode|Foot)|DocumentFragment|ProcessingInstruction|E(?:ntityReference|lement)|Attribute))|tabIndex|i(?:nsert(?:Row|Before|Cell|Data)|tem)|open|delete(?:Row|C(?:ell|aption)|T(?:Head|Foot)|Data)|focus|write(?:ln)?|a(?:dd|ppend(?:Child|Data))|re(?:set|place(?:Child|Data)|move(?:NamedItem|Child|Attribute(?:Node)?)?)|get(?:NamedItem|Element(?:sBy(?:Name|TagName|ClassName)|ById)|Attribute(?:Node)?)|blur)\b(?=\()/},
+   
+{token:"support.constant",regex:/(s(?:ystemLanguage|cr(?:ipts|ollbars|een(?:X|Y|Top|Left))|t(?:yle(?:Sheets)?|atus(?:Text|bar)?)|ibling(?:Below|Above)|ource|uffixes|e(?:curity(?:Policy)?|l(?:ection|f)))|h(?:istory|ost(?:name)?|as(?:h|Focus))|y|X(?:MLDocument|SLDocument)|n(?:ext|ame(?:space(?:s|URI)|Prop))|M(?:IN_VALUE|AX_VALUE)|c(?:haracterSet|o(?:n(?:structor|trollers)|okieEnabled|lorDepth|mp(?:onents|lete))|urrent|puClass|l(?:i(?:p(?:boardData)?|entInformation)|osed|asses)|alle(?:e|r)|rypto)|t(?:o(?:olbar|p)|ext(?:Transform|Indent|Decoration|Align)|ags)|SQRT(?:1_2|2)|i(?:n(?:ner(?:Height|Width)|put)|ds|gnoreCase)|zIndex|o(?:scpu|n(?:readystatechange|Line)|uter(?:Height|Width)|p(?:sProfile|ener)|ffscreenBuffering)|NEGATIVE_INFINITY|d(?:i(?:splay|alog(?:Height|Top|Width|Left|Arguments)|rectories)|e(?:scription|fault(?:Status|Ch(?:ecked|arset)|View)))|u(?:ser(?:Profile|Language|Agent)|n(?:iqueID|defined)|pdateInterval)|_content|p(?:ixelDepth|ort|ersonalbar|kcs11|l(?:ugins|atform)|a(?:thname|dding(?:Right|Bottom|Top|Left)|rent(?:Window|Layer)?|ge(?:X(?:Offset)?|Y(?:Offset)?))|r(?:o(?:to(?:col|type)|duct(?:Sub)?|mpter)|e(?:vious|fix)))|e(?:n(?:coding|abledPlugin)|x(?:ternal|pando)|mbeds)|v(?:isibility|endor(?:Sub)?|Linkcolor)|URLUnencoded|P(?:I|OSITIVE_INFINITY)|f(?:ilename|o(?:nt(?:Size|Family|Weight)|rmName)|rame(?:s|Element)|gColor)|E|whiteSpace|l(?:i(?:stStyleType|n(?:eHeight|kColor))|o(?:ca(?:tion(?:bar)?|lName)|wsrc)|e(?:ngth|ft(?:Context)?)|a(?:st(?:M(?:odified|atch)|Index|Paren)|yer(?:s|X)|nguage))|a(?:pp(?:MinorVersion|Name|Co(?:deName|re)|Version)|vail(?:Height|Top|Width|Left)|ll|r(?:ity|guments)|Linkcolor|bove)|r(?:ight(?:Context)?|e(?:sponse(?:XML|Text)|adyState))|global|x|m(?:imeTypes|ultiline|enubar|argin(?:Right|Bottom|Top|Left))|L(?:N(?:10|2)|OG(?:10E|2E))|b(?:o(?:ttom|rder(?:Width|RightWidth|BottomWidth|Style|Color|TopWidth|LeftWidth))|ufferDepth|elow|ackground(?:Color|Image)))\b/},{token:"identifier",regex:o},{regex:"",token:"empty",next:"no_regex"}],start:[i.getStartRule("doc-start"),f("start"),{token:"string.regexp",regex:"\\/",next:"regex"},{token:"text",regex:"\\s+|^$",next:"start"},{token:"empty",regex:"",next:"no_regex"}],regex:[{token:"regexp.keyword.operator",regex:"\\\\(?:u[\\da-fA-F]{4}|x[\\da-fA-F]{2}|.)"},{token:"string.regexp",regex:"/[sxngimy]*",next:"no_regex"},{token:"invalid",regex:/\{\d+\b,?\d*\}[+*]|[+*$^?][+*]|[$^][?]|\?{3,}/},{token:"constant.language.escape",regex:/\(\?[:=!]|\)|\{\d+\b,?\d*\}|[+*]\?|[()$^+*?.]/},{token:"constant.language.delimiter",regex:/\|/},{token:"constant.language.escape",regex:/\[\^?/,next:"regex_character_class"},{token:"empty",regex:"$",next:"no_regex"},{defaultToken:"string.regexp"}],regex_character_class:[{token:"regexp.charclass.keyword.operator",regex:"\\\\(?:u[\\da-fA-F]{4}|x[\\da-fA-F]{2}|.)"},{token:"constant.language.escape",regex:"]",next:"regex"},{token:"constant.language.escape",regex:"-"},{token:"empty",regex:"$",next:"no_regex"},{defaultToken:"string.regexp.charachterclass"}],function_arguments:[{token:"variable.parameter",regex:o},{token:"punctuation.operator",regex:"[, ]+"},{token:"punctuation.operator",regex:"$"},{token:"empty",regex:"",next:"no_regex"}],qqstring:[{token:"constant.language.escape",regex:r},{token:"string",regex:"\\\\$",consumeLineEnd:!0},{token:"string",regex:'"|$',next:"no_regex"},{defaultToken:"string"}],qstring:[{token:"constant.language.escape",regex:r},{token:"string",regex:"\\\\$",consumeLineEnd:!0},{token:"string",regex:"'|$",next:"no_regex"},{defaultToken:"string"}]};if(!e||!e.noES6)this.$rules.no_regex.unshift({regex:"[{}]",onMatch:function(e,t,n){this.next=e=="{"?this.nextState:"";if(e=="{"&&n.length)n.unshift("start",t);else if(e=="}"&&n.length){n.shift(),this.next=n.shift();if(this.next.indexOf("string")!=-1||this.next.indexOf("jsx")!=-1)return"paren.quasi.end"}return e=="{"?"paren.lparen":"paren.rparen"},nextState:"start"},{token:"string.quasi.start",regex:/`/,push:[{token:"constant.language.escape",regex:r},{token:"paren.quasi.start",regex:/\${/,push:"start"},{token:"string.quasi.end",regex:/`/,next:"pop"},{defaultToken:"string.quasi"}]}),(!e||e.jsx!=0)&&a.call(this);this.embedRules(i,"doc-",[i.getEndRule("no_regex")]),this.normalizeRules()};r.inherits(u,s),t.JavaScriptHighlightRules=u}),ace.define("ace/mode/matching_brace_outdent",["require","exports","module","ace/range"],function(e,t,n){"use strict";var r=e("../range").Range,i=function(){};(function(){this.checkOutdent=function(e,t){return/^\s+$/.test(e)?/^\s*\}/.test(t):!1},this.autoOutdent=function(e,t){var n=e.getLine(t),i=n.match(/^(\s*\})/);if(!i)return 0;var s=i[1].length,o=e.findMatchingBracket({row:t,column:s});if(!o||o.row==t)return 0;var u=this.$getIndent(e.getLine(o.row));e.replace(new r(t,0,t,s-1),u)},this.$getIndent=function(e){return e.match(/^\s*/)[0]}}).call(i.prototype),t.MatchingBraceOutdent=i}),ace.define("ace/mode/folding/cstyle",["require","exports","module","ace/lib/oop","ace/range","ace/mode/folding/fold_mode"],function(e,t,n){"use strict";var r=e("../../lib/oop"),i=e("../../range").Range,s=e("./fold_mode").FoldMode,o=t.FoldMode=function(e){e&&(this.foldingStartMarker=new RegExp(this.foldingStartMarker.source.replace(/\|[^|]*?$/,"|"+e.start)),this.foldingStopMarker=new RegExp(this.foldingStopMarker.source.replace(/\|[^|]*?$/,"|"+e.end)))};r.inherits(o,s),function(){this.foldingStartMarker=/([\{\[\(])[^\}\]\)]*$|^\s*(\/\*)/,this.foldingStopMarker=/^[^\[\{\(]*([\}\]\)])|^[\s\*]*(\*\/)/,this.singleLineBlockCommentRe=/^\s*(\/\*).*\*\/\s*$/,this.tripleStarBlockCommentRe=/^\s*(\/\*\*\*).*\*\/\s*$/,this.startRegionRe=/^\s*(\/\*|\/\/)#?region\b/,this._getFoldWidgetBase=this.getFoldWidget,this.getFoldWidget=function(e,t,n){var r=e.getLine(n);if(this.singleLineBlockCommentRe.test(r)&&!this.startRegionRe.test(r)&&!this.tripleStarBlockCommentRe.test(r))return"";var i=this._getFoldWidgetBase(e,t,n);return!i&&this.startRegionRe.test(r)?"start":i},this.getFoldWidgetRange=function(e,t,n,r){var i=e.getLine(n);if(this.startRegionRe.test(i))return this.getCommentRegionBlock(e,i,n);var s=i.match(this.foldingStartMarker);if(s){var o=s.index;if(s[1])return this.openingBracketBlock(e,s[1],n,o);var u=e.getCommentFoldRange(n,o+s[0].length,1);return u&&!u.isMultiLine()&&(r?u=this.getSectionRange(e,n):t!="all"&&(u=null)),u}if(t==="markbegin")return;var s=i.match(this.foldingStopMarker);if(s){var o=s.index+s[0].length;return s[1]?this.closingBracketBlock(e,s[1],n,o):e.getCommentFoldRange(n,o,-1)}},this.getSectionRange=function(e,t){var n=e.getLine(t),r=n.search(/\S/),s=t,o=n.length;t+=1;var u=t,a=e.getLength();while(++t<a){n=e.getLine(t);var f=n.search(/\S/);if(f===-1)continue;if(r>f)break;var l=this.getFoldWidgetRange(e,"all",t);if(l){if(l.start.row<=s)break;if(l.isMultiLine())t=l.end.row;else if(r==f)break}u=t}return new i(s,o,u,e.getLine(u).length)},this.getCommentRegionBlock=function(e,t,n){var r=t.search(/\s*$/),s=e.getLength(),o=n,u=/^\s*(?:\/\*|\/\/|--)#?(end)?region\b/,a=1;while(++n<s){t=e.getLine(n);var f=u.exec(t);if(!f)continue;f[1]?a--:a++;if(!a)break}var l=n;if(l>o)return new i(o,r,l,t.length)}}.call(o.prototype)}),ace.define("ace/mode/javascript",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/javascript_highlight_rules","ace/mode/matching_brace_outdent","ace/worker/worker_client","ace/mode/behaviour/cstyle","ace/mode/folding/cstyle"],function(e,t,n){"use strict";var r=e("../lib/oop"),i=e("./text").Mode,s=e("./javascript_highlight_rules").JavaScriptHighlightRules,o=e("./matching_brace_outdent").MatchingBraceOutdent,u=e("../worker/worker_client").WorkerClient,a=e("./behaviour/cstyle").CstyleBehaviour,f=e("./folding/cstyle").FoldMode,l=function(){this.HighlightRules=s,this.$outdent=new o,this.$behaviour=new a,this.foldingRules=new f};r.inherits(l,i),function(){this.lineCommentStart="//",this.blockComment={start:"/*",end:"*/"},this.$quotes={'"':'"',"'":"'","`":"`"},this.getNextLineIndent=function(e,t,n){var r=this.$getIndent(t),i=this.getTokenizer().getLineTokens(t,e),s=i.tokens,o=i.state;if(s.length&&s[s.length-1].type=="comment")return r;if(e=="start"||e=="no_regex"){var u=t.match(/^.*(?:\bcase\b.*:|[\{\(\[])\s*$/);u&&(r+=n)}else if(e=="doc-start"){if(o=="start"||o=="no_regex")return"";var u=t.match(/^\s*(\/?)\*/);u&&(u[1]&&(r+=" "),r+="* ")}return r},this.checkOutdent=function(e,t,n){return this.$outdent.checkOutdent(t,n)},this.autoOutdent=function(e,t,n){this.$outdent.autoOutdent(t,n)},this.createWorker=function(e){var t=new u(["ace"],"ace/mode/javascript_worker","JavaScriptWorker");return t.attachToDocument(e.getDocument()),t.on("annotate",function(t){e.setAnnotations(t.data)}),t.on("terminate",function(){e.clearAnnotations()}),t},this.$id="ace/mode/javascript",this.snippetFileId="ace/snippets/javascript"}.call(l.prototype),t.Mode=l});                (function() {
+                    ace.require(["ace/mode/javascript"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+  } catch(e) {
+    console.error(e)
+  }
+      
+  
+  })
+  })
+  
+  }
+  initEditor()
 </script>
