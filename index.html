@@ -488,7 +488,113 @@
        
   </head>
   <body>
+    
+    <!-- modal alert popup -->
+    <style>
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1000000; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+      
+      /* Add Animation */
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0} 
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 2px 10px;
+  background-color: #00bb78;
+  color: white;
+}
+      
+ .modal-body {padding: 2px 16px;}
+
+</style>
    
+    <!-- The Modal -->
+<div id="alertModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close">&times;</span>
+      <p id="modalTitle" style="font-size: 25px; font-weight: bold; color: white;">Modal Header</p>
+    </div>
+    <div id="modalBody" style="color:black; font-size: 15px;" class="modal-body">
+      <p>Some text in the Modal Body</p>
+      <p>Some other text...</p>
+    </div>
+  </div>
+
+</div>
+    
+  <script>
+    
+    var modal = document.getElementById("alertModal");
+    modal.style.display = "none";
+    var closeButton = document.getElementsByClassName("close")[0];
+    closeButton.onclick = function() {
+      modal.style.display = "none";
+    };
+    
+    function popup(title, body) {
+      document.getElementById("modalTitle").innerHTML = title;
+      document.getElementById("modalBody").innerHTML = body;
+      modal.style.display = "block";
+    }
+      
+  </script>
+    
     <!-- loading screen -->
     <div style="width: 75px; height:200px; margin: auto; margin-top: calc(50vh - 50px); margin-left: calc(50vw - 50px); transform: scale(1.25); position: absolute;" id="menuLoading">
       <div class="lds-ring" style="margin: auto; margin-top: 12px;"><div></div><div></div><div></div><div></div></div>
@@ -1102,10 +1208,13 @@
           function programBehavior(behavior) {
             let base = internalData.behaviorBase[behavior];
             let data = internalData.behaviors[behavior];
-            window.behavior = behavior;
             internalProgramBehavior = {
               base, data
             };
+            codeTypes = {};
+            changeCodeType("Execute");
+            window.behavior = behavior;
+            document.getElementById("writeCommentText").innerHTML = "";
             
             // top text
             inNavMenu("programBehaviorView", "None");
@@ -1138,27 +1247,58 @@
                 data.defaultValue = "<i>Empty String</i>";
               }
               
+              let fieldInject = "><input class='inputFieldInject' id=";
+              fieldInject += "'inputDisplay." + name + "'>"; 
+              
+              let toggleInject = "><label class='form-switch inputToggleFieldInject'>"
+              toggleInject += "'<input type='checkbox' id='inputDisplay." + name + "'><i></i>Toggle Input Field</label>";
+              
+              let thing = content.replace("cDshow", 'id="input.' + name + '"');
+              thing = thing.replace("containerPlaceholder", "containerPlaceholder internalField");
+              
+              if (name === "values") {
+                content = content.replace('cDshow style="', 'cDshow style="background-color: #ffe39a;');
+              }
+              if (name === "storage") {
+                content = content.replace('cDshow style="', 'cDshow style="background-color: #ffe39a;');
+              }
+              if (name === "outputs") {
+                content = content.replace('cDshow style="', 'cDshow style="background-color: #ffe39a;');
+              }
+              
               // input types
               if (data.inputType == "String") {
                 content = content.replace("D71B2E45-BC8A-4CEA-8126-2A0DDDB37C6D", "F9464C73-A32B-4E87-8DAD-C69BAFC0A30B");
+                thing = thing.replace("D71B2E45-BC8A-4CEA-8126-2A0DDDB37C6D", "F9464C73-A32B-4E87-8DAD-C69BAFC0A30B");
+                thing = thing.replace(" internalFieldAddon", fieldInject);
               }
               if (data.inputType == "Boolean") {
                 content = content.replace("D71B2E45-BC8A-4CEA-8126-2A0DDDB37C6D", "77900F34-5185-4D61-935C-E74CB2E6B332");
+                thing = thing.replace("D71B2E45-BC8A-4CEA-8126-2A0DDDB37C6D", "77900F34-5185-4D61-935C-E74CB2E6B332");
+                thing = thing.replace(" internalFieldAddon", toggleInject);
               }
               if (data.inputType == "ObjectID") {
                 content = content.replace("D71B2E45-BC8A-4CEA-8126-2A0DDDB37C6D", "1B9139F8-F0BC-4F3F-A48F-BCF3017BA2BC");
+                thing = thing.replace("D71B2E45-BC8A-4CEA-8126-2A0DDDB37C6D", "1B9139F8-F0BC-4F3F-A48F-BCF3017BA2BC");
               }
               if (data.inputType == "Number") {
                 content = content.replace("D71B2E45-BC8A-4CEA-8126-2A0DDDB37C6D", "966301E9-72B3-467E-B158-243FE3C22BEA");
+                thing = thing.replace("D71B2E45-BC8A-4CEA-8126-2A0DDDB37C6D", "966301E9-72B3-467E-B158-243FE3C22BEA");
+                thing = thing.replace(" internalFieldAddon", fieldInject);
               }
               if (data.inputType == "BehaviorID") {
                 content = content.replace("D71B2E45-BC8A-4CEA-8126-2A0DDDB37C6D", "642503BE-BCF0-4A99-8AC0-654C02354E5C");
+                thing = thing.replace("D71B2E45-BC8A-4CEA-8126-2A0DDDB37C6D", "642503BE-BCF0-4A99-8AC0-654C02354E5C");
               }
               if (data.inputType == "Array") {
                 content = content.replace("D71B2E45-BC8A-4CEA-8126-2A0DDDB37C6D", "C85CD91F-0E95-4177-A65D-B18C597039C5");
+                thing = thing.replace("D71B2E45-BC8A-4CEA-8126-2A0DDDB37C6D", "C85CD91F-0E95-4177-A65D-B18C597039C5");
+                thing = thing.replace(" internalFieldAddon", fieldInject);
               }
               if (data.inputType == "Dictionary") {
                 content = content.replace("D71B2E45-BC8A-4CEA-8126-2A0DDDB37C6D", "11D40B55-B03E-430E-A305-143AE3F0F53F");
+                thing = thing.replace("D71B2E45-BC8A-4CEA-8126-2A0DDDB37C6D", "11D40B55-B03E-430E-A305-143AE3F0F53F");
+                thing = thing.replace(" internalFieldAddon", fieldInject);
               }
               
               if (typeof data.defaultValue !== "string") {
@@ -1166,10 +1306,8 @@
               }
               
               content = content.replace("DESCRIPTION", "Default Value: " + data.defaultValue);
+              thing = thing.replace("DESCRIPTION", "Default Value: " + data.defaultValue);
               left += content;
-              let thing = content.replace("cDshow", 'id="input.' + name + '"');
-              thing = thing.replace("containerPlaceholder", "containerPlaceholder internalField");
-              console.log(thing);
               leftInternal += thing;
             });
             
@@ -1180,6 +1318,9 @@
               right += content;
               let thing = content.replace("cDshow", 'id="output.' + name + '"');
               thing = thing.replace("containerPlaceholder", "containerPlaceholder internalField");
+              let fieldInject = "><input class='outputFieldInject' id=";
+              fieldInject += "'outputDisplay." + name + "'>"; 
+              thing = thing.replace(" internalFieldAddon", fieldInject);
               console.log(thing);
               rightInternal += thing;
             });
@@ -1216,6 +1357,37 @@
             c += "</div>";
             document.getElementById("behaviorFields").innerHTML = c;
             
+            // initialize input fields
+            resetInputFields();
+            
+            // reset output fields
+            let optionalFields = 0;
+            document.getElementById("hiddenInputs").style.display = "none";
+            document.getElementById("hiddenInputsMore").style.display = "none";
+            document.querySelectorAll(".internalField").forEach(function(element) {
+              element.style["background-color"] = "#e9e9e9";
+              if (element.id === "input.storage") {
+                element.style["background-color"] = "#ffe39a";
+                optionalFields++;
+              }
+              if (element.id === "input.values") {
+                element.style["background-color"] = "#ffe39a";
+                optionalFields++;
+              }
+              if (element.id === "input.outputs") {
+                element.style["background-color"] = "#ffe39a";
+                optionalFields++;
+              }
+            });
+            if (optionalFields > 0) {
+              document.getElementById("hiddenInputs").style.display = "block";
+            }
+            document.querySelectorAll(".outputFieldInject").forEach(function(element) {
+              element.innerHTML = "";
+              element.placeholder = "Waiting for output...";
+              element.setAttribute("readonly", true);
+            });
+            
             if (showComments) {
               toggleComments();
               toggleComments();
@@ -1232,7 +1404,7 @@
             let base = internalProgramBehavior.base || {};
             if (showComments) {
               showComments = false;
-              document.getElementById("toggleCommentsButton").innerHTML = "SHOW SUBMISSIONS";
+              document.getElementById("toggleCommentsButton").innerHTML = "SHOW COMMENTS";
               document.getElementById("writeComment").style.display = "none";
               let count = (data.comments || []).length;
               document.getElementById("commentTitle").innerHTML = "<b>Code Submissions</b> (" + count + ")";
@@ -1243,7 +1415,7 @@
               }
             } else {
               showComments = true;
-              document.getElementById("toggleCommentsButton").innerHTML = "SHOW COMMENTS";
+              document.getElementById("toggleCommentsButton").innerHTML = "SHOW SUBMISSIONS";
               document.getElementById("writeComment").style.display = "block";
               let count = (data.codeSubmissions || []).length;
               document.getElementById("commentTitle").innerHTML = "<b>Comments</b> (" + count + ")";
@@ -1255,18 +1427,146 @@
             }
           }
           
-          document.getElementById("mainCodeIDE").style.display = "none";
-          document.getElementById("mainCodeIDEAlert").style.display = "block";
+          // document.getElementById("mainCodeIDE").style.display = "none";
+          // document.getElementById("mainCodeIDEAlert").style.display = "block";
           function openCodeIDE(behavior) {
             inNavMenu("codeIDE", "CODE IDE");
             document.getElementById("mainCodeIDE").style.display = "block";
             document.getElementById("mainCodeIDEAlert").style.display = "none";
-            document.querySelectorAll(".internalField").forEach(function(element) {
-              element.style["background-color"] = "#e9e9e9";
-              console.log(element)
+          }
+          
+          function resetInputFields() {
+            Object.keys(internalProgramBehavior.base.inputs).forEach(function(inputField) {
+              let fieldData = internalProgramBehavior.base.inputs[inputField];
+              console.debug(fieldData)
+              try {
+                let id = "inputDisplay." + inputField;
+                if (fieldData.defaultValue == "true") {
+                  document.getElementById(id).setAttribute("checked", true);
+                  document.getElementById(id).checked = true;
+                  console.log(document.getElementById(id))
+                }
+                if (fieldData.defaultValue == "false") {
+                  document.getElementById(id).setAttribute("checked", false);
+                  document.getElementById(id).checked = false;
+                }
+                if (fieldData.defaultValue == "<i>Empty String</i>") {
+                  document.getElementById(id).setAttribute("placeholder", "Empty String");
+                  document.getElementById(id).value = "";
+                } else {
+                  if (typeof fieldData.defaultValue !== "string") {
+                    fieldData.defaultValue = JSON.stringify(fieldData.defaultValue);
+                  }
+                  document.getElementById(id).setAttribute("placeholder", fieldData.defaultValue);
+                  document.getElementById(id).value = fieldData.defaultValue;
+                  document.getElementById(id).setAttribute("value", fieldData.defaultValue);
+                }
+                
+                console.log(id);
+              } catch(e) {};
             });
           }
+          
+          function learnMoreOptionalInputs() {
+            document.getElementById("hiddenInputs").style.display = "none";
+            document.getElementById("hiddenInputsMore").style.display = "block";
+          }
+          
+          function playtest() {
+            popup("WIP", "<p>Currently, working on this feature... Soon, you will be able to thoroughly test your code to make sure it functions as intended.</p>")
+          }
+          
 		</script>
+        <style>
+          .inputToggleFieldInject {
+            height: 27px;
+            position: absolute;
+            right: 8px;
+            top: 20px;
+            transform: scale(1.25);
+          }
+          .outputFieldInject {
+            width: calc(100% - 300px);
+            height: 27px;
+            vertical-align: center;
+            visibility: none;
+            background-color: transparent;
+            right: 8px;
+            top: 20px;
+            position: absolute;
+            float: right;
+            font-size: 20px;
+            text-align: right;
+            margin-right: 5px;
+            border-radius: 10px;
+            color: black;
+          }
+          .inputFieldInject {
+            width: 600px;
+            height: 27px;
+            vertical-align: center;
+            visibility: none;
+            background-color: transparent;
+            right: 8px;
+            top: 20px;
+            position: absolute;
+            float: right;
+            font-size: 20px;
+            text-align: right;
+            margin-right: 5px;
+            border-radius: 10px;
+            color: black;
+          }
+          
+          .form-switch {
+  display: inline-block;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.form-switch i {
+  position: relative;
+  display: inline-block;
+  margin-right: .5rem;
+  width: 46px;
+  height: 26px;
+  background-color: #e6e6e6;
+  border-radius: 23px;
+  vertical-align: text-bottom;
+  transition: all 0.3s linear;
+}
+.form-switch i::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 42px;
+  height: 22px;
+  background-color: #fff;
+  border-radius: 11px;
+  transform: translate3d(2px, 2px, 0) scale3d(1, 1, 1);
+  transition: all 0.25s linear;
+}
+.form-switch i::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 22px;
+  height: 22px;
+  background-color: #fff;
+  border-radius: 11px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.24);
+  transform: translate3d(2px, 2px, 0);
+  transition: all 0.2s ease-in-out;
+}
+.form-switch:active i::after {
+  width: 28px;
+  transform: translate3d(2px, 2px, 0);
+}
+.form-switch:active input:checked + i::after { transform: translate3d(16px, 2px, 0); }
+.form-switch input { display: none; }
+.form-switch input:checked + i { background-color: #4BD763; }
+.form-switch input:checked + i::before { transform: translate3d(18px, 2px, 0) scale3d(0, 0, 0); }
+.form-switch input:checked + i::after { transform: translate3d(22px, 2px, 0); }
+        </style>
         
         <div class="displayRow" style="height: 90px; border-radius: 10px 10px 0px 0px">
       
@@ -1287,6 +1587,15 @@
               </p>  
               <a class="button" onclick="openCodeIDE()" style="min-width: 250px; margin-right: 15px;
               padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color:#6581ff">PROGRAM BEHAVIOR</a>
+              <a class="button" onclick="reportError()" style="min-width: 190px; margin-right: 7.5px;
+              padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color:#f66">REPORT ERROR</a>
+              
+              <script>
+              function reportError() {
+                popup("Report an Error", "<p>Something wrong? <b>Let RXCodes know in the Discord server!</b><br><br>Some errors can consist of:<br>• Missing input and/or output fields<br>• Typos in behavior name and fields<br>• Incorrect input field type<br>• Invalid default value</p>")
+              }
+              </script>
+              
               <a class="button" onclick="inNavMenu('behaviorList1', 'BEHAVIORS')" style="min-width: 75px; margin-right: 7.5px;
               padding-top: 8.5px; padding-bottom: 8.5px; float: right;">BACK</a>
               
@@ -1298,7 +1607,72 @@
           
       </div>
 </div>
+     
+        <div class="displayRow" id="hiddenInputs" style="height: 90px; border-radius: 10px 10px 0px 0px; margin-top: -15px; margin-bottom: -15px">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: 100%; overflow: hidden;">
+       <div class="containerDisplay">
+         
+            <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px; background-color: #ffe39a">
+              <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/256A8E2C-7AE6-463F-B964-DC87CDA3C691.png" style="width:40px; z-index:3; position: absolute; left: 8.5px; top: 10px; border-radius: 100%">
+              
+              <p class="inline" style="margin-top: 10px; margin-left: 57px; font-size: 17.5px; color:black">
+                <b>This Behavior has Hidden / Optional Inputs</b>
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 57px; font-size: 15px; color:black">
+                Yellow input fields are hidden in most behaviors and may serve no functionality. <u onclick="learnMoreOptionalInputs()"><b>Learn More</b></u>
+              </p>  
+              
+            </div>
+         
+         
+      </div>
+          </div> 
+          
+      
+     
+          
+      </div>
+</div>
         
+        <div class="displayRow" id="hiddenInputsMore" style="height: 220px; border-radius: 10px 10px 0px 0px; margin-top: -15px; margin-bottom: -15px">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: 100%; overflow: hidden;">
+       <div class="containerDisplay">
+         
+            <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px; background-color: #ffe39a">
+              <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/256A8E2C-7AE6-463F-B964-DC87CDA3C691.png" style="width:40px; z-index:3; position: absolute; left: 8.5px; top: 10px; border-radius: 100%">
+              
+              <p class="inline" style="margin-top: 10px; margin-left: 57px; font-size: 17.5px; color:black">
+                <b>This Behavior has Hidden / Optional Inputs</b>
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 57px; font-size: 15px; color:black; text-align: left">
+                Yellow input fields are hidden in most behaviors and may serve no functionality.<br>
+                In hyperPad, these input fields are hidden from the user - almost never to be seen in the editor.
+                <br><br>
+                You may ignore these input fields as they provide very specific functionality to behaviors.<br>
+                <b>outputs</b>: An array containing behavior IDs of behaviors using output(s) of this behavior.<br>
+                <b>storage</b>: Additional meta data stored by the behavior. <i>(Unsure)</i><br>
+                <b>values</b>: A dictionary used to store outputs from other behaviors. Known to be used by <b>Box Container</b>.
+              </p>  
+              
+            </div>
+         
+         
+      </div>
+          </div> 
+          
+      
+     
+          
+      </div>
+</div>
         
         <div class="displayRow" style="margin-top: -15px; height: 70px;">
     
@@ -1332,7 +1706,7 @@
         <div id="writeComment" class="displayRow" style="height: 150px; margin-top: -6px">
     
     <div class="containerDisplay" style="width: calc(100% - 30px); margin-left: auto; margin-right: auto; overflow: hidden; white-space: nowrap;">
-           <textarea id="writeComment" placeholder="Write a comment..." style="width: 100%; background-color: transparent; border-width: 0px; height: calc(100% - 25px); padding: 10px; z-index: 30; color: black; font-size: 17px"></textarea>
+           <textarea id="writeCommentText" placeholder="Write a comment..." style="width: 100%; background-color: transparent; border-width: 0px; height: calc(100% - 25px); padding: 10px; z-index: 30; color: black; font-size: 17px"></textarea>
        <a class="button" id="toggleCommentsButton" onclick="submitComment()" style="margin: 0px; width: 100%; bottom: 0px; border-radius: 0px; position: absolute; height: 25px;">SUBMIT COMMENT</a>
                  
     </div> 
@@ -1393,7 +1767,7 @@
      <u>In the code editor, you can write and run your code. To submit it, your code must follow certain criteria:<br></u>
               
               • Code cannot throw errors or have invalid syntax.<br>
-              • Code must use all input fields - <i>if any</i>.<br>
+              • Code must use some input fields - <i>if any</i>. Some input fields can be useless.<br>
               • Code must use all output fields - <i>if any</i>.<br>
               • Code cannot contain malware, bloatware or irrelevant functions.
               
@@ -2047,7 +2421,7 @@
                 <b>Add Values</b>
               </p>
               <p class="inline" style="margin-top: 30px; margin-left: 70px; font-size: 15px; color:black">
-                On <b id="codeTypeStr">Execute</b>
+                On <b id="codeTypeStr" style="color:#ff5b41">Execute</b>
               </p> 
               
               <a class="button" id="codeType:Execute" class="codeTypeButton" onclick="changeCodeType('Execute')" style="min-width: 150px; margin-right: 12px;
@@ -2058,6 +2432,16 @@
               padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #00bb78">ON DISABLE</a>
               <a class="button" onclick="playtest()" style="min-width: 150px; margin-right: 12px;
               padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #2489bb">PLAYTEST</a>
+              <a class="button" onclick="submitProgramBehavior()" style="min-width: 120px; margin-right: 12px;
+              padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #ffb65b">SUBMIT</a>
+              
+              <script>
+              
+                function submitProgramBehavior() {
+                  popup("Coming Soon!", "<p>Sorry, this stuff is still in progress. It will be finished soon! :)</p>")
+                }
+              
+              </script>
               
               <div class="editor" style="top: 25px; width: 100%; height: 490px" id="codeIDEWindow">// enter your code here</div>  
               
@@ -2115,7 +2499,7 @@
                 <b>Good Thing to Note</b>
               </p>
               <p class="inline" style="margin-top: 30px; margin-left: 57px; font-size: 15px; color:black">
-                The input and output fields below will highlight green if they are being utilized in the code. <b>All fields should be used in the code.</b>
+                The input and output fields below will highlight green if they are being utilized in the code. <b>All output fields should be used in the code.</b>
               </p>  
               
             </div>
