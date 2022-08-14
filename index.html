@@ -1212,7 +1212,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
               base, data
             };
             codeTypes = {};
-            changeCodeType("Execute");
             window.behavior = behavior;
             document.getElementById("writeCommentText").innerHTML = "";
             
@@ -1360,6 +1359,9 @@ body {font-family: Arial, Helvetica, sans-serif;}
             // initialize input fields
             resetInputFields();
             
+            // reset code
+            changeCodeType("Execute");
+            
             // reset output fields
             let optionalFields = 0;
             document.getElementById("hiddenInputs").style.display = "none";
@@ -1393,6 +1395,10 @@ body {font-family: Arial, Helvetica, sans-serif;}
               toggleComments();
             } else {
               toggleComments();
+            }
+            
+            if (playtesting) {
+              playtest();
             }
           }
           
@@ -1472,8 +1478,300 @@ body {font-family: Arial, Helvetica, sans-serif;}
             document.getElementById("hiddenInputsMore").style.display = "block";
           }
           
+          var playtesting = false;
+          var playtestIDE = null;
+          var viewingCodeProgram = true;
+          
+          function swapMenuProgram() {
+            if (viewingCodeProgram) {
+              viewingCodeProgram = false;
+              document.getElementById("swapMenuProgramButton").innerHTML = "VIEW CODE";
+              document.getElementById("codeType:Execute").style.display = "none";
+              document.getElementById("codeType:Enable").style.display = "none";
+              document.getElementById("codeType:Disable").style.display = "none";
+              document.getElementById("tryProgramCode:Execute").style.display = "block";
+              document.getElementById("tryProgramCode:Enable").style.display = "block";
+              document.getElementById("tryProgramCode:Disable").style.display = "block";
+              document.getElementById("triggerType").style.display = "none";
+              document.getElementById("consoleLogTitle").style.display = "block";
+              document.getElementById("codeIDEWindow").style.display = "none";
+              document.getElementById("log-container").style.display = "block";
+            } else {
+              viewingCodeProgram = true;
+              document.getElementById("codeIDEWindow").style.display = "block";
+              document.getElementById("log-container").style.display = "none";
+              document.getElementById("triggerType").style.display = "block";
+              document.getElementById("consoleLogTitle").style.display = "none";
+              document.getElementById("swapMenuProgramButton").innerHTML = "VIEW LOG";
+              document.getElementById("codeType:Execute").style.display = "block";
+              document.getElementById("codeType:Enable").style.display = "block";
+              document.getElementById("codeType:Disable").style.display = "block";
+              document.getElementById("tryProgramCode:Execute").style.display = "none";
+              document.getElementById("tryProgramCode:Enable").style.display = "none";
+              document.getElementById("tryProgramCode:Disable").style.display = "none";
+            }
+          }
+          
           function playtest() {
-            popup("WIP", "<p>Currently, working on this feature... Soon, you will be able to thoroughly test your code to make sure it functions as intended.</p>")
+            if (!playtesting) {
+              document.getElementById("playtestButton").innerHTML = "END TEST";
+              document.getElementById("playtestButton").style["background-color"] = "#ff482c";
+              document.getElementById("submitCodeButton").style.display = "none";
+              document.getElementById("codeProgramOptions").style.display = "block";
+              document.getElementById("swapMenuProgramButton").style.display = "block";
+              internal = {};
+              logOpen = true;
+              if (viewingCodeProgram) {
+                swapMenuProgram();
+              }
+              playtesting = true;
+              document.getElementById("log-container").innerHTML = '<pre id="log"></pre>';
+              
+              console.debug("<i>[SYSTEM]</i> <b>Behavior initialized</b> - time to test your behavior!")
+            } else {
+              internal = {};
+              if (!viewingCodeProgram) {
+                swapMenuProgram();
+              }
+              logOpen = false;
+              document.getElementById("playtestButton").innerHTML = "PLAYTEST";
+              document.getElementById("playtestButton").style["background-color"] = "#2489bb";
+              document.getElementById("submitCodeButton").style.display = "block";
+              document.getElementById("codeProgramOptions").style.display = "none";
+              document.getElementById("swapMenuProgramButton").style.display = "none";
+              playtesting = false;
+            }
+          }
+          
+          
+          // toggles
+          var rootBehavior = false;
+          var disableBehavior = false;
+          var globalBehavior = false;
+          
+          setTimeout(function() {
+          document.getElementById("rootToggleProgram").addEventListener("click", function() {
+            if (document.getElementById("rootToggleProgram").checked) {
+              console.debug("<i>[SYSTEM]</i> <b>Behavior updated</b>: Set behavior as a root behavior.");
+              rootBehavior = true;
+            } else {
+              console.debug("<i>[SYSTEM]</i> <b>Behavior updated</b>: Set behavior as a non-root behavior.");
+              rootBehavior = false;
+            }
+          });
+          
+          document.getElementById("disableToggleProgram").addEventListener("click", function() {
+            if (document.getElementById("disableToggleProgram").checked) {
+              console.debug("<i>[SYSTEM]</i> <b>Behavior updated</b>: Disabled behavior.");
+              disableBehavior = true;
+              tryProgramCode("Enable");
+            } else {
+              console.debug("<i>[SYSTEM]</i> <b>Behavior updated</b>: Enabled behavior.");
+              disableBehavior = false;
+              tryProgramCode("Disable");
+            }
+          });
+          
+          document.getElementById("globalToggleProgram").addEventListener("click", function() {
+            if (document.getElementById("globalToggleProgram").checked) {
+              console.debug("<i>[SYSTEM]</i> <b>Behavior updated</b>: Moved behavior to global behaviors.");
+              globalBehavior = true;
+            } else {
+              console.debug("<i>[SYSTEM]</i> <b>Behavior updated</b>: Removed behavior from global behaviors.");
+              globalBehavior = false;
+            }
+          });
+            
+          }, 1000);
+          
+          var internal = {};
+          function tryProgramCode(type) {
+            
+            if (type == "Enable") {
+              console.debug("<i>[SYSTEM]</i> <b>Behavior updated</b>: Disabled behavior.");
+              disableBehavior = true;
+              document.getElementById("disableToggleProgram").checked = true;
+            }
+            if (type == "Disable") {
+              console.debug("<i>[SYSTEM]</i> <b>Behavior updated</b>: Enabled behavior.");
+              disableBehavior = false;
+              document.getElementById("disableToggleProgram").checked = false;
+            }
+            
+            let codeToRun = codeTypes[type] || "";
+            console.info("<i>[SYSTEM]</i> Running <b>" + type + "</b> script...");
+            try {
+              
+              // root and global
+              let root = rootBehavior;
+              let global = globalBehavior;
+              
+              // children count
+              let childrenCount = Number(document.getElementById("childrenCount").value) || 0;
+              if (childrenCount < 0) {
+                childrenCount = 0;
+              }
+              
+              // behavior actions
+              let behaviors = new Proxy({}, {
+  				get(target, name) {
+    			  
+                      return {
+                        enable: function() {
+                          console.debug("<i>[BEHAVIORS]</i> <b>Enabled</b> a behavior.")
+                        },
+                        disable: function() {
+                          console.debug("<i>[BEHAVIORS]</i> <b>Disabled</b> a behavior.")
+                        },
+                        execute: function() {
+                          console.debug("<i>[BEHAVIORS]</i> <b>Executed</b> a behavior.")
+                        },
+                        setInput: function(field, data) {
+                          if (data.constructor !== Object) {
+                            return console.error("<i>[ERROR]</i> Field <b>" + field + "</b> is not a dictionary.")
+                          }
+                          
+                          if (data.controller === undefined) {
+                            return console.error("<i>[ERROR]</i> Field <b>" + field + "</b> is missing the 'controller' property.")
+                          }
+                          
+                          if (data.key === undefined) {
+                            return console.error("<i>[ERROR]</i> Field <b>" + field + "</b> is missing the 'key' property.")
+                          }
+                            
+                          console.debug("<i>[BEHAVIORS]</i> Successfully set field <b>" + field + "</b> in a behavior.")
+                        },
+                        inputs: new Proxy({}, {
+                          get(target, name) {
+                            return {
+                              type: "<fieldType>",
+                              key: "<fieldKey>",
+                              controller: "<behaviorID>"
+                            }
+                          }
+                        }),
+                        outputs: new Proxy({}, {
+                          get(target, name) {
+                            return {}
+                          }
+                        }),
+                      }
+
+  				}
+			  });
+              
+              // show inputs
+              let _inputs = {};
+              Object.keys(internalProgramBehavior.base.inputs).forEach(function(name) {
+                let data = internalProgramBehavior.base.inputs[name];
+                let value = undefined;
+                try {
+                  value = document.getElementById("inputDisplay." + name).value;
+                } catch(e) {}
+                
+                // boolean
+                if (data.inputType == "Boolean") {
+                  if (value == "true") {
+                    _inputs[name] = true;
+                    return;
+                  } else {
+                    _inputs[name] = false;
+                    return;
+                  }
+                }
+                
+                // string
+                if (data.inputType == "String") {
+                  _inputs[name] = value || "";
+                  return;
+                }
+                
+                // number
+                if (data.inputType == "Number") {
+                  _inputs[name] = Number(value);
+                  return;
+                }
+                
+                // array
+                if (data.inputType == "Array") {
+                  _inputs[name] = value;
+                  _inputs[name] = JSON.parse(value);
+                  return;
+                }
+                
+                // dictionary
+                if (data.inputType == "Dictionary") {
+                  _inputs[name] = value;
+                  _inputs[name] = JSON.parse(value);
+                  return;
+                }
+                
+                // other stuff
+                _inputs[name] = value;
+                if (value === undefined) {
+                  _inputs[name] = null;
+                }
+                
+              });
+              
+              // inputs
+              let input = new Proxy({}, {
+  				get(target, name) {
+    			  if (_inputs[name] === undefined) {
+                    console.error("<i>[WARNING]</i> Input field <b>\"" + name + "\"</b> does not exist.");
+                    return null;
+                  }
+                  return _inputs[name];
+  				}
+			  });
+              
+              // extraneous functions
+              let trigger = function() {
+                console.info("<i>[SYSTEM]</i> Triggered child behaviors.");
+              }
+              let triggerNode = function(num) {
+                console.info("<i>[SYSTEM]</i> Triggered child behavior: <b>" + Number(num) + "</b>");
+              }
+              
+              // yield outputs
+              let _outputs = internalProgramBehavior.base.outputs;
+              let yield = function(outputs) {
+                
+                // check if outputs is a dictionary
+                let successOutput = true;
+                if (outputs.constructor !== Object) {
+                  return console.error("<i>[ERROR]</i> Output fields must be a dictionary.");
+                }
+                
+                // check for output stuff again
+                _outputs.forEach(function(key) {
+                  if (!Object.keys(outputs).includes(key)) {
+                    successOutput = false;
+                    console.error("<i>[ERROR]</i> Output field <b>\"" + key + "\"</b> is missing.");
+                  }
+                });
+                
+                // show yields
+                if (successOutput) {
+                  console.debug("<i>[YIELD]</i> Successfully updated output fields!");
+                  _outputs.forEach(function(key) {
+                    console.debug("<b>" + key + "</b>: <span style='color:white'>" + outputs[key] + "</span>");
+                    
+                    // show output
+                    try {
+                      if (outputs[key] )
+                      document.getElementById("outputDisplay." + key).value = outputs[key];
+                    } catch(e) {};
+                    
+                  });
+                }
+                
+              };
+              
+              eval(codeToRun);
+            } catch(e) {
+              console.error(e.message);
+            }
           }
           
 		</script>
@@ -1567,6 +1865,81 @@ body {font-family: Arial, Helvetica, sans-serif;}
 .form-switch input:checked + i::before { transform: translate3d(18px, 2px, 0) scale3d(0, 0, 0); }
 .form-switch input:checked + i::after { transform: translate3d(22px, 2px, 0); }
         </style>
+        
+        <!-- built in console log -->
+              <script>
+   
+        var logOpen = false;
+        
+rewireLoggingToElement(
+    () => document.getElementById("log"),
+    () => document.getElementById("log-container"), true);
+
+function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
+    fixLoggingFunc('log');
+    fixLoggingFunc('debug');
+    fixLoggingFunc('warn');
+    fixLoggingFunc('error');
+    fixLoggingFunc('info');
+
+    function fixLoggingFunc(name) {
+        console['old' + name] = console[name];
+        console[name] = function(...arguments) {
+            const output = produceOutput(name, arguments);
+            const eleLog = eleLocator();
+            console['old' + name].apply(undefined, arguments);
+          if (!logOpen) {
+            return;
+          }
+
+            if (autoScroll) {
+                const eleContainerLog = eleOverflowLocator();
+                const isScrolledToBottom = eleContainerLog.scrollHeight - eleContainerLog.clientHeight <= eleContainerLog.scrollTop + 1;
+                eleLog.innerHTML += output + "<br>";
+                if (isScrolledToBottom) {
+                    eleContainerLog.scrollTop = eleContainerLog.scrollHeight - eleContainerLog.clientHeight;
+                }
+            } else {
+                eleLog.innerHTML += output + "<br>";
+            }
+
+            
+        };
+    }
+
+    function produceOutput(name, args) {
+        return args.reduce((output, arg) => {
+            return output +
+                "<span class=\"log-" + (typeof arg) + " log-" + name + "\">" +
+                    (typeof arg === "object" && (JSON || {}).stringify ? JSON.stringify(arg) : arg) +
+                "</span>&nbsp;";
+        }, '');
+    }
+}
+      </script>
+      
+      <style>
+        
+        .errorMarker {
+          position:absolute;
+          background:rgba(255,50,50,0.25);
+          z-index:20
+        }
+        
+        #log {
+          background-color: transparent;
+          border: transparent;
+        }
+
+        .log-warn { color: #ffc008 }
+        .log-error { color: #ff554f }
+        .log-info { color: skyblue }
+        .log-log { color: silver }
+        .log-debug { color: #00bb78 }
+
+        .log-warn, .log-error { font-weight: bold; }
+      </style>
+        
         
         <div class="displayRow" style="height: 90px; border-radius: 10px 10px 0px 0px">
       
@@ -2329,8 +2702,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
                 let status = "<b>" + s + "</b> • " + (internal.viewCount || 0) + " Views • ";
                 status += (internal.codeSubmissions || 0) + " Submissions";
                 content = content.replace("$Status", status);
-                content = content.replace("BehaviorName", "<b>" + behavior.alias + "</b>");
-                content = content.replace("rawBehaviorName", behavior.alias);
+                content = content.replace("BehaviorName", "<b>" + behavior.alias.replace("'", "\'") + "</b>");
+                content = content.replace("rawBehaviorName", behavior.alias.replace("'", "\'"));
                 content = content.replace("BGColor", "#" + categoryColor[behavior.category]);
                 
                 let desc = Object.keys(behavior.inputs).length;
@@ -2406,6 +2779,81 @@ body {font-family: Arial, Helvetica, sans-serif;}
         
         <div id="mainCodeIDE" style="display:none">
           
+          <div class="displayRow" style="height: 95px; display: none" id="codeProgramOptions">
+            
+            <div class="containerMargin">
+              
+              <div class="container" style="width: calc(100% / 5); float: left; overflow: hidden; border-radius: 10px;">
+                
+                <div class="containerDisplay" style="background-color: #f4f4f4">
+                  
+                  <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px;">
+                    
+                    
+                    <p class="inline" style="margin-top: 18px; margin-left: 12px; font-size: 20px; color:black"><b>Disable</b></p>
+                    <label class='form-switch inputToggleFieldInject'>
+                      <input type='checkbox' id='disableToggleProgram'><i></i>Disable</label>
+                    
+                  </div>
+                  
+                </div>
+                
+              </div>
+              
+              <div class="container" style="width: calc(100% / 5); float: left; overflow: hidden; border-radius: 10px;">
+                
+                <div class="containerDisplay" style="background-color: #f4f4f4">
+                  
+                  <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px;">
+                    
+                    
+                    <p class="inline" style="margin-top: 18px; margin-left: 12px; font-size: 20px; color:black"><b>Root</b></p>
+                    <label class='form-switch inputToggleFieldInject'>
+                      <input type='checkbox' id='rootToggleProgram'><i></i>Root</label>
+                    
+                  </div>
+                  
+                </div>
+                
+              </div>
+              
+              <div class="container" style="width: calc(100% / 5); float: left; overflow: hidden; border-radius: 10px;">
+                
+                <div class="containerDisplay" style="background-color: #f4f4f4">
+                  
+                  <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px;">
+                    
+                  
+                    <p class="inline" style="margin-top: 18px; margin-left: 12px; font-size: 20px; color:black"><b>Global</b></p>
+                    <label class='form-switch inputToggleFieldInject'>
+                      <input type='checkbox' id='globalToggleProgram'><i></i>Global</label>
+                    
+                  </div>
+                  
+                </div>
+                
+              </div>
+              
+              <div class="container" style="width: calc(40%); float: left; overflow: hidden; border-radius: 10px;">
+                
+                <div class="containerDisplay" style="background-color: #e5e5e5">
+                  
+                  <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px;">
+                    
+                   
+                    <p class="inline" style="margin-top: 18px; margin-left: 12px; font-size: 20px; color:black"><b>Children Count</b></p>
+                    <input class='inputFieldInject' id="childrenCount" placeholder="0" value="0">
+                    
+                  </div>
+                  
+                </div>
+                
+              </div>
+              
+            </div>
+            
+          </div>
+          
           <div class="displayRow" style="height: 500px;">
       
         <div class="containerMargin">
@@ -2415,25 +2863,42 @@ body {font-family: Arial, Helvetica, sans-serif;}
        <div class="containerDisplay">
          
             <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px">
-              <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/FCE06513-BE15-456C-9FE6-3499D68EF7A9.png" style="width:58px; z-index:3; position: absolute; left: 8.5px; top: 8px; border-radius: 100%" id="userIcon">
+              <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/FCE06513-BE15-456C-9FE6-3499D68EF7A9.png" style="width:58px; z-index:3; position: absolute; left: 8.5px; top: 8px; border-radius: 100%">
               
               <p class="inline" id="programBehavior" style="margin-top: 10px; margin-left: 70px; font-size: 17.5px; color:black">
                 <b>Add Values</b>
               </p>
-              <p class="inline" style="margin-top: 30px; margin-left: 70px; font-size: 15px; color:black">
+              <p class="inline" style="margin-top: 30px; margin-left: 70px; font-size: 15px; color:black" id="triggerType">
                 On <b id="codeTypeStr" style="color:#ff5b41">Execute</b>
               </p> 
+              <p class="inline" style="margin-top: 30px; margin-left: 70px; font-size: 15px; color:black; display: none" id="consoleLogTitle">
+                Console Log
+              </p> 
               
+              <!-- code -->
               <a class="button" id="codeType:Execute" class="codeTypeButton" onclick="changeCodeType('Execute')" style="min-width: 150px; margin-right: 12px;
               padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #4c4c4c">ON EXECUTE</a>
               <a class="button" id="codeType:Enable" class="codeTypeButton" onclick="changeCodeType('Enable')" style="min-width: 150px; margin-right: 12px;
               padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #00bb78">ON ENABLE</a>
               <a class="button" id="codeType:Disable" class="codeTypeButton" onclick="changeCodeType('Disable')" style="min-width: 150px; margin-right: 12px;
               padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #00bb78">ON DISABLE</a>
-              <a class="button" onclick="playtest()" style="min-width: 150px; margin-right: 12px;
+              
+              
+              <!-- execute -->
+              <a class="button" id="tryProgramCode:Execute" class="codeExecuteButton" onclick="tryProgramCode('Execute')" style="min-width: 150px; margin-right: 12px; display: none;
+              padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #5190ff">EXECUTE</a>
+              <a class="button" id="tryProgramCode:Enable" class="codeExecuteButton" onclick="tryProgramCode('Enable')" style="min-width: 150px; margin-right: 12px; display: none;
+              padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #ff8f42">ENABLE</a>
+              <a class="button" id="tryProgramCode:Disable" class="codeExecuteButton" onclick="tryProgramCode('Disable')" style="min-width: 150px; margin-right: 12px; display: none;
+              padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #ff8f42">DISABLE</a>
+              
+              
+              <a class="button" id="playtestButton" onclick="playtest()" style="min-width: 150px; margin-right: 12px;
               padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #2489bb">PLAYTEST</a>
-              <a class="button" onclick="submitProgramBehavior()" style="min-width: 120px; margin-right: 12px;
+              <a class="button" id="submitCodeButton" onclick="submitProgramBehavior()" style="min-width: 120px; margin-right: 12px;
               padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #ffb65b">SUBMIT</a>
+              <a class="button" id="swapMenuProgramButton" onclick="swapMenuProgram()" style="min-width: 135px; margin-right: 12px;
+              padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #9942ff; display: none">VIEW LOG</a>
               
               <script>
               
@@ -2443,7 +2908,10 @@ body {font-family: Arial, Helvetica, sans-serif;}
               
               </script>
               
-              <div class="editor" style="top: 25px; width: 100%; height: 490px" id="codeIDEWindow">// enter your code here</div>  
+              <div class="editor" style="top: 25px; width: 100%; height: 490px" id="codeIDEWindow">// enter your code here</div>
+              <div style="display: none; background-color: black; top: 65px; width: 100%; height: 420px; position: absolute; padding-left: 10px" id="log-container">
+                <pre id="log"></pre>
+              </div>
               
               <script>
                 var behavior = "Add Values";
@@ -2703,7 +3171,7 @@ triggerNode(internal.sequence);
 internal.sequence++;
                 
 // reset it if it exceeds the child behaviors count
-if (internal.sequence > childrenCount) {
+if (internal.sequence >= childrenCount) {
   internal.sequence = 0;                
 }</div>
                 </div>
@@ -2716,40 +3184,40 @@ if (internal.sequence > childrenCount) {
               <div style="border-radius: 10px; overflow: hidden; top: 1705px; height: 700px; width: calc(100% - 40px); margin-left: 20px; display: block; position: absolute;">
                 
               <div class="editor" noscroll readonly id="example5" style="border-radius: 10px; left: 0px; right: 0px; top: 0px; bottom: 0px; position: absolute">// enable a behavior
-behaviors[input.behaviorA].enable();
+behaviors[input.behaviourA].enable();
                 
 // disable a behavior
-behaviors[input.behaviorA].disable();
+behaviors[input.behaviourA].disable();
                 
 // execute a behavior
-behaviors[input.behaviorA].execute();
+behaviors[input.behaviourA].execute();
                 
 // get a behavior's input field
-behaviors[input.behaviorA].inputs;
+behaviors[input.behaviourA].inputs;
                 
 // get a behavior's output field
-behaviors[input.behaviorA].outputs;
+behaviors[input.behaviourA].outputs;
                 
 // set a behavior's input field
-behaviors[input.behaviorA].inputs.numberA = input.text;
+behaviors[input.behaviourA].inputs.numberA = input.text;
                 
 // set a behavior's output field
-behaviors[input.behaviorA].outputs.numberA = input.text;
+behaviors[input.behaviourA].outputs.numberA = input.text;
                 
 // get a behavior's input field type
-behaviors[input.behaviorA].inputs.numberA.type;
+behaviors[input.behaviourA].inputs.numberA.type;
                 
 // get a behavior's input field key
-behaviors[input.behaviorA].inputs.numberA.key;
+behaviors[input.behaviourA].inputs.numberA.key;
                 
 // get a behavior's input field controller
-behaviors[input.behaviorA].inputs.numberA.controller;
+behaviors[input.behaviourA].inputs.numberA.controller;
                 
 // dynamically set a behavior's input field
-behaviors[input.behaviorA].setInput("numberA", {
+behaviors[input.behaviourA].setInput("numberA", {
   key: "result",
-  controller: input.behaviorB
-};</div>
+  controller: input.behaviourB
+});</div>
                 </div>
               
               <p class="inline" style="top: 2420px; left: 20px; font-size: 19px; text-align:left; color:black; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px; overflow: hidden">
