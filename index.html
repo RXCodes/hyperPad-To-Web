@@ -1053,27 +1053,21 @@ body {font-family: Arial, Helvetica, sans-serif;}
            </style>
            </div>  
            <p class="inline" style="bottom: 20px; left: 20px; font-size: 15px; text-align:left; color:white; font-size: 40px; font-weight: bold;">
-                INPUT<br>FIELDS
+                GLOBAL<br>SCRIPTS
               </p>
-           <p class="inline" style="top: 15px; left: 20px; font-size: 22px; color:white; font-weight: bold">
-                0/218 Behaviors Validated
-              </p>
-           <p class="inline" style="top: 40px; left: 20px; font-size: 16px; color:white;">
-                0 Total Input Fields
-              </p>
-        
+           
             </div>
             <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
               
               <p class="inline" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
-                0 Input Submissions
+                0 Code Submissions
               </p>
               <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
-                Behavior Input Validation
+                Project Functionality
               </p>
               
-              <a class="button" onclick="openInternalMenu('Input Fields')" style="min-width: 140px; margin-right: 15px;
-              padding-top: 8.5px; padding-bottom: 8.5px;">VALIDATE</a>
+              <a class="button" onclick="openInternalMenu('Global Scripts')" style="min-width: 120px; margin-right: 15px;
+              padding-top: 8.5px; padding-bottom: 8.5px;">VIEW</a>
               
               
             </div>
@@ -1205,7 +1199,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
         
         <!-- program behavior view -->
         <script>
-          function programBehavior(behavior) {
+          async function programBehavior(behavior, intent) {
             let base = internalData.behaviorBase[behavior];
             let data = internalData.behaviors[behavior];
             internalProgramBehavior = {
@@ -1213,7 +1207,10 @@ body {font-family: Arial, Helvetica, sans-serif;}
             };
             codeTypes = {};
             window.behavior = behavior;
+            document.getElementById("programBehaviorLoader").style.display = "block";
+            document.getElementById("programBehaviorLoad").style.display = "none";
             document.getElementById("writeCommentText").innerHTML = "";
+            document.getElementById("writeCommentText").value = "";
             
             // top text
             inNavMenu("programBehaviorView", "None");
@@ -1224,7 +1221,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
             // bottom text
             let statusText = '<span style="color:statusColor; font-size: 65px; line-height: 35px; margin-bottom: -160px; margin-top: -100px; vertical-align: middle;">•</span>';
             statusText = statusText.replace("statusColor", data.statusColor);
-            statusText += "<b>" + data.status + "</b> • " + (data.viewCount || 0) + " Views • " + (data.codeSubmissions || 0) + " Submissions";
+            statusText += "<span style='bottom: 10px'><b>" + data.status + "</b> • " + (data.views || 0) + " Views • " + (data.codeSubmissions || 0) + " Submissions</span>";
             document.getElementById("status").innerHTML = statusText;
             
             // inputs and outputs
@@ -1262,6 +1259,9 @@ body {font-family: Arial, Helvetica, sans-serif;}
                 content = content.replace('cDshow style="', 'cDshow style="background-color: #ffe39a;');
               }
               if (name === "outputs") {
+                content = content.replace('cDshow style="', 'cDshow style="background-color: #ffe39a;');
+              }
+              if (name === "symbol") {
                 content = content.replace('cDshow style="', 'cDshow style="background-color: #ffe39a;');
               }
               
@@ -1364,24 +1364,26 @@ body {font-family: Arial, Helvetica, sans-serif;}
             
             // reset output fields
             optionalFields = 0;
+            errorCount = 0;
             document.getElementById("hiddenInputs").style.display = "none";
             document.getElementById("hiddenInputsMore").style.display = "none";
             document.querySelectorAll(".internalField").forEach(function(element) {
+              console.debug(element.id);
               element.style["background-color"] = "#e9e9e9";
-              if (element.id === "input.storage") {
-                element.style["background-color"] = "#ffe39a";
+              if (element.id == "input.storage") {
+                element.style["background-color"] = "#ffe39a !important";
                 optionalFields++;
               }
-              if (element.id === "input.values") {
-                element.style["background-color"] = "#ffe39a";
+              if (element.id == "input.values") {
+                element.style["background-color"] = "#ffe39a !important";
                 optionalFields++;
               }
-              if (element.id === "input.outputs") {
-                element.style["background-color"] = "#ffe39a";
+              if (element.id == "input.outputs") {
+                element.style["background-color"] = "#ffe39a !important";
                 optionalFields++;
               }
-              if (element.id === "input.symbol") {
-                element.style["background-color"] = "#ffe39a";
+              if (element.id == "input.symbol") {
+                element.style["background-color"] = "#ffe39a !important";
                 optionalFields++;
               }
             });
@@ -1394,6 +1396,44 @@ body {font-family: Arial, Helvetica, sans-serif;}
               element.setAttribute("readonly", true);
             });
             
+            if (playtesting) {
+              playtest();
+            }
+            
+            // load data
+            let countView = window["viewedBehavior-" + behavior] == undefined;
+            window["viewedBehavior-" + behavior] = true;
+            let behaviorInternal = await fetch("https://hyperpadtoweb.rxcodes.repl.co/fetch-behavior", {
+              method: "POST",
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                behavior,
+                countView
+              })
+            });
+            behaviorInternal = await behaviorInternal.json();
+            currentInternalBehavior = behaviorInternal;
+            
+            console.log(behaviorInternal)
+            document.getElementById("programBehaviorLoader").style.display = "none";
+            document.getElementById("programBehaviorLoad").style.display = "block";
+            
+            // intents
+            console.info(intent);
+            if (intent == "code submission") {
+              document.getElementById("programBehaviorLoader").scrollIntoView();
+            }
+            if (intent == "comment submission") {
+              document.getElementById("programBehaviorLoader").scrollIntoView();
+            }
+            
+            if (intent == "code submission") {
+              if (showComments) {
+                toggleComments();
+              }
+              return;
+            }
+            
             if (showComments) {
               toggleComments();
               toggleComments();
@@ -1401,13 +1441,11 @@ body {font-family: Arial, Helvetica, sans-serif;}
               toggleComments();
             }
             
-            if (playtesting) {
-              playtest();
-            }
           }
           
-          var showComments = true;
+          var showComments = false;
           var internalProgramBehavior = {};
+          var currentInternalBehavior = {};
           function toggleComments() {
             document.getElementById("NoComments").style.display = "none";
             let data = internalProgramBehavior.data || {};
@@ -1416,25 +1454,171 @@ body {font-family: Arial, Helvetica, sans-serif;}
               showComments = false;
               document.getElementById("toggleCommentsButton").innerHTML = "SHOW COMMENTS";
               document.getElementById("writeComment").style.display = "none";
-              let count = (data.comments || []).length;
+              let count = Object.keys(currentInternalBehavior.codeSubmissions || {}).length;
               document.getElementById("commentTitle").innerHTML = "<b>Code Submissions</b> (" + count + ")";
               if (count == 0) {
                 document.getElementById("NoComments").style.display = "block";
                 document.getElementById("noCommentTitle").innerHTML = "<b>Nobody has submitted code for this behavior yet.</b>";
                 document.getElementById("noCommentDesc").innerHTML = "Be the first one to comment on this behavior!";
               }
+              
+              // display
+              document.getElementById("commentSectionView").innerHTML = "";
+              let display = "";
+              
+              document.getElementById("commentSectionView").innerHTML = display;
+              
             } else {
               showComments = true;
               document.getElementById("toggleCommentsButton").innerHTML = "SHOW SUBMISSIONS";
               document.getElementById("writeComment").style.display = "block";
-              let count = (data.codeSubmissions || []).length;
+              let count = Number((currentInternalBehavior.comments || []).length);
+              if (isNaN(count)) {
+                count = 0;
+              }
               document.getElementById("commentTitle").innerHTML = "<b>Comments</b> (" + count + ")";
               if (count == 0) {
                 document.getElementById("NoComments").style.display = "block";
                 document.getElementById("noCommentTitle").innerHTML = "<b>Nobody has commented on this behavior yet.</b>";
                 document.getElementById("noCommentDesc").innerHTML = "Be the first one to submit code for this behavior!";
               }
+              
+              // display
+              document.getElementById("commentSectionView").innerHTML = "";
+              let display = "";
+              
+              let comments = currentInternalBehavior.comments || [];
+              window.currentComments = comments;
+              console.info(JSON.stringify(comments, null, "  "));
+              
+              let commentPlaceholder = document.getElementById("commentPlaceholder").innerHTML;
+              comments = comments.reverse();
+              comments.forEach(function(comment) {
+                
+                let commentData = commentPlaceholder;
+                
+                let author = internalData.userList[comment.owner];
+                let authorName = author.username + "#" + author.discriminator;
+                commentData = commentData.replace("DATA.USERNAME", authorName);
+                let avatar = "https://cdn.discordapp.com/avatars/" + author.id + "/" + author.avatar + ".png";
+                commentData = commentData.replace("DATA.AVATAR", avatar);
+                
+                let upvote = "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/D47F3B62-37CC-4F62-8F2C-AA72D1DDCA55.png";
+                if (comment.upvotes.includes(discordAcc.id)) {
+                  upvote = "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/B70068B8-F1C8-4449-8702-444EC4620973.png";
+                }
+                
+                
+                commentData = commentData.replace("DATA.UPVOTEIMG", upvote);
+                commentData = commentData.replace("DATA.UPVOTECOUNTID", comment.id + "-upvoteCount");
+                commentData = commentData.replace("DATA.UPVOTECOUNT", comment.upvotes.length || 0);
+                commentData = commentData.replace("DATA.UPVOTEIMGID", comment.id + "-upvoteIMG");
+                commentData = commentData.replace("DATA.UPVOTEID", comment.id);
+                
+                
+                let secondsPassed = (Date.now() - comment.time) / 1000;
+                
+                commentData = commentData.replace("DATA.CREATIONDATE", getRelativeTime(secondsPassed));
+                commentData = commentData.replace("DATA.COMMENT", comment.comment);
+                
+                display += commentData;
+              });
+              
+              document.getElementById("commentSectionView").innerHTML = display;
+              
             }
+          }
+          
+          function getRelativeTime(seconds) {
+            if (seconds < 60) {
+              return "Just Now"
+            }
+            if (seconds < 60 * 60) {
+              return Math.floor(seconds / 60) + "m ago";
+            }
+            if (seconds < 60 * 60 * 24) {
+              return Math.floor(seconds / 60 / 60) + "hr ago";
+            }
+            if (seconds < 60 * 60 * 24 * 30) {
+              return Math.floor(seconds / 60 / 60 / 24) + "d ago";
+            }
+            return Math.floor(seconds / 60 / 60 / 24 / 30) + "mo ago";
+          }
+          
+          let upvotingTimeout = {};
+          function toggleUpvote(commentID) {
+            
+            clearTimeout(upvotingTimeout[commentID]);
+            
+            currentComments.forEach(function(comment) {
+              if (comment.id == commentID) {
+                
+                let anim1 = document.getElementById(comment.id + "-upvoteIMG").animate([
+                  { transform: "rotate(15) scale(1.1) translateY(10px)" },
+                  { transform: "rotate(0) scale(1) translateY(0px)" }
+                ], {
+                  duration: 450,
+                  iterations: 1,
+                  easing: "ease-out"
+                });
+                
+                let anim2 = document.getElementById(comment.id + "-upvoteCount").animate([
+                  { transform: "scale(2.5)" },
+                  { transform: "scale(1)" }
+                ], {
+                  duration: 1500,
+                  iterations: 1,
+                  easing: "cubic-bezier(0.6, 0, 0.6, 2)"
+                });
+                
+                anim1.play();
+                anim2.play();
+                
+                
+                if (comment.upvotes.includes(discordAcc.id)) {
+                  upvotingTimeout[commentID] = setTimeout(function(commentID) {
+                    removeUpvoteComment(commentID);
+           		  }, 1000, commentID);
+                  let index = comment.upvotes.indexOf(discordAcc.id);
+                  comment.upvotes.splice(index, 1);
+                  document.getElementById(comment.id + "-upvoteCount").innerHTML = comment.upvotes.length;
+                  document.getElementById(comment.id + "-upvoteIMG").src = "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/D47F3B62-37CC-4F62-8F2C-AA72D1DDCA55.png";
+                } else {
+                  upvotingTimeout[commentID] = setTimeout(function(commentID) {
+                    upvoteComment(commentID);
+           		  }, 1000, commentID);
+                  comment.upvotes.push(discordAcc.id);
+                  document.getElementById(comment.id + "-upvoteCount").innerHTML = comment.upvotes.length;
+                  document.getElementById(comment.id + "-upvoteIMG").src = "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/B70068B8-F1C8-4449-8702-444EC4620973.png";
+                }
+              }
+            });
+          }
+          
+          async function upvoteComment(commentID) {
+            let response = await fetch("https://hyperpadtoweb.rxcodes.repl.co/upvote-comment", {
+              method: "POST",
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                behavior,
+                commentID
+              })
+            });
+            response = await response.text();
+            console.log(response);
+          }
+          
+          async function removeUpvoteComment(commentID) {
+            let response = await fetch("https://hyperpadtoweb.rxcodes.repl.co/remove-upvote-comment", {
+              method: "POST",
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                behavior,
+                commentID
+              })
+            });
+            response = await response.text();
+            console.log(response);
           }
           
           // document.getElementById("mainCodeIDE").style.display = "none";
@@ -1515,7 +1699,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
               document.getElementById("tryProgramCode:Disable").style.display = "none";
             }
           }
-          
+
+          var codesTested = {};
           var fieldsUsed = {};
           function playtest() {
             if (!playtesting) {
@@ -1530,22 +1715,26 @@ body {font-family: Arial, Helvetica, sans-serif;}
                 swapMenuProgram();
               }
               playtesting = true;
+              
+              fieldsUsed = {};
+              errorCount = 0;
+              codesTested = {};
               document.querySelectorAll(".internalField").forEach(function(element) {
               fieldsUsed[element.id] = false;
               element.style["background-color"] = "#e9e9e9";
-              if (element.id === "input.storage") {
+              if (element.id == "input.storage") {
                 element.style["background-color"] = "#ffe39a";
                 optionalFields++;
               }
-              if (element.id === "input.values") {
+              if (element.id == "input.values") {
                 element.style["background-color"] = "#ffe39a";
                 optionalFields++;
               }
-              if (element.id === "input.outputs") {
+              if (element.id == "input.outputs") {
                 element.style["background-color"] = "#ffe39a";
                 optionalFields++;
               }
-              if (element.id === "input.symbol") {
+              if (element.id == "input.symbol") {
                 element.style["background-color"] = "#ffe39a";
                 optionalFields++;
               }
@@ -1622,14 +1811,18 @@ body {font-family: Arial, Helvetica, sans-serif;}
           var internal = {};
           var runningTimers = [];
           var origCode;
+          var encounteredError = false;
+          var errorCount = 0;
           setTimeout(function() {
             origCode = document.getElementById("beginningCode").innerHTML;
             origCode = origCode.replace("throw die;", "");
             
           }, 10)
           
+          
           function tryProgramCode(type) {
             
+            codesTested[type] = true;
             if (type == "Enable") {
               console.debug("<i>[SYSTEM]</i> <b>Behavior updated</b>: Disabled behavior.");
               disableBehavior = true;
@@ -1641,6 +1834,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
               document.getElementById("disableToggleProgram").checked = false;
             }
             
+            encounteredError = false;
             let codeToRun = origCode.replace("[CodeToRun]", (codeTypes[type] || ""));
             console.info("<i>[SYSTEM]</i> Running <b>" + type + "</b> script...");
             
@@ -1648,12 +1842,64 @@ body {font-family: Arial, Helvetica, sans-serif;}
               eval(codeToRun);
             } catch(e) {
               console.error(e.message);
+              encounteredError = true;
+              window.errorEncountered = e.message;
             }
             
             
           }
           
 		</script>
+        
+<link rel="preload" as="image" href="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/B70068B8-F1C8-4449-8702-444EC4620973.png">
+<link rel="preload" as="image" href="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/D47F3B62-37CC-4F62-8F2C-AA72D1DDCA55.png">
+        <i id="commentPlaceholder" style="display: none">
+        
+   <div class="displayRow" style="border-radius: 10px 10px 0px 0px; height: 150px">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: 100%; overflow: hidden;">
+       <div class="containerDisplay">
+         
+            <div class="containerPlaceholder">
+              
+              <img src="DATA.AVATAR" style="width:40px; z-index:3; position: absolute; left: 8.5px; top: 10px; border-radius: 100%">
+              
+              <p class="inline" style="top: 15px; right: 10px; font-size: 22px; color:black; text-align: center; position: absolute; width: 65px; background-color: #ededed; border-radius: 10px;">
+                <b id="DATA.UPVOTECOUNTID">DATA.UPVOTECOUNT</b>
+              </p>
+              <img src="DATA.UPVOTEIMG" id="DATA.UPVOTEIMGID" style="top: 10px; right: 80px; width: 35px; position: absolute;" onclick="toggleUpvote('DATA.UPVOTEID')">
+              
+              <p class="inline" style="top: 10px; margin-left: 57px; font-size: 17.5px; color:black">
+                <b>DATA.USERNAME</b>
+              </p>
+              <p class="inline" style="top: 30px; margin-left: 57px; font-size: 15px; color:black">
+                DATA.CREATIONDATE
+              </p>
+              
+              <div style="background-color: #ededed; border-radius: 10px; height: calc(100% - 60px); width: calc(100% - 10px); right: 5px; bottom: 5px; position: absolute;">
+              
+              <p style="margin-left: 8px; margin-top: 8px; font-size: 16px; color:black; width: calc(100% - 10px); word-break: break-all; white-space: normal">
+                DATA.COMMENT
+              </p>  
+                
+              </div>
+              
+            </div>
+         
+         
+      </div>
+          </div> 
+          
+      
+     
+          
+      </div>
+</div>
+          
+        </i>
         
    <script style="display: none;" id="beginningCode">
        throw die; 
@@ -1705,14 +1951,17 @@ body {font-family: Arial, Helvetica, sans-serif;}
                         },
                         setInput: function(field, data) {
                           if (data.constructor !== Object) {
+                            errorCount++;
                             return console.error("<i>[ERROR]</i> Field <b>" + field + "</b> is not a dictionary.")
                           }
                           
                           if (data.controller === undefined) {
+                            errorCount++;
                             return console.error("<i>[ERROR]</i> Field <b>" + field + "</b> is missing the 'controller' property.")
                           }
                           
                           if (data.key === undefined) {
+                            errorCount++;
                             return console.error("<i>[ERROR]</i> Field <b>" + field + "</b> is missing the 'key' property.")
                           }
                             
@@ -1802,7 +2051,10 @@ body {font-family: Arial, Helvetica, sans-serif;}
                     return null;
                   }
                   document.getElementById("input." + name).style["background-color"] = "#9affc2";
-                  document.getElementById("inputDisplay." + name).value = _inputs[name];
+                  try {
+                    document.getElementById("inputDisplay." + name).value = _inputs[name];
+                  } catch(e) {};
+                  fieldsUsed["input." + name] = true;
                   return _inputs[name];
   				}
 			  });
@@ -1812,7 +2064,11 @@ body {font-family: Arial, Helvetica, sans-serif;}
                 console.info("<i>[SYSTEM]</i> Triggered child behaviors.");
               }
               let triggerNode = function(num) {
-                console.info("<i>[SYSTEM]</i> Triggered child behavior: <b>" + Number(num) + "</b>");
+                num = Number(num);
+                if (isNaN(num)) {
+                  num = 0;
+                }
+                console.info("<i>[SYSTEM]</i> Triggered child behavior: <b>" + num + "</b>");
               }
               
               // yield outputs
@@ -1822,12 +2078,14 @@ body {font-family: Arial, Helvetica, sans-serif;}
                 // check if outputs is a dictionary
                 let successOutput = true;
                 if (outputs.constructor !== Object) {
+                  errorCount++;
                   return console.error("<i>[ERROR]</i> Output fields must be a dictionary.");
                 }
                 
                 // check for output stuff again
                 _outputs.forEach(function(key) {
                   if (!Object.keys(outputs).includes(key)) {
+                    errorCount++;
                     successOutput = false;
                     console.error("<i>[ERROR]</i> Output field <b>\"" + key + "\"</b> is missing.");
                   }
@@ -1843,7 +2101,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
                     try {
                       if (outputs[key] !== undefined)
                       document.getElementById("outputDisplay." + key).value = outputs[key];
-                      document.getElementById("output." + key).style["background-color"] = "#9affc2"
+                      document.getElementById("output." + key).style["background-color"] = "#9affc2";
+                      fieldsUsed["output." + key] = true;
                     } catch(e) {};
                     
                   });
@@ -2148,7 +2407,15 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
      <div id="behaviorFields"></div>
         
         <!-- show comments and code submissions -->
-     <div class="displayRow" style="margin-top: -15px; height: 80px;">
+        <div id="programBehaviorLoader">
+          <div class="lds-ring" style="margin: auto; margin-top: 12px;"><div></div><div></div><div></div><div></div></div>
+      
+      <p style="margin: auto; text-align: center; color: white;" id="loadingText">Loading Content</p>
+        </div>
+        
+        <div id="programBehaviorLoad" style="margin-top: -15px;">    
+        
+     <div class="displayRow" style="height: 80px;">
     
     <div class="containerDisplay" style="width: calc(100% - 30px); margin-left: auto; margin-right: auto; white-space: nowrap;">
            <p style="font-size: 20px; left: 15px; margin-top:17px; position: absolute; color:#474747; display: inline;" id="commentTitle">
@@ -2165,13 +2432,13 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
     
     <div class="containerDisplay" style="width: calc(100% - 30px); margin-left: auto; margin-right: auto; overflow: hidden; white-space: nowrap;">
            <textarea id="writeCommentText" placeholder="Write a comment..." style="width: 100%; background-color: transparent; border-width: 0px; height: calc(100% - 25px); padding: 10px; z-index: 30; color: black; font-size: 17px"></textarea>
-       <a class="button" id="toggleCommentsButton" onclick="submitComment()" style="margin: 0px; width: 100%; bottom: 0px; border-radius: 0px; position: absolute; height: 25px;">SUBMIT COMMENT</a>
+       <a class="button" id="submitCommentButton" onclick="submitComment()" style="margin: 0px; width: 100%; bottom: 0px; border-radius: 0px; position: absolute; height: 25px;">SUBMIT COMMENT</a>
                  
     </div> 
     </div>
         
         <!-- show stuff -->
-        <div id="commentSectionView">
+        <div id="commentSectionView" style="overflow: hidden">
           
         </div>
         
@@ -2198,6 +2465,7 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
       </div>
         </div>
       </div>
+        </div>
         
         <div style="height: 300px">
           
@@ -2758,8 +3026,9 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
                 try {
                 let content = '<div class="displayRow" style="height: 130px; margin-bottom: -10px; overflow: hidden"><div class="containerMargin"><div class="container" style="width: 100%; height: 85px; border-radius: 10px;"><div class="containerDisplay" style="border-radius: 10px 10px 0px 0px"><div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px"><p class="inline" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:black">BehaviorName</p><p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:black">Description</p><a class="button" onclick="programBehavior(\'rawBehaviorName\');" style="min-width: 90px; margin-right: 15px; padding-top: 8.5px; padding-bottom: 8.5px">OPEN</a></div></div></div>  <div class="containerDisplay" style="background-color: #e9e9e9; height: 35px; border-radius: 0px 0px 10px 10px; width: calc(100% - 20px); margin-top: -15px; border-top: 10px solid BGColor"><div style="background-color: $StatusColor; border-radius: 100%; width: 11.5px; height: 11.5px; margin-left: 10px; position: absolute; margin-top: 6px;"></div><p class="inline" style="margin-top: 3px; margin-left: 25px; font-size: 13.5px; color:black">$Status</p></div></div></div>';
                 internal[behavior.alias] = internal[behavior.alias] || {};
+                let dashboardData = internalData.behaviors[behavior.alias];
                 let sC;
-                let s = internal.status || "No Progress";
+                let s = dashboardData.codeStatus || "No Progress";
                 if (s == "No Progress") {
                   content = content.replace("$StatusColor", "#ff5050");
                   sC = "#ff5050";
@@ -2784,8 +3053,8 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
                   content = content.replace("$StatusColor", "gray");
                   sC = "gray";
                 }  
-                let status = "<b>" + s + "</b> • " + (internal.viewCount || 0) + " Views • ";
-                status += (internal.codeSubmissions || 0) + " Submissions";
+                let status = "<b>" + s + "</b> • " + (dashboardData.views || 0) + " Views • ";
+                status += (dashboardData.codeSubmissions || 0) + " Submissions";
                 content = content.replace("$Status", status);
                 content = content.replace("BehaviorName", "<b>" + behavior.alias.replace("'", "\'") + "</b>");
                 content = content.replace("rawBehaviorName", behavior.alias.replace("'", "\'"));
@@ -2986,9 +3255,176 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
               padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #9942ff; display: none">VIEW LOG</a>
               
               <script>
+                
+                // comment submission
+                var submittingComment = false;
+                async function submitComment() {
+                  if (submittingComment) {
+                    return;
+                  }
+                  
+                  // check authorization
+                  if (!internalData.authorized) {
+                    return popup("You're Not Logged In", "<p><b>Sorry, you cannot comment when you are not logged in.</b><br><br>Note that after logging in, your written comment will be reset.")
+                  }
+                  
+                  // check comment
+                  let comment = document.getElementById("writeCommentText").value;
+                  comment = comment.trim();
+                  if (comment.length == 0) {
+                    return popup("Cannot Submit Comment", "<p>Your comment cannot be blank!");
+                  }
+                  if (comment.length < 5) {
+                    return popup("Cannot Submit Comment", "<p>Your comment is too short.");
+                  }
+                  if (comment.length > 500) {
+                    return popup("Cannot Submit Comment", "<p>Your comment is too long!");
+                  }
+                  
+                  // submit comment
+                  document.getElementById("writeCommentText").setAttribute("readonly", true);
+                  document.getElementById("writeComment").style.opacity = 0.5;
+                  document.getElementById("submitCommentButton").innerHTML = "SUBMITTING";
+                  submittingComment = true;
+                  
+                  let response = await fetch("https://hyperpadtoweb.rxcodes.repl.co/submit-comment", {
+                    method: "POST",
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                      behavior,
+                      comment
+                    })
+                  });
+                  response = await response.text();
+                  console.log(response)
+                  submittingComment = false;
+                  document.getElementById("writeCommentText").removeAttribute("readonly");
+                  document.getElementById("writeCommentText").value = "";
+                  document.getElementById("writeComment").style.opacity = 1;
+                  document.getElementById("submitCommentButton").innerHTML = "SUBMIT";
+                  
+                  if (response !== "success") {
+                    return popup("Error Submitting Comment", "<p><b>Sorry, there was an error submitting your comment.</b><br><br>Please check your internet connection or try signing out then logging in again.</p>")
+                  }
+                  
+                  programBehavior(behavior, "comment submission");
+                  document.getElementById("programBehaviorLoader").scrollIntoView();
+                  
+                }
               
-                function submitProgramBehavior() {
-                  popup("Coming Soon!", "<p>Sorry, this stuff is still in progress. It will be finished soon! :)</p>")
+                // code submission
+                var submittingCode = false;
+                async function submitProgramBehavior() {
+                  
+                  if (submittingCode) {
+                    return;
+                  }
+                  
+                  // check authorization
+                  if (!internalData.authorized) {
+                    return popup("You're Not Logged In", "<p><b>Sorry, you cannot submit code when you are not logged in.</b><br><br>Please copy your code and save it somewhere before attempting to log in to ensure that your progress will not be lost.")
+                  }
+                  
+                  // check fields count
+                  let inputs = 0;
+                  let falseInputs = 0;
+                  let outputs = 0;
+                  let inputsUsed = 0;
+                  let outputsUsed = 0;
+                  Object.keys(fieldsUsed).forEach(function(field) {
+                    if (field.startsWith("input.")) {
+                      inputs++;
+                      if (fieldsUsed[field]) {
+                        inputsUsed++;
+                      }
+                      if (field == "input.symbol") {
+                        falseInputs++;
+                      }
+                      if (field == "input.outputs") {
+                        falseInputs++;
+                      }
+                      if (field == "input.storage") {
+                        falseInputs++;
+                      }
+                      if (field == "input.values") {
+                        falseInputs++;
+                      }
+                    }
+                    if (field.startsWith("output.")) {
+                      outputs++;
+                      if (fieldsUsed[field]) {
+                        outputsUsed++;
+                      }
+                    }
+                  });
+                  
+                  let success = true;
+                  let reasons = [];
+                  inputs -= falseInputs;
+                  if (inputs > 0) {
+                    if (inputsUsed == 0) {
+                      reasons.push("• You must use at least <b>one</b> input field for this behavior.")
+					  success = false;
+                    }
+                  }
+                  
+                  if (outputs !== outputsUsed) {
+                    reasons.push("• You must use <b>all</b> output fields for this behavior using the <i>yield</i> function.")
+					success = false;
+                  }
+                  
+                  if (encounteredError) {
+                    reasons.push("• Your code must follow correct syntax and cannot throw errors -> <b>" + window.errorEncountered + "</b>");
+                    success = false;
+                  }
+                  
+                  if (Object.keys(codesTested).length !== 3) {
+                    reasons.push("• You must <b>test all of your scripts</b> before submission, even if you just edited them or restarted the playtest.");
+                    success = false;
+                  }
+                  
+                  if (errorCount !== 0) {
+                    reasons.push("• Resolve all the warnings and errors shown in the <b>console log</b>.");
+                    success = false;
+                  }
+                  
+                  if (!success) {
+                    let msg = "<p>Sorry, but your code is incomplete. Your code must follow certain criteria to be a valid submission.<br><br><b style='font-size: 20px'><u>Here's what you need to change:</u></b><br>";
+                    msg += reasons.join("<br>");
+                    msg += "<br><br>If you just have edited your code, you may have to run all the scripts again for the system to recognize new fulfilled requirements.</p>"
+                    return popup("Failed to Submit Scripts", msg);
+                  }
+                  
+                  // success submit
+                  submittingCode = true;
+                  
+                  let sendData = {
+                    code: codeTypes,
+                    behavior
+                  };
+                  console.log(sendData);
+                  
+                  let loading = '<div class="lds-ring" style="height: 80px; transform: scale(0.5); position: absolute; margin-top: -16.5px; top: 0px; margin-left: 8px; width: 100%"><div></div><div></div><div></div><div></div></div>';
+                  document.getElementById("submitCodeButton").innerHTML = loading;
+                  
+                  // loading
+                  let response = await fetch("https://hyperpadtoweb.rxcodes.repl.co/submit-code", {
+                    method: "POST",
+                    headers: { 'Content-Type': 'application/json' },
+    				body: JSON.stringify(sendData)
+                  });
+                  response = await response.text();
+                  
+                  console.log(response);
+                  submittingCode = false;
+                  document.getElementById("submitCodeButton").innerHTML = "SUBMIT";
+                  
+                  if (response !== "success") {
+                    return popup("Error Submitting Code", "<p><b>There was an error submitting your code.</b><br><br>Please check your internet connection and see if you are logged in. If issues persist, please notify <b>RXCodes</b> in the Discord server.</p>")
+                  }
+                  
+                  programBehavior(behavior, "code submission");
+                  
                 }
               
               </script>
@@ -3010,6 +3446,25 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
                   window["codeIDEWindow-editor"].on('change', function(delta) {
                     let code = window["codeIDEWindow-editor"].getValue();
                     codeTypes[currentCodeType] = code;
+                    fieldsUsed = {};
+                    codesTested = {};
+                    errorCount = 0;
+                    document.querySelectorAll(".internalField").forEach(function(element) {
+                      fieldsUsed[element.id] = false;
+                      element.style["background-color"] = "#e9e9e9";
+                      if (element.id == "input.storage") {
+                        element.style["background-color"] = "#ffe39a";
+                      }
+                      if (element.id == "input.values") {
+                        element.style["background-color"] = "#ffe39a";
+                      }
+                      if (element.id == "input.outputs") {
+                        element.style["background-color"] = "#ffe39a";
+                      }
+                      if (element.id == "input.symbol") {
+                        element.style["background-color"] = "#ffe39a";
+                      }
+                    });
 				  });
 			      changeCodeType("Execute");
                 }, 5500);
@@ -4278,15 +4733,15 @@ const internalMenuNavs = {
     if (internalData.authorized) {
 	  document.getElementById("loggedInNav").style.display = "block";
       document.getElementById("registerNav").style.display = "none";
+      let avatar = "https://cdn.discordapp.com/avatars/" + discordAcc.id + "/" + discordAcc.avatar + ".png";
+      document.getElementById("userIcon").src = avatar;
+      console.info(avatar);
       
       // display discord profile
       document.getElementById("discordUsername").innerHTML = "Logged in as: <b>" + discordAcc.username + "#" + discordAcc.discriminator + "</b>";
       let contribTxt = internalData.account.contributions + " Total Contributions <i>(";
       contribTxt += internalData.account.verifiedContributions + " Verified)</i>";
       document.getElementById("discordContributions").innerHTML = contribTxt;
-      let avatar = "https://cdn.discordapp.com/avatars/" + discordAcc.id + "/" + discordAcc.avatar + ".png";
-      document.getElementById("userIcon").src = avatar;
-      console.info(avatar);
       
     } else {
 	  document.getElementById("loggedInNav").style.display = "none";
@@ -4350,6 +4805,7 @@ const internalMenuNavs = {
           if (data.code == 0) {
             throw data.message;
           }
+          await fetch("https://hyperpadtoweb.rxcodes.repl.co/authorize?token=" + internalData.auth.replace(" ", "%20"));
           discordAcc = data;
           console.debug(data);
           internalData.authorized = true;
