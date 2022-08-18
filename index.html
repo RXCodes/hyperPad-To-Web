@@ -1408,7 +1408,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
               headers: {'Content-Type': 'application/json'},
               body: JSON.stringify({
                 behavior,
-                countView
+                countView,
+                auth: internalData.auth
               })
             });
             behaviorInternal = await behaviorInternal.json();
@@ -1442,7 +1443,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
             }
             
           }
-          
+ 
           var showComments = false;
           var internalProgramBehavior = {};
           var currentInternalBehavior = {};
@@ -1466,7 +1467,65 @@ body {font-family: Arial, Helvetica, sans-serif;}
               document.getElementById("commentSectionView").innerHTML = "";
               let display = "";
               
+              let codes = currentInternalBehavior.codeSubmissions || {};
+              window.currentCodes = codes;
+              console.info(JSON.stringify(codes, null, "  "));
+              let codeSessions = [];
+              let codePlaceholder = document.getElementById("codePlaceholder").innerHTML;
+              Object.keys(codes).forEach(function(key) {
+                let codeData = codePlaceholder;
+                let data = codes[key]
+                let author = internalData.userList[key];
+                let authorName = author.username + "#" + author.discriminator;
+                codeData = codeData.replace("DATA.USERNAME", authorName);
+                let avatar = "https://cdn.discordapp.com/avatars/" + author.id + "/" + author.avatar + ".png";
+                codeData = codeData.replace("DATA.AVATAR", avatar);
+                
+                let upvote = "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/D47F3B62-37CC-4F62-8F2C-AA72D1DDCA55.png";
+                if (data.upvotes.includes(discordAcc.id)) {
+                  upvote = "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/B70068B8-F1C8-4449-8702-444EC4620973.png";
+                }
+                
+                
+                codeData = codeData.replace("DATA.UPVOTEIMG", upvote);
+                codeData = codeData.replace("DATA.UPVOTECOUNTID", data.id + "-upvoteCount");
+                codeData = codeData.replace("DATA.UPVOTECOUNT", data.upvotes.length || 0);
+                codeData = codeData.replace("DATA.UPVOTEIMGID", data.id + "-upvoteIMG");
+                codeData = codeData.replace("DATA.UPVOTEID", data.id);
+                
+                
+                let secondsPassed = (Date.now() - data.time) / 1000;
+                function htmlEntities(str) {
+    			  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+				}
+                
+                codeData = codeData.replace("DATA.CREATIONDATE", "Submitted " + getRelativeTime(secondsPassed));
+                let textarea = "<textarea style='border-radius: 10px' class='editor' id='" + data.id + "-codeDiv'>" + (htmlEntities(data.codes.Execute) || "// enter your code here") + "</textarea>";
+                codeData = codeData.replace("DATA.CODE", textarea); 
+                codeSessions.push(data.id + "-codeDiv");
+                
+                display += codeData;
+              });
+              
               document.getElementById("commentSectionView").innerHTML = display;
+              codeSessions.forEach(function(id) {
+                let editor = CodeMirror.fromTextArea(document.getElementById(id), {
+                  tabSize: 2,
+                  mode: "javascript",
+                  theme: 'monokai',
+                  firstLineNumber: 1,
+                  matchBrackets: true,
+                  viewportMargin: Infinity,
+                  readOnly: true,
+                  keyword: codeKeywords
+                });
+                console.log(id)
+
+                editor.setSize("100%", "100%");
+                editor.save();
+
+                
+              });
               
             } else {
               showComments = true;
@@ -1519,11 +1578,14 @@ body {font-family: Arial, Helvetica, sans-serif;}
                 let secondsPassed = (Date.now() - comment.time) / 1000;
                 
                 commentData = commentData.replace("DATA.CREATIONDATE", getRelativeTime(secondsPassed));
-                commentData = commentData.replace("DATA.COMMENT", comment.comment);
+                function htmlEntities(str) {
+    			  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+			    }
+                commentData = commentData.replace("DATA.COMMENT", htmlEntities(comment.comment));
                 
                 display += commentData;
               });
-              
+             
               document.getElementById("commentSectionView").innerHTML = display;
               
             }
@@ -1548,8 +1610,13 @@ body {font-family: Arial, Helvetica, sans-serif;}
           let upvotingTimeout = {};
           function toggleUpvote(commentID) {
             
+            if (!internalData.authorized) {
+              return popup("Cannot Upvote", "<p>You <b>must be logged in</b> to upvote comments and code submissions.<br><br>If you are already logged in, try logging out and logging back in again.</p>");
+            }
+            
             clearTimeout(upvotingTimeout[commentID]);
             
+            // check comment
             currentComments.forEach(function(comment) {
               if (comment.id == commentID) {
                 
@@ -1558,7 +1625,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
                   { transform: "rotate(0) scale(1) translateY(0px)" }
                 ], {
                   duration: 450,
-                  iterations: 1,
                   easing: "ease-out"
                 });
                 
@@ -1567,7 +1633,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
                   { transform: "scale(1)" }
                 ], {
                   duration: 1500,
-                  iterations: 1,
                   easing: "cubic-bezier(0.6, 0, 0.6, 2)"
                 });
                 
@@ -1593,6 +1658,51 @@ body {font-family: Arial, Helvetica, sans-serif;}
                 }
               }
             });
+            
+            // check code submission
+            Object.keys(currentCodes).forEach(function(userID) {
+              let code = currentCodes[userID];
+              if (code.id == commentID) {
+                
+                let anim1 = document.getElementById(code.id + "-upvoteIMG").animate([
+                  { transform: "rotate(15) scale(1.1) translateY(10px)" },
+                  { transform: "rotate(0) scale(1) translateY(0px)" }
+                ], {
+                  duration: 450,
+                  easing: "ease-out"
+                });
+                
+                let anim2 = document.getElementById(code.id + "-upvoteCount").animate([
+                  { transform: "scale(2.5)" },
+                  { transform: "scale(1)" }
+                ], {
+                  duration: 1500,
+                  easing: "cubic-bezier(0.6, 0, 0.6, 2)"
+                });
+                
+                anim1.play();
+                anim2.play();
+                
+                
+                if (code.upvotes.includes(discordAcc.id)) {
+                  upvotingTimeout[commentID] = setTimeout(function(commentID) {
+                    removeUpvoteCode(commentID);
+           		  }, 1000, commentID);
+                  let index = code.upvotes.indexOf(discordAcc.id);
+                  code.upvotes.splice(index, 1);
+                  document.getElementById(code.id + "-upvoteCount").innerHTML = code.upvotes.length;
+                  document.getElementById(code.id + "-upvoteIMG").src = "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/D47F3B62-37CC-4F62-8F2C-AA72D1DDCA55.png";
+                } else {
+                  upvotingTimeout[commentID] = setTimeout(function(commentID) {
+                    upvoteCode(commentID);
+           		  }, 1000, commentID);
+                  code.upvotes.push(discordAcc.id);
+                  document.getElementById(code.id + "-upvoteCount").innerHTML = code.upvotes.length;
+                  document.getElementById(code.id + "-upvoteIMG").src = "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/B70068B8-F1C8-4449-8702-444EC4620973.png";
+                }
+              }
+            });
+            
           }
           
           async function upvoteComment(commentID) {
@@ -1601,7 +1711,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
               headers: {'Content-Type': 'application/json'},
               body: JSON.stringify({
                 behavior,
-                commentID
+                commentID,
+                auth: internalData.auth
               })
             });
             response = await response.text();
@@ -1614,7 +1725,36 @@ body {font-family: Arial, Helvetica, sans-serif;}
               headers: {'Content-Type': 'application/json'},
               body: JSON.stringify({
                 behavior,
-                commentID
+                commentID,
+                auth: internalData.auth
+              })
+            });
+            response = await response.text();
+            console.log(response);
+          }
+          
+          async function upvoteCode(codeID) {
+            let response = await fetch("https://hyperpadtoweb.rxcodes.repl.co/upvote-code", {
+              method: "POST",
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                behavior,
+                codeID,
+                auth: internalData.auth
+              })
+            });
+            response = await response.text();
+            console.log(response);
+          }
+          
+          async function removeUpvoteCode(codeID) {
+            let response = await fetch("https://hyperpadtoweb.rxcodes.repl.co/remove-upvote-code", {
+              method: "POST",
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                behavior,
+                codeID,
+                auth: internalData.auth
               })
             });
             response = await response.text();
@@ -1853,6 +1993,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
         
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/B70068B8-F1C8-4449-8702-444EC4620973.png">
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/D47F3B62-37CC-4F62-8F2C-AA72D1DDCA55.png">
+        
         <i id="commentPlaceholder" style="display: none">
         
    <div class="displayRow" style="border-radius: 10px 10px 0px 0px; height: 150px">
@@ -1884,6 +2025,51 @@ body {font-family: Arial, Helvetica, sans-serif;}
               <p style="margin-left: 8px; margin-top: 8px; font-size: 16px; color:black; width: calc(100% - 10px); word-break: break-all; white-space: normal">
                 DATA.COMMENT
               </p>  
+                
+              </div>
+              
+            </div>
+         
+         
+      </div>
+          </div> 
+          
+      
+     
+          
+      </div>
+</div>
+          
+        </i>
+        
+        <i id="codePlaceholder" style="display: none">
+        
+   <div class="displayRow" style="border-radius: 10px 10px 0px 0px; height: 300px">
+      
+        <div class="containerMargin">
+          
+          
+    <div class="container" style="width: 100%; overflow: hidden;">
+       <div class="containerDisplay">
+         
+            <div class="containerPlaceholder">
+              
+              <img src="DATA.AVATAR" style="width:40px; z-index:3; position: absolute; left: 8.5px; top: 10px; border-radius: 100%">
+              
+              <p class="inline" style="top: 15px; right: 10px; font-size: 22px; color:black; text-align: center; position: absolute; width: 65px; background-color: #ededed; border-radius: 10px;">
+                <b id="DATA.UPVOTECOUNTID">DATA.UPVOTECOUNT</b>
+              </p>
+              <img src="DATA.UPVOTEIMG" id="DATA.UPVOTEIMGID" style="top: 10px; right: 80px; width: 35px; position: absolute;" onclick="toggleUpvote('DATA.UPVOTEID')">
+              
+              <p class="inline" style="top: 10px; margin-left: 57px; font-size: 17.5px; color:black">
+                <b>DATA.USERNAME</b>
+              </p>
+              <p class="inline" style="top: 30px; margin-left: 57px; font-size: 15px; color:black">
+                DATA.CREATIONDATE
+              </p>
+              
+              <div style="background-color: #ededed; border-radius: 10px; height: calc(100% - 60px); width: calc(100% - 10px); right: 5px; bottom: 5px; position: absolute; overflow: hidden">
+              DATA.CODE
                 
               </div>
               
@@ -3292,7 +3478,8 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
                       behavior,
-                      comment
+                      comment,
+                      auth: internalData.auth
                     })
                   });
                   response = await response.text();
@@ -3400,7 +3587,8 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
                   
                   let sendData = {
                     code: codeTypes,
-                    behavior
+                    behavior,
+                    auth: internalData.auth
                   };
                   console.log(sendData);
                   
@@ -4879,9 +5067,18 @@ const internalMenuNavs = {
   .cm-motionTween {
     color: #ac41ff !important;
   }
+  .cm-comment {
+    color: #707070 !important;
+  }
+  .cm-string {
+    color: #ffeea5 !important;
+  }
   
   .CodeMirror {
     opacity: 1;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
     z-index: 3;
   }
   
@@ -4964,6 +5161,44 @@ const internalMenuNavs = {
     }
   }
 
+          var codeKeywords = {
+            "/\[[^\]]*]|\/\/([^\n]*)/g": "comment",
+            "/([\"'])(?:(?=(\\?))\2.)*?\1/gm": "string",
+            "inputs": "hyperBlue",
+            "behaviors": "hyperPadGreen",
+            "yield": "hyperPadGreen",
+            "input": "hyperPadGreen",
+            "triggerNode": "hyperPadGreen",
+            "trigger": "hyperPadGreen",
+            "internal": "hyperPadGreen",
+            "global": "hyperPadOrange",
+            "root": "hyperPadOrange",
+            "childrenCount": "hyperPadOrange",
+            "console": "hyperBlue",
+            "outputs": "hyperBlue",
+            "setInput": "hyperGold",
+            "kaboom": "hyperGold",
+            "motionTween": "motionTween",
+            "key": "hyperMagenta",
+            "controller": "hyperMagenta",
+            "values": "hyperRed",
+            "outputs": "hyperRed",
+            "storage": "hyperRed",
+            "world": "hyperRed",
+            "objects": "hyperPadGreen",
+            "stop": "hyperRed",
+            "onUpdate": "hyperMagenta",
+            "onEnd": "hyperMagenta"
+          };
+  Object.keys(codeKeywords).forEach(function(key) {
+    if (!key.startsWith("/")) {
+      let regex = '/\b' + key + '/\b(?=[^"]*("[^"]*"[^"]*)*$)(?=[^\']*("[^\']*"[^\']*)*$)/gm';
+      console.log(regex, codeKeywords[key])
+      //codeKeywords[regex] = codeKeywords[key];
+      //delete codeKeywords[key];
+    }
+  });
+  
   async function initEditor() {
   console.log("running editors")
     
@@ -4995,39 +5230,11 @@ const internalMenuNavs = {
           matchBrackets: true,
           viewportMargin: Infinity,
           readOnly: readonly,
-          keyword: {
-            "inputs": "hyperBlue",
-            "behaviors": "hyperPadGreen",
-            "yield": "hyperPadGreen",
-            "input": "hyperPadGreen",
-            "triggerNode": "hyperPadGreen",
-            "trigger": "hyperPadGreen",
-            "internal": "hyperPadGreen",
-            "global": "hyperPadOrange",
-            "root": "hyperPadOrange",
-            "childrenCount": "hyperPadOrange",
-            "console": "hyperBlue",
-            "outputs": "hyperBlue",
-            "setInput": "hyperGold",
-            "kaboom": "hyperGold",
-            "motionTween": "motionTween",
-            "key": "hyperMagenta",
-            "controller": "hyperMagenta",
-            "\"key\"": "hyperMagenta",
-            "\"controller\"": "hyperMagenta",
-            "values": "hyperRed",
-            "outputs": "hyperRed",
-            "storage": "hyperRed",
-            "world": "hyperRed",
-            "objects": "hyperPadGreen",
-            "stop": "hyperRed",
-            "onUpdate": "hyperMagenta",
-            "onEnd": "hyperMagenta"
-          }
+          keyword: codeKeywords
         });
           
         window[element.id + "-editor"] = editor;
-        editor.setSize("100%", "1000px");
+        editor.setSize("100%", "100%");
         editor.setValue(code);
         editor.save();
         
