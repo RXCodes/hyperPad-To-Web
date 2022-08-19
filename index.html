@@ -873,7 +873,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
               });
              
               document.getElementById("liveChatLog").innerHTML = display;
-              window.scroll(0, 99999999999);
+              
           
         });
         
@@ -1502,8 +1502,10 @@ body {font-family: Arial, Helvetica, sans-serif;}
         <!-- program behavior view -->
         <script>
           async function programBehavior(behavior, intent) {
-            let base = internalData.behaviorBase[behavior];
-            let data = internalData.behaviors[behavior];
+            
+            try {
+            let base = internalData.behaviorBase[behavior] || {};
+            let data = internalData.behaviors[behavior] || {};
             internalProgramBehavior = {
               base, data
             };
@@ -1516,9 +1518,14 @@ body {font-family: Arial, Helvetica, sans-serif;}
             
             // top text
             inNavMenu("programBehaviorView", "None");
-            let cate = "<b style='color:#" + data.color + "'>" + base.category + "</b>: ";
-            document.getElementById("programBehavior3").innerHTML = cate + "<b>" + behavior + "</b>";
+            //let cate = "<b style='color:#" + data.color + "'>" + base.category + "</b>: ";
+            //document.getElementById("programBehavior3").innerHTML = cate + "<b>" + behavior + "</b>";
             console.debug(data);
+              
+            if (!data.status) {
+              data.status = "No Progress";
+              data.statusColor = "#ff5555";
+            }
             
             // bottom text
             let statusText = '<span style="color:statusColor; font-size: 65px; line-height: 35px; margin-bottom: -160px; margin-top: -100px; vertical-align: middle;">•</span>';
@@ -1742,6 +1749,11 @@ body {font-family: Arial, Helvetica, sans-serif;}
               toggleComments();
             } else {
               toggleComments();
+            }
+              
+            } catch(e) {
+              popup("Critical Error!", "<p><b>Failed to properly open behavior because:</b><br><br><i>" + e.message + "</i><br><br>Please report this issue to <b>RXCodes</b>! This is RARE but also probably deadly! It is recommended to try another behavior.</p>");
+              console.olderror(e);
             }
             
           }
@@ -3544,9 +3556,14 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
                 try {
                 let content = '<div class="displayRow" style="height: 130px; margin-bottom: -10px; overflow: hidden"><div class="containerMargin"><div class="container" style="width: 100%; height: 85px; border-radius: 10px;"><div class="containerDisplay" style="border-radius: 10px 10px 0px 0px"><div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px"><p class="inline" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:black">BehaviorName</p><p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:black">Description</p><a class="button" onclick="programBehavior(\'rawBehaviorName\');" style="min-width: 90px; margin-right: 15px; padding-top: 8.5px; padding-bottom: 8.5px">OPEN</a></div></div></div>  <div class="containerDisplay" style="background-color: #e9e9e9; height: 35px; border-radius: 0px 0px 10px 10px; width: calc(100% - 20px); margin-top: -15px; border-top: 10px solid BGColor"><div style="background-color: $StatusColor; border-radius: 100%; width: 11.5px; height: 11.5px; margin-left: 10px; position: absolute; margin-top: 6px;"></div><p class="inline" style="margin-top: 3px; margin-left: 25px; font-size: 13.5px; color:black">$Status</p></div></div></div>';
                 internal[behavior.alias] = internal[behavior.alias] || {};
-                let dashboardData = internalData.behaviors[behavior.alias];
+                let dashboardData = internalData.behaviors[behavior.alias] || {};
                 let sC;
                 let s = dashboardData.codeStatus || "No Progress";
+                 
+                if (s == undefined) {
+                  s = "No Progress";
+                }  
+                  
                 if (s == "No Progress") {
                   content = content.replace("$StatusColor", "#ff5050");
                   sC = "#ff5050";
@@ -3574,8 +3591,8 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
                 let status = "<b>" + s + "</b> • " + (dashboardData.views || 0) + " Views • ";
                 status += (dashboardData.codeSubmissions || 0) + " Submissions";
                 content = content.replace("$Status", status);
-                content = content.replace("BehaviorName", "<b>" + behavior.alias.replace("'", "\'") + "</b>");
-                content = content.replace("rawBehaviorName", behavior.alias.replace("'", "\'"));
+                content = content.replace("BehaviorName", "<b>" + behavior.alias + "</b>");
+                content = content.replace("rawBehaviorName", behavior.alias.replaceAll("'", "\\'"));
                 content = content.replace("BGColor", "#" + categoryColor[behavior.category]);
                 
                 let desc = Object.keys(behavior.inputs).length;
