@@ -690,7 +690,311 @@ body {font-family: Arial, Helvetica, sans-serif;}
     
     <!-- main menu -->
     <div class="hideAllMenu" id="mainMenu">
-    
+      
+    <!-- contribute menu -->
+    <div class="hideAll" id="liveChat">
+      <div id="liveChatLog">
+        
+      </div>
+      
+      <div style="height: 120px">
+        
+      </div>
+      <div id="navBar" class="displayRow" style="height: 200px; width: 100%; bottom: 0px; position: fixed; margin-bottom: -5px; z-index: 19; background: linear-gradient(to top, rgba(132,132,132,.87) 0.0%, transparent 100.0%)">
+        
+          <div class="container" style="width: 100%; overflow: hidden; border-radius: 10px; height: 65px; margin-top: 65px">
+       <div class="containerDisplay">
+        
+        <input id="liveChatSend" rows="1" placeholder="Write a message..." style="position: absolute; left: 0px; width: calc(100% - 200px); background-color: transparent; border-width: 0px; height: 100%; padding: 10px; z-index: 30; color: black; font-size: 18px; float: left; font-weight: normal">
+       <a class="button" onclick="sendLiveChat()" style="padding-top: 20px; width: 150px; top: -13px; border-radius: 0px; position: absolute; right: 0px; height: 35px;">SEND</a>
+          
+            
+          </div>
+        </div>
+      </div>
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+      
+      <script>
+      
+        var inputLiveChatBox = document.getElementById("liveChatSend");
+        
+        // Execute a function when the user presses a key on the keyboard
+        inputLiveChatBox.addEventListener('keydown', (event) => {
+          // If the user presses the "Enter" key on the keyboard
+          if (event.key === "Enter") {
+            sendLiveChat();
+            return;
+          }
+        });
+        
+        socket = io("https://hyperpadtoweb.rxcodes.repl.co");
+        socket.on("connect", function(msg) {
+          console.debug("Connected!")
+        });
+        
+        socket.on("upvote live chat", function(data) {
+          
+          if (data.user == discordAcc.id) {
+            return;
+          }
+          
+          liveChats.forEach(function(comment) {
+              
+              if (comment.id == data.chatID) {
+                comment.upvotes.push(data.user);
+                document.getElementById(comment.id + "-upvoteCount").innerHTML = comment.upvotes.length;
+              }
+            
+          });
+        });
+        
+        
+        socket.on("remove upvote live chat", function(data) {
+          
+          if (data.user == discordAcc.id) {
+            return;
+          }
+          
+          liveChats.forEach(function(comment) {
+              
+              if (comment.id == data.chatID) {
+                let index = comment.upvotes.indexOf(data.user);
+                comment.upvotes.splice(index, 1);
+                document.getElementById(comment.id + "-upvoteCount").innerHTML = comment.upvotes.length;
+              }
+            
+          });
+        });
+        
+        function toggleUpvoteLive(commentID) {
+          
+            
+            if (!internalData.authorized) {
+              return popup("Cannot Upvote", "<p>You <b>must be logged in</b> to upvote comments from the live chat.<br><br>Sign up in the <b>Contributions</b> tab. If you are already logged in, try logging out and logging back in again.</p>");
+            }
+            
+            
+            // check comment
+            liveChats.forEach(function(comment) {
+              
+              if (comment.id == commentID) {
+                
+                let anim1 = document.getElementById(comment.id + "-upvoteIMG").animate([
+                  { transform: "rotate(15) scale(1.1) translateY(10px)" },
+                  { transform: "rotate(-15) scale(0.9) translateY(10px)" },
+                  { transform: "rotate(0) scale(1) translateY(0px)" }
+                ], {
+                  duration: 450
+                });
+                
+                let anim2 = document.getElementById(comment.id + "-upvoteCount").animate([
+                  { transform: "scale(2.5)" },
+                  { transform: "scale(1)" }
+                ], {
+                  duration: 1000
+                });
+                
+                anim1.play();
+                anim2.play();
+                
+                if (comment.upvotes.includes(discordAcc.id)) {
+                  socket.emit("remove upvote live chat", {
+                    discord: discordAcc,
+                    id: comment.id
+                  });
+                  let index = comment.upvotes.indexOf(discordAcc.id);
+                  comment.upvotes.splice(index, 1);
+                  document.getElementById(comment.id + "-upvoteCount").innerHTML = comment.upvotes.length;
+                  document.getElementById(comment.id + "-upvoteIMG").src = "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/D47F3B62-37CC-4F62-8F2C-AA72D1DDCA55.png";
+                } else {
+                  socket.emit("upvote live chat", {
+                    discord: discordAcc,
+                    id: comment.id
+                  });
+                  comment.upvotes.push(discordAcc.id);
+                  document.getElementById(comment.id + "-upvoteCount").innerHTML = comment.upvotes.length;
+                  document.getElementById(comment.id + "-upvoteIMG").src = "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/B70068B8-F1C8-4449-8702-444EC4620973.png";
+                }
+                
+              }
+            });
+          
+        }
+        
+        socket.on("liveChat", function(comments) {
+          console.log("Loaded live chat")
+          liveChats = comments;
+          console.log(comments);
+          comments = comments.reverse();
+          let display = "";
+          let commentPlaceholder = document.getElementById("commentPlaceholder").innerHTML;
+              comments = comments.reverse();
+              comments.forEach(function(comment) {
+
+                let commentData = commentPlaceholder;
+                
+                internalData.userList = internalData.userList || {};
+                let author = internalData.userList[comment.author];
+                
+                if (!author) {
+                  author = comment.authorData;
+                  internalData.userList[comment.authorData.id] = comment.authorData;
+                }
+                
+                let authorName = author.username + "#" + author.discriminator;
+                commentData = commentData.replace("DATA.USERNAME", authorName);
+                let avatar = "https://cdn.discordapp.com/avatars/" + author.id + "/" + author.avatar + ".png";
+                commentData = commentData.replace("DATA.AVATAR", avatar);
+                
+                let upvote = "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/D47F3B62-37CC-4F62-8F2C-AA72D1DDCA55.png";
+                if (comment.upvotes.includes(discordAcc.id)) {
+                  upvote = "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/B70068B8-F1C8-4449-8702-444EC4620973.png";
+                }
+                
+                commentData = commentData.replaceAll("DATA.ID", comment.id);
+                commentData = commentData.replace("toggleUpvote", "toggleUpvoteLive");
+                commentData = commentData.replace("DATA.UPVOTEIMG", upvote);
+                commentData = commentData.replace("DATA.UPVOTECOUNTID", comment.id + "-upvoteCount");
+                commentData = commentData.replace("DATA.UPVOTECOUNT", comment.upvotes.length || 0);
+                commentData = commentData.replace("DATA.UPVOTEIMGID", comment.id + "-upvoteIMG");
+                commentData = commentData.replace("DATA.UPVOTEID", comment.id);
+                
+                
+                let secondsPassed = (Date.now() - comment.time) / 1000;
+                
+                commentData = commentData.replace("DATA.CREATIONDATE", getRelativeTime(secondsPassed));
+                function htmlEntities(str) {
+    			  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+			    }
+                commentData = commentData.replace("DATA.COMMENT", htmlEntities(comment.content));
+                
+                display += commentData;
+              });
+             
+              document.getElementById("liveChatLog").innerHTML = display;
+              window.scroll(0, 99999999999);
+          
+        });
+        
+        setInterval(function() {
+          if (usingLiveChat) {
+            liveChats.forEach(function(chat) {
+              let timeEle = document.getElementById(chat.id + "-creationDate");
+              let secondsPassed = (Date.now() - chat.time) / 1000;
+              timeEle.innerHTML = getRelativeTime(secondsPassed);
+			}); 
+          }
+        }, 5000)
+        
+        var timeCheckUpvotes = setInterval(function() {
+          if (usingLiveChat) {
+            if (!discordAcc.id) {
+              return;
+            }
+            liveChats.forEach(function(chat) {
+              if (chat.upvotes.includes(discordAcc.id)) {
+                document.getElementById(chat.id + "-upvoteIMG").src = "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/B70068B8-F1C8-4449-8702-444EC4620973.png";
+              }
+			}); 
+            clearInterval(timeCheckUpvotes);
+          }
+        }, 100);
+        
+        var liveChats = [];
+        
+        socket.on("live message", function(comment) {
+          
+                let commentData = document.getElementById("commentPlaceholder").children[0].innerHTML;
+                
+                let author = internalData.userList[comment.author];
+                
+                if (!author) {
+                  author = comment.authorData;
+                  internalData.userList[comment.authorData.id] = comment.authorData;
+                }
+                
+                let authorName = author.username + "#" + author.discriminator;
+                commentData = commentData.replace("DATA.USERNAME", authorName);
+                let avatar = "https://cdn.discordapp.com/avatars/" + author.id + "/" + author.avatar + ".png";
+                commentData = commentData.replace("DATA.AVATAR", avatar);
+                
+                let upvote = "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/D47F3B62-37CC-4F62-8F2C-AA72D1DDCA55.png";
+                if (comment.upvotes.includes(discordAcc.id)) {
+                  upvote = "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/B70068B8-F1C8-4449-8702-444EC4620973.png";
+                }
+                
+          		commentData = commentData.replaceAll("DATA.ID", comment.id);
+                commentData = commentData.replace("toggleUpvote", "toggleUpvoteLive");
+                commentData = commentData.replace("DATA.UPVOTEIMG", upvote);
+                commentData = commentData.replace("DATA.UPVOTECOUNTID", comment.id + "-upvoteCount");
+                commentData = commentData.replace("DATA.UPVOTECOUNT", comment.upvotes.length || 0);
+                commentData = commentData.replace("DATA.UPVOTEIMGID", comment.id + "-upvoteIMG");
+                commentData = commentData.replace("DATA.UPVOTEID", comment.id);
+                
+                
+                let secondsPassed = (Date.now() - comment.time) / 1000;
+                
+                commentData = commentData.replace("DATA.CREATIONDATE", getRelativeTime(secondsPassed));
+                function htmlEntities(str) {
+    			  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+			    }
+                commentData = commentData.replace("DATA.COMMENT", htmlEntities(comment.content));
+                
+          		let chatdiv = document.createElement("div");
+          		chatdiv.innerHTML = commentData;
+          		chatdiv.style = "border-radius: 10px 10px 0px 0px; height: 150px";
+          		chatdiv.classList.add("displayRow");
+          
+          		// console.log(window.scroll)	
+          
+                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                  // you're at the bottom of the page
+                  
+                  window.scroll(0, 99999999999, true);
+    			}
+          
+          		// <div class="displayRow" style="border-radius: 10px 10px 0px 0px; height: 150px">
+                document.getElementById("liveChatLog").appendChild(chatdiv);
+          		if (comment.author == discordAcc.id) {
+                  window.scroll(0, 99999999999, true);
+                }
+          
+
+                liveChats.push(comment);
+		
+              
+        });
+        
+        var prevSend = 0;
+        function sendLiveChat() {
+          let msg = inputLiveChatBox.value;
+          
+          if (!internalData.authorized) {
+            return popup("Cannot Send Live Chat", "<p><b>You must be logged in to join the live chat.</b><br><br>Sign up by navigating to <b>Contributions</b> and pressing the login button located at the top - this will use your Discord account as your profile.</p>")
+          }
+          
+          if (msg.length == 0) {
+            return;
+          }
+          msg = msg.substring(0, 500);
+          
+          if (Date.now() - prevSend < 1000) {
+            return popup("Too Fast!", "<p>Please wait before sending another message.</p>")
+          }
+          prevSend = Date.now();
+          socket.emit("send live chat", {
+            discord: discordAcc,
+            message: msg
+          });
+          
+          inputLiveChatBox.value = "";
+        }
+        
+      </script>
+      
+    </div>
+   
     <!-- contribute menu -->
     <div class="hideAll" id="contributeMenu">
      
@@ -843,7 +1147,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
             </div>
             <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
               
-              <p class="inline" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
+              <p class="inline" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787" id="codeSubCount">
                 0 Code Submissions
               </p>
               <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
@@ -1132,6 +1436,11 @@ body {font-family: Arial, Helvetica, sans-serif;}
         
         function toggleStats() {
           loadStats(internalData.statistics);
+          let cS = 0;
+          Object.keys(internalData.behaviors).forEach(function(behavior) {
+            cS += internalData.behaviors[behavior].codeSubmissions || 0;
+          });
+          document.getElementById("codeSubCount").innerHTML = cS + " Code Submissions";
         }     
              
         //loadStats(globalStats);
@@ -2030,7 +2339,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
               <p class="inline" style="top: 10px; margin-left: 57px; font-size: 17.5px; color:black">
                 <b>DATA.USERNAME</b>
               </p>
-              <p class="inline" style="top: 30px; margin-left: 57px; font-size: 15px; color:black">
+              <p class="inline" style="top: 30px; margin-left: 57px; font-size: 15px; color:black" id="DATA.ID-creationDate">
                 DATA.CREATIONDATE
               </p>
               
@@ -4807,7 +5116,7 @@ Creeper kingdom stars <a style="color:black" href="https://youtube.com/channel/U
       </p>
       
                  <p style="font-size: 20px; right: 8px; margin-top:13px; position: absolute; color:#acacac; font-weight: bold; display: inline;">
-                   <span class="navTexts" value="CONTRIBUTE" onclick="navMenu('contributeMenu', 'CONTRIBUTE')"><b style="color:#00BB78">CONTRIBUTE</b></span> / <span value="BETA TEST" class="navTexts" onclick="navMenu('betaTestMenu', 'BETA TEST')">BETA TEST</span> / <span value="ROADMAP" class="navTexts" onclick="navMenu('roadmapMenu', 'ROADMAP')">ROADMAP</span>
+                   <span class="navTexts" value="LIVE CHAT" onclick="navMenu('liveChat', 'LIVE CHAT')"><b>LIVE CHAT</b></span> / <span class="navTexts" value="CONTRIBUTE" onclick="navMenu('contributeMenu', 'CONTRIBUTE')"><b style="color:#00BB78">CONTRIBUTE</b></span> / <span value="BETA TEST" class="navTexts" onclick="navMenu('betaTestMenu', 'BETA TEST')">BETA TEST</span> / <span value="ROADMAP" class="navTexts" onclick="navMenu('roadmapMenu', 'ROADMAP')">ROADMAP</span>
            <script>
              function hideAllMenus() {
                document.querySelectorAll('.hideAll').forEach(function(element) {
@@ -4815,7 +5124,10 @@ Creeper kingdom stars <a style="color:black" href="https://youtube.com/channel/U
 			   });
              }
              
+             var usingLiveChat = false;
+             var inMenu = "";
              function navMenu(menu, text) {
+               inMenu = menu;
                hideAllMenus();
                window.scrollTo(0, 0);
                document.getElementById(menu).style.display = "block";
@@ -4825,6 +5137,11 @@ Creeper kingdom stars <a style="color:black" href="https://youtube.com/channel/U
                    element.innerHTML = "<b style='color:#00BB78'>" + text + "</b>"; 
                  }
 			   });
+               usingLiveChat = false;
+               if (menu == "liveChat") {
+                 window.scrollTo(0, 99999999999);
+                 usingLiveChat = true;
+               }
              }
              
              navMenu("aboutMenu", "ABOUT US")
