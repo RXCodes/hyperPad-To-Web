@@ -122,7 +122,6 @@
         margin: auto;
         bottom: -8px;
         height: 25px; 
-        text-decoration: none;
         width: 10%;
         min-width: 125px;
         overflow: hidden;
@@ -823,9 +822,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
         }
         
         socket.on("liveChat", function(comments) {
-          console.log("Loaded live chat")
           liveChats = comments;
-          console.log(comments);
           comments = comments.reverse();
           let display = "";
           let commentPlaceholder = document.getElementById("commentPlaceholder").innerHTML;
@@ -1273,7 +1270,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
             <div class="containerPlaceholder" style="height: 60px; bottom: 0px; left: 0px; margin-left: 0px">
               
               <p class="inline" style="margin-top: 10px; margin-left: 10px; font-size: 17.5px; color:#878787">
-                0 Devices Confirmed
+                0 Devices Tested
               </p>
               <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
                 Keyboard and Controller
@@ -1494,6 +1491,78 @@ body {font-family: Arial, Helvetica, sans-serif;}
         </div>
       </div>
       
+      <!-- device support -->
+      <div id="Device Support" class="inMenuDoc" style="display: none">
+        
+      <div class="hideInternal" id="deviceSupportView">
+       
+         <!-- instructions -->
+        <div class="displayRow" style="height: 365px;">
+      
+        <div class="containerMargin">
+          
+    <div class="container" style="width: 100%; overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+            <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px">
+              
+              <p class="inline" style="top: 10px; left: 20px; text-align:left; color:black; font-size: 40px; font-weight: bold;">
+               INSTRUCTIONS
+              </p>
+              <div style="width: 350px; height: 5px; background-color: black; top: 55px; left: 20px; position: absolute"></div>
+   <p class="inline" style="top: 70px; left: 20px; font-size: 19px; text-align:left; color:black; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px;">
+     In this module, you will see a screen that will <b>preview demos</b>. Your job is to test these demos to see if they work with your device. <i>If a demo doesn't work, make a comment about it and be sure to share your device model!</i><br>These demos will have various device input controls involving:<br><br>• <b>Touch / Mouse Testing</b> - Tapping, dragging, clicking, etc.<br>
+     • <b>Controller Testing</b> - Joystick movements, button presses, etc.<br>
+     • <b>Keyboard Testing</b> - Keydown, key release, key hold, etc.<br><br>
+     In addition, the preview screen will attempt to resize to the closest supported aspect ratio and fullscreen mode would be available.
+              
+              </p>
+                     
+           </div>
+              
+            </div>
+        
+      </div>
+        </div>
+          
+      </div>
+        
+      </div>
+        
+      <div class="hideInternal" id="deviceSupportPreview">  
+        <div id="deviceNoDemo"  style="display: block">
+        <div class="displayRow" style="height: 95px;">
+           <div class="containerMargin">
+        <div class="container" style="width: calc((100%)); overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+         
+            <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px">
+              <img src="https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/images/D71B2E45-BC8A-4CEA-8126-2A0DDDB37C6D.png" style="width:50px; z-index:3; position: absolute; left: 10px; bottom: 10px;">
+              
+              <p class="inline" style="margin-top: 10px; margin-left: 65px; font-size: 17.5px; color:black">
+                <b>No demo loaded!</b> Nothing to see here...
+              </p>
+              <p class="inline" style="margin-top: 30px; margin-left: 65px; font-size: 15px; color:black">
+                Please open a demo to preview.
+              </p>
+              
+              
+         </div>  
+         </div>
+            </div>
+          </div>
+        
+      
+        </div>
+      </div>
+        
+        <div style="width: calc(100% - 30px); height: 500px; margin-left: 10px; background-color: black; border-radius: 10px; box-shadow: 0px 5px 5px rgba(0,0,0,.39); margin-bottom: 10px;">
+            
+          </div>
+        
+      </div>
+        
+      </div>
+      
       <!-- program behaviors -->
       <div id="Program Behaviors" class="inMenuDoc" style="display: none">
         
@@ -1509,7 +1578,13 @@ body {font-family: Arial, Helvetica, sans-serif;}
             internalProgramBehavior = {
               base, data
             };
-            codeTypes = {};
+            
+            let changedBehavior = (behavior !== window.behavior);
+              
+            if (changedBehavior) {
+              codeTypes = {};
+            }  
+              
             window.behavior = behavior;
             document.getElementById("programBehaviorLoader").style.display = "block";
             document.getElementById("programBehaviorLoad").style.display = "none";
@@ -1629,7 +1704,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
               let fieldInject = "><input class='outputFieldInject' id=";
               fieldInject += "'outputDisplay." + name + "'>"; 
               thing = thing.replace(" internalFieldAddon", fieldInject);
-              console.log(thing);
+              // console.log(thing);
               rightInternal += thing;
             });
             let emptyContent = '<div class="displayRow" style="height: 95px; margin-top: -10px; opacity: 0.5;"><div class="containerMargin"><div class="container" style="width: 100%; overflow: hidden; border-radius: 10px"><div class="containerDisplay"><div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px; background-color: #484848;"></div></div></div></div></div>';
@@ -1724,7 +1799,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
             behaviorInternal = await behaviorInternal.json();
             currentInternalBehavior = behaviorInternal;
             
-            console.log(behaviorInternal)
+            // console.log(behaviorInternal)
             document.getElementById("programBehaviorLoader").style.display = "none";
             document.getElementById("programBehaviorLoad").style.display = "block";
             
@@ -1835,7 +1910,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
                   readOnly: true,
                   keyword: codeKeywords
                 });
-                console.log(id)
+                // console.log(id)
 
                 editor.setSize("100%", "100%");
                 editor.save();
@@ -1909,10 +1984,11 @@ body {font-family: Arial, Helvetica, sans-serif;}
           }
           
           function changeCodeView(id) {
-            console.log(id);
+            // console.log(id);
             let val = document.getElementById(id + "-snippetID").value;
-            console.log(val);
-            console.log(currentCodes[id])
+            if (currentCodes[id].codes.Special == undefined) {
+              currentCodes[id].codes.Special = defaultSpecial;
+            }
             
             window[currentCodes[id].id + "-codeDiv"].setValue(currentCodes[id].codes[val] || "// enter your code here");
           }
@@ -2051,7 +2127,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
               })
             });
             response = await response.text();
-            console.log(response);
+            // console.log(response);
           }
           
           async function removeUpvoteComment(commentID) {
@@ -2065,7 +2141,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
               })
             });
             response = await response.text();
-            console.log(response);
+            // console.log(response);
           }
           
           async function upvoteCode(codeID) {
@@ -2079,7 +2155,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
               })
             });
             response = await response.text();
-            console.log(response);
+            // console.log(response);
           }
           
           async function removeUpvoteCode(codeID) {
@@ -2093,7 +2169,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
               })
             });
             response = await response.text();
-            console.log(response);
+            // console.log(response);
           }
           
           // document.getElementById("mainCodeIDE").style.display = "none";
@@ -2113,7 +2189,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
                 if (fieldData.defaultValue == "true") {
                   document.getElementById(id).setAttribute("checked", true);
                   document.getElementById(id).checked = true;
-                  console.log(document.getElementById(id))
                 }
                 if (fieldData.defaultValue == "false") {
                   document.getElementById(id).setAttribute("checked", false);
@@ -2144,14 +2219,13 @@ body {font-family: Arial, Helvetica, sans-serif;}
           var playtesting = false;
           var playtestIDE = null;
           var viewingCodeProgram = true;
+          var GLOBAL = {};
           
           function swapMenuProgram() {
             if (viewingCodeProgram) {
               viewingCodeProgram = false;
               document.getElementById("swapMenuProgramButton").innerHTML = "VIEW CODE";
-              document.getElementById("codeType:Execute").style.display = "none";
-              document.getElementById("codeType:Enable").style.display = "none";
-              document.getElementById("codeType:Disable").style.display = "none";
+              document.getElementById("codeTypeSelector").style.display = "none";
               document.getElementById("tryProgramCode:Execute").style.display = "block";
               document.getElementById("tryProgramCode:Enable").style.display = "block";
               document.getElementById("tryProgramCode:Disable").style.display = "block";
@@ -2159,19 +2233,21 @@ body {font-family: Arial, Helvetica, sans-serif;}
               document.getElementById("consoleLogTitle").style.display = "block";
               document.getElementById("codeIDEWindowDiv").style.display = "none";
               document.getElementById("log-container").style.display = "block";
+              document.getElementById("exitCodeButton").style.display = "none";
+              document.getElementById("selectScriptTxt").style.display = "none";
             } else {
               viewingCodeProgram = true;
+              document.getElementById("selectScriptTxt").style.display = "block";
               document.getElementById("codeIDEWindowDiv").style.display = "block";
               document.getElementById("log-container").style.display = "none";
               document.getElementById("triggerType").style.display = "block";
               document.getElementById("consoleLogTitle").style.display = "none";
               document.getElementById("swapMenuProgramButton").innerHTML = "VIEW LOG";
-              document.getElementById("codeType:Execute").style.display = "block";
-              document.getElementById("codeType:Enable").style.display = "block";
-              document.getElementById("codeType:Disable").style.display = "block";
+              document.getElementById("codeTypeSelector").style.display = "block";
               document.getElementById("tryProgramCode:Execute").style.display = "none";
               document.getElementById("tryProgramCode:Enable").style.display = "none";
               document.getElementById("tryProgramCode:Disable").style.display = "none";
+              document.getElementById("exitCodeButton").style.display = "block";
             }
           }
 
@@ -2187,6 +2263,23 @@ body {font-family: Arial, Helvetica, sans-serif;}
               document.getElementById("swapMenuProgramButton").style.display = "block";
               internal = {};
               logOpen = true;
+              
+              tryProgramCode("Special");
+              if (encounteredError) {
+                popup("Special Script Error", "<p>There was an error while attempting to run the special script. Please make sure to use correct syntax and do not invoke unnecessary functions.<br><br><b>" + errorEncountered + "</b></p>");
+                playtesting = true;
+                playtest();
+                return;
+              }
+              
+              tryProgramCode("Create");
+              if (encounteredError) {
+                playtesting = true;
+                popup("Create Script Error", "<p>There was an error while attempting to run the create script. Please make sure to use correct syntax and do not invoke unnecessary functions.<br><br><b>" + errorEncountered + "</b></p>");
+                playtest();
+                return;
+              }
+              
               if (viewingCodeProgram) {
                 swapMenuProgram();
               }
@@ -2229,6 +2322,10 @@ body {font-family: Arial, Helvetica, sans-serif;}
               document.getElementById("codeProgramOptions").style.display = "none";
               document.getElementById("swapMenuProgramButton").style.display = "none";
               playtesting = false;
+              tryProgramCode("Destroy");
+              if (encounteredError) {
+                popup("Destroy Script Error", "<p>There was an error while attempting to run the destroy script. Please make sure to use correct syntax and do not invoke unnecessary functions.<br><br><b>" + errorEncountered + "</b></p>");
+              }
               delete window.runningScript;
               runningTimers.forEach(function(dict) {
                 if (dict.type == "interval") {
@@ -2238,6 +2335,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
                   clearTimeout(dict.timer);
                 }
               });
+              
+              
               
             }
           }
@@ -2390,8 +2489,11 @@ body {font-family: Arial, Helvetica, sans-serif;}
             <div class="containerPlaceholder">
       <select name="Code Snippet" id="DATA.ID-snippetID" onchange="changeCodeView('DATA.ID')" style="top: 15px; right: 135px; font-size: 15px; color:black; text-align: center; position: absolute; width: 155px; background-color: #ededed; border-radius: 10px; visibility: none" value="Execute">
   <option value="Execute">On Execute</option>
-  <option value="Disable">On Disable</option>
   <option value="Enable">On Enable</option>
+  <option value="Disable">On Disable</option>
+  <option value="Create">On Create</option>
+  <option value="Destroy">On Destroy</option>
+  <option value="Special">Special</option>
 </select>
               
               <a class="button" onclick="openSnippet('DATA.ID')" style="min-width: 100px; top: 12.5px; margin-right: 300px; font-size: 15px;  height: 20px">OPEN IN IDE</a>
@@ -2527,6 +2629,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
                 
                 // boolean
                 if (data.inputType == "Boolean") {
+                  value = document.getElementById("inputDisplay." + name).checked;
                   if (value == "true") {
                     _inputs[name] = true;
                     return;
@@ -3765,12 +3868,22 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
               </p> 
               
               <!-- code -->
-              <a class="button" id="codeType:Execute" class="codeTypeButton" onclick="changeCodeType('Execute')" style="min-width: 150px; margin-right: 12px;
-              padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #4c4c4c">ON EXECUTE</a>
-              <a class="button" id="codeType:Enable" class="codeTypeButton" onclick="changeCodeType('Enable')" style="min-width: 150px; margin-right: 12px;
-              padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #00bb78">ON ENABLE</a>
-              <a class="button" id="codeType:Disable" class="codeTypeButton" onclick="changeCodeType('Disable')" style="min-width: 150px; margin-right: 12px;
-              padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #00bb78">ON DISABLE</a>
+              <p style="right: 65px; top: -11.5px; color: black; position: absolute; z-index: 10; font-size: 15px;" id="selectScriptTxt">
+                <b>Select Script:</b>
+              </p>
+              
+              <select class="button" class="codeTypeButton" id="codeTypeSelector" style="min-width: 180px; margin-right: 12px;
+               !important; padding: 10px; padding-left: 15px; margin-top: 15px; float: right; text-align: center; visibility: visible; background-color: #00bb78; -webkit-appearance: menulist !important; appearance: menulist !important; !important; justify-content: center;" value="Execute">
+              
+              <option value="Execute">ON EXECUTE</option>
+              <option value="Enable">ON ENABLE</option>
+              <option value="Disable">ON DISABLE</option>
+              <option value="Create">ON CREATE</option>
+              <option value="Destroy">ON DESTROY</option>
+              <option value="Special">SPECIAL</option>
+              
+              </select>
+              
               
               
               <!-- execute -->
@@ -3786,10 +3899,57 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
               padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #2489bb">PLAYTEST</a>
               <a class="button" id="submitCodeButton" onclick="submitProgramBehavior()" style="min-width: 120px; margin-right: 12px;
               padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #ffb65b">SUBMIT</a>
+              <a class="button" id="exitCodeButton" onclick="exitCode()" style="min-width: 100px; margin-right: 12px;
+              padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #ff4c4c">BACK</a>
               <a class="button" id="swapMenuProgramButton" onclick="swapMenuProgram()" style="min-width: 135px; margin-right: 12px;
               padding-top: 8.5px; padding-bottom: 8.5px; float: right; background-color: #9942ff; display: none">VIEW LOG</a>
               
               <script>
+                
+                function exitCode() {
+                  programBehavior(behavior);
+                }
+                
+                   // default specials
+               	    var defaultSpecial = "// IMPORTANT NOTE: These properties do not take effect in playtest mode!\n";
+                    defaultSpecial += "// IMPORTANT NOTE: These only work in exported projects!\n\n";
+                    var defaultDictSpecial = {
+                      canExecuteAsRoot: true,
+                      canExecuteWhenDisabled: false,
+                      canExecute: true,
+                      useDisableScriptWhenDestroyed: true,
+                      outputUndefinedAs: "\"\"",
+                      executeCreateScriptOnInputUpdate: false,
+                      canUseGlobalStorage: true
+                    };
+                var defaultDictComment = {
+                      canExecuteAsRoot: "behavior can execute on start",
+                      canExecuteWhenDisabled: "behavior can be executed when disabled", 
+                      canExecute: "when set to false, the \"On Execute\" script is never used",
+                      useDisableScriptWhenDestroyed: "when the behavior's parent is destroyed, it will trigger the disable script",
+                      outputUndefinedAs: "uses blank for an undefined output - behaviors like Get Dictionary Value would use \"<null>\"",
+                      executeCreateScriptOnInputUpdate: "the \"On Create\" script is executed when any of its inputs update (Box Container for example)",
+                      canUseGlobalStorage: "can use the GLOBAL keyword to store properties that other behaviors can access"
+                    };
+                
+                Object.keys(defaultDictSpecial).forEach(function(key) {
+                  
+                  defaultSpecial += "// " + defaultDictComment[key] + "\n";
+                  defaultSpecial += "special." + key + " = " + defaultDictSpecial[key] + ";\n\n";
+                  
+                });
+                
+                // change code type
+                document.getElementById("codeTypeSelector").onchange = function() {
+                  let mode = document.getElementById("codeTypeSelector").value;
+                  
+                  if (codeTypes.Special == undefined) {
+                    
+                    codeTypes.Special = defaultSpecial;
+                  }
+                  
+                  changeCodeType(mode);
+                }
                 
                 // comment submission
                 var submittingComment = false;
@@ -3961,12 +4121,13 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
                   }
                   
                   programBehavior(behavior, "code submission");
+                  codeTypes = {};
                   
                 }
               
               </script>
              
-              <div style="width: 100%; height: 405px; top: 65px; position: absolute;" id="codeIDEWindowDiv">
+              <div style="width: 100%; height: 405px; top: 65px; position: absolute; background-color: #050505" id="codeIDEWindowDiv">
                 <textarea class="editor" id="codeIDEWindow"></textarea>
               </div>
               <div style="display: none; background-color: black; top: 65px; width: 100%; height: 420px; position: absolute; padding-left: 10px" id="log-container">
@@ -4014,12 +4175,8 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
                 
                 function changeCodeType(type) {
                   codeTypes[type] = codeTypes[type] || "// enter your code here";
-                  document.getElementById("codeType:Execute").style["background-color"] = "#00bb78";
-                  document.getElementById("codeType:Disable").style["background-color"] = "#00bb78";
-                  document.getElementById("codeType:Enable").style["background-color"] = "#00bb78";
                   document.getElementById("codeTypeStr").innerHTML = type;
                   currentCodeType = type;
-                  document.getElementById("codeType:" + type).style["background-color"] = "#4c4c4c";
 				  window["codeIDEWindow-editor"].setValue(codeTypes[type], 0);
                 }
                 
@@ -4134,7 +4291,7 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
         
         
       <div id="codeDoc" class="hideInternal">
-        <div class="displayRow" style="height: 450px; overflow: hidden">
+        <div class="displayRow" style="height: 700px; overflow: hidden">
       
         <div class="containerMargin">
           
@@ -4147,10 +4304,14 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
               </p>
               <div style="width: 650px; height: 5px; background-color: black; top: 55px; left: 20px; position: absolute"></div>
    <p class="inline" style="top: 70px; left: 20px; font-size: 19px; text-align:left; color:black; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px; overflow: hidden">
-     The behavior system uses <b>Javascript</b> as the primary programming language.<br>There are <i>3</i> snippets of code you will see in the editor: <br><br>
+     The behavior system uses <b>Javascript</b> as the primary programming language.<br>There are <i>6</i> snippets of code you will see in the editor, but the <b>top 3</b> are the most important: <br><br>
 <b>On Execute</b> - This piece of code will run when the behavior is executed. It can be triggered by other behaviors or be triggered automatically on launch if no behavior is on the top <i>(Root Behaviors)</i>.<br><br>
 <b>On Disable</b> - This piece of code will run when the behavior is disabled. The code will also be executed on launch when the behavior is initially disabled. Note that the "On Execute" script cannot be executed when the behavior is disabled - you may leave this blank if the behavior doesn't do anything when disabled. <br><br>
-<b>On Enable</b> - This piece of code will only execute when the behavior transitions from being disabled to being enabled via the <i>Behavior On</i> behavior. You may leave this blank if the behavior doesn't do anything when enabled - though, note that the behavior can trigger the "On Execute" script when enabled.
+<b>On Enable</b> - This piece of code will only execute when the behavior transitions from being disabled to being enabled via the <i>Behavior On</i> behavior. You may leave this blank if the behavior doesn't do anything when enabled - though, note that the behavior can trigger the "On Execute" script when enabled.<br><br>
+<b>On Create</b> - This piece of code will only execute once when the behavior has been created or cloned in a scene. It's the very first thing that runs <i>once</i> before anything happens. <i>(eg. Box Container needs to yield an array before anything.)</i><br><br>
+     <b>On Destroy</b> - This piece of code will only execute when the behavior's parent has been destroyed <i>(not disabled)</i> via Destroy Object. <i>(eg. the Play Sound behavior still continues playing audio when destroyed but the audio is interrupted when disabled instead.)</i><br><br>
+ <b>Special</b> - A <i>special</i> piece of code for the compiler to process, giving unique properties to behaviors. <i>(eg. the Comment behavior can be executed when disabled.)</i><br><br>
+     In the IDE, you can navigate through all scripts in a behavior via the <b>Select Script</b> dropdown at the top.
               </p>
                      
            </div>
@@ -4339,6 +4500,51 @@ if (root) {
         </div>
           
       </div>
+        
+        
+        
+        <div class="displayRow" style="height: 340px; overflow: hidden">
+      
+        <div class="containerMargin">
+          
+    <div class="container" style="width: 100%; overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+            <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px">
+              
+              <p class="inline" style="top: 10px; left: 20px; text-align:left; color:black; font-size: 40px; font-weight: bold;">
+               USING KABOOM
+              </p>
+              
+              <style>
+                .noscroll {
+                  overflow: hidden;
+                }
+              </style>
+              
+              <div style="width: 650px; height: 5px; background-color: black; top: 55px; left: 20px; position: absolute"></div>
+   <p class="inline" style="top: 70px; left: 20px; font-size: 19px; text-align:left; color:black; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px; overflow: hidden">
+     
+     <b style="font-size: 25px">kaboom[ <i style="color:#00bb78">func: <span style="color:#ffad32">STRING</span></i> ] ... </b>
+        <br>      
+     The <i>Kaboom.js</i> module will be heavily used throughout the entire project as the primary game engine. You can use it by referring to the <b>kaboom</b> variable. Check out Kaboom's <a style="color: #00bb78" href="https://kaboomjs.com" target="blank">official documentation</a> on how to use it!<br><br>
+     <b>Example</b></p>
+              <div style="border-radius: 10px; overflow: hidden; top: 195px; height: 80px; width: calc(100% - 40px); margin-left: 20px; display: inline-block; position: absolute;">
+                
+              <textarea class="editor" noscroll="true" readonly="true" id="example1">// load a sound effect
+kaboom.loadSound("shoot", "https://kaboomjs.com/sounds/scream6.mp3");</textarea>
+                </div>  
+         </div>
+      </div>
+          </div>
+          </div>
+        </div>
+        
+        
+        
+</div>
+        
+        
+        
       </div>
       </div>
       
@@ -5237,10 +5443,13 @@ Creeper kingdom stars <a style="color:black" href="https://youtube.com/channel/U
     document.getElementById(inMenu).style.display = "block";
   }
 const internalMenuNavs = {
-          "Program Behaviors": '<span class="navTexts" value="BEHAVIORS" onclick="inNavMenu(\'behaviorList1\', \'BEHAVIORS\')"><b style="color:#00BB78">BEHAVIORS</b></span> / <span value="CODE IDE" class="navTexts" onclick="inNavMenu(\'codeIDE\', \'CODE IDE\')">BETA TEST</span> / <span value="DOCUMENTATION" class="navTexts" onclick="inNavMenu(\'codeDoc\', \'DOCUMENTATION\')">ROADMAP</span>'
+          "Program Behaviors": '<span class="navTexts" value="BEHAVIORS" onclick="inNavMenu(\'behaviorList1\', \'BEHAVIORS\')"><b style="color:#00BB78">BEHAVIORS</b></span> / <span value="CODE IDE" class="navTexts" onclick="inNavMenu(\'codeIDE\', \'CODE IDE\')">BETA TEST</span> / <span value="DOCUMENTATION" class="navTexts" onclick="inNavMenu(\'codeDoc\', \'DOCUMENTATION\')">DOCUMENTATION</span>',
+  
+   "Device Support": '<span class="navTexts" value="DEMOS" onclick="inNavMenu(\'deviceSupportView\', \'DEMOS\')"><b style="color:#00BB78">DEMOS</b></span> / <span value="PREVIEW" class="navTexts" onclick="inNavMenu(\'deviceSupportPreview\', \'PREVIEW\')">PREVIEW</span>'
         };
         const internalCall = {
-          "Program Behaviors": "inNavMenu('behaviorList1', 'BEHAVIORS')"
+          "Program Behaviors": "inNavMenu('behaviorList1', 'BEHAVIORS')",
+          "Device Support": "inNavMenu('deviceSupportView', 'DEMOS')"
         };
   		const internalFunct = {
           "behaviorList1": "loadBehaviorList1();"
@@ -5446,6 +5655,34 @@ const internalMenuNavs = {
   .cm-motionTween {
     color: #ac41ff !important;
   }
+  .cm-hyperSpecial {
+    color: #ac41ff !important;
+    animation-name: hyperSpecial !important;
+    animation-duration: 4s !important;
+    animation-direction: alternate !important;
+    animation-iteration-count: infinite;
+  }
+  .cm-important {
+    color: #ac41ff !important;
+    animation-name: hyperImportant !important;
+    animation-duration: 0.5s !important;
+    animation-direction: alternate !important;
+    animation-iteration-count: infinite;
+  }
+  
+  @keyframes hyperSpecial {
+  0%   {color: #ff7653;}
+  25%  {color: #ffec6e;}
+  50%  {color: #76b6ff;}
+  75%  {color: #ff749d;}
+  100% {color: #94ffac;}
+  }
+  
+  @keyframes hyperImportant {
+  0%   {color: #ff7653;}
+  100% {color: #ff9f5d;}
+  }
+  
   .cm-comment {
     color: #707070 !important;
   }
@@ -5513,6 +5750,55 @@ const internalMenuNavs = {
 });
  
   
+  // auto refresh
+  // CodeMirror, copyright (c) by Marijn Haverbeke and others
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
+
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"))
+  else if (typeof define == "function" && define.amd) // AMD
+    define(["../../lib/codemirror"], mod)
+  else // Plain browser env
+    mod(CodeMirror)
+})(function(CodeMirror) {
+  "use strict"
+
+  CodeMirror.defineOption("autoRefresh", false, function(cm, val) {
+    if (cm.state.autoRefresh) {
+      stopListening(cm, cm.state.autoRefresh)
+      cm.state.autoRefresh = null
+    }
+    if (val && cm.display.wrapper.offsetHeight == 0)
+      startListening(cm, cm.state.autoRefresh = {delay: val.delay || 250})
+  })
+
+  function startListening(cm, state) {
+    function check() {
+      if (cm.display.wrapper.offsetHeight) {
+        stopListening(cm, state)
+        if (cm.display.lastWrapHeight != cm.display.wrapper.clientHeight)
+          cm.refresh()
+      } else {
+        state.timeout = setTimeout(check, state.delay)
+      }
+    }
+    state.timeout = setTimeout(check, state.delay)
+    state.hurry = function() {
+      clearTimeout(state.timeout)
+      state.timeout = setTimeout(check, 50)
+    }
+    CodeMirror.on(window, "mouseup", state.hurry)
+    CodeMirror.on(window, "keyup", state.hurry)
+  }
+
+  function stopListening(_cm, state) {
+    clearTimeout(state.timeout)
+    CodeMirror.off(window, "mouseup", state.hurry)
+    CodeMirror.off(window, "keyup", state.hurry)
+  }
+});
+  
   </script>
 
 <!-- Button interaction -->
@@ -5541,6 +5827,7 @@ const internalMenuNavs = {
   }
 
           var codeKeywords = {
+            "IMPORTANT NOTE": "important",
             "/\[[^\]]*]|\/\/([^\n]*)/g": "comment",
             "/([\"'])(?:(?=(\\?))\2.)*?\1/gm": "string",
             "inputs": "hyperBlue",
@@ -5567,7 +5854,8 @@ const internalMenuNavs = {
             "objects": "hyperPadGreen",
             "stop": "hyperRed",
             "onUpdate": "hyperMagenta",
-            "onEnd": "hyperMagenta"
+            "onEnd": "hyperMagenta",
+            "special": "hyperSpecial"
           };
   Object.keys(codeKeywords).forEach(function(key) {
     if (!key.startsWith("/")) {
@@ -5600,11 +5888,12 @@ const internalMenuNavs = {
           
         element.innerHTML = "plz show lines";
         let editor = CodeMirror.fromTextArea(element, {
-          lineNumbers: true,
-          gutter: true,
+          lineNumbers: false,
+          gutter: false,
           tabSize: 2,
           mode: "javascript",
           cursorBlinkRate: 500,
+          autoRefresh: true,
           theme: 'monokai',
           firstLineNumber: 1,
           matchBrackets: true,
@@ -5617,10 +5906,6 @@ const internalMenuNavs = {
         editor.setSize("100%", "100%");
         editor.setValue(code);
         editor.save();
-        
-        setInterval(function() {
-          editor.refresh()
-        }, 500);
           
         } catch(e) {
           console.olderror(e)
@@ -5631,5 +5916,15 @@ const internalMenuNavs = {
     }, 500)
     
   }
+  
   initEditor()
+</script>
+
+<script src="https://unpkg.com/kaboom/dist/kaboom.js"></script>
+
+<script>
+
+  console.oldlog(kaboom);
+const kaboom = kaboom({ global: false });
+  
 </script>
