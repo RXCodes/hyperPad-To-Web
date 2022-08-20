@@ -205,14 +205,14 @@ async function loadProject() {
   results.targetDevices = plistData.targetDevices;
   
   // show result
-  window.results = results;
+  window.resultsOutput = JSON.stringify(results, null, "  ");
   showResult();
   
 }
 
 function showResult() {
-  resultDisplay.innerHTML = "<a onclick='downloadFile(JSON.stringify(result), \"result.json\")' style='color:#00bb78'>Download Result</a><br><br>";
-  resultDisplay.innerHTML += JSON.stringify(results);
+  resultDisplay.innerHTML = "<a onclick='downloadFile(resultsOutput), \"result.json\")' style='color:#00bb78'>Download Result</a><br><br>";
+  resultDisplay.innerHTML += window.resultsOutput;
 }  
 </script>
 
