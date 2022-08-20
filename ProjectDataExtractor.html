@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=320, initial-scale=1">
+    <meta charset="utf-8">
+    <style>
+      body, html {
+        min-width: 100%;
+        min-height: 100%;
+        margin: 0;
+        padding: 0;
+        font: Arial 14px;
+      }
+      
+      p {
+        padding: 5px
+      }
+    </style>
+  </head>
+  
+  <body>
+  
+    <!-- display stuff -->
+    <p>
+      <b>Import a project</b>
+    </p>
+    <input type="file" id="projectImporter" accept=".tap">
+    <p id="result">
+      Result will show here...
+    </p>
+    
+  </body>
+  
+</html>
+
+<!-- setup all the scripts you need -->
+<script src="https://cdn.jsdelivr.net/npm/web-streams-polyfill@2.0.2/dist/ponyfill.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/eligrey/Blob.js/Blob.js"></script>
+<script src="https://rxcodes.github.io/hyperPad-Project-Modder/saveFile.js"></script>   
+<script src="https://rxcodes.github.io/hyperPad-Project-Modder/JSZip.js"></script>
+<script src="https://rxcodes.github.io/hyperPad-Project-Modder/LZString.js"></script>
+<script src="https://rxcodes.github.io/hyperPad-Project-Modder/BPListParser.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.js'></script>
+
+<!-- initialize SQLite -->
+<script>
+  const config = {
+    locateFile: (filename, prefix) => {
+      return 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.wasm';
+    }
+  }
+  var SQL;
+  var db;
+  async function start() {
+    SQL = await initSqlJs(config)
+    console.debug("Initialized SQL Module!")
+  }
+  start();
+</script>
+
+<!-- project import script -->
+<script>
+var project = new JSZip();
+const fileSelector = document.getElementById("projectImporter");
+const resultDisplay = document.getElementById("result");
+fileSelector.addEventListener('change', (event) => {
+    
+  resultDisplay.innerHTML = "Loading..."
+  
+    // Closure to capture the file information.
+    function handleFile(f) {
+		file = f;
+      	scenes = {};
+        project.loadAsync(f)              
+        .then(function(zip) {
+            
+          resultDisplay.innerHTML = "Compiling..."
+           project.file("levels/Level 1/Level.sqlite").async("uint8array")
+          .then(function(content) {
+             db = new SQL.Database(content);
+             loadProject();
+           });
+          
+        }, function (e) {
+            console.error(f.name + ": " + e.message);
+        });
+    }
+    
+    var files = event.target.files;
+  	setTimeout(function() {
+      for (var i = 0; i < files.length; i++) {
+        handleFile(files[i]);
+  	  }
+    }, 1);
+  });
+
+</script>
+
+<!-- load project data -->
+<script>
+
+// form a dictionary given two arrays
+function mapDictionary(keys, values) {
+  try {
+    let result = {};
+    let i = 0;
+    keys.forEach(function(key) {
+      key = key.substring(1, key.length);
+      result[key] = values[i];
+      i++;
+    });
+  return result;
+  } catch(e) {
+    console.error(e)
+  }
+}
+  
+// load the project
+async function loadProject() {
+  
+  let results = {
+    levels: [],
+    overlays: [],
+    creationDate: Date.now()
+  };
+  
+  // load scene data (levels and overlays)
+  let levelIndexes = {};
+  let overlayIndexes = {};
+  
+  let scenes = db.exec("select * from zleveldata")[0];
+  console.log(scenes)
+  scenes.values.forEach(function(scene) {
+    let sceneData = mapDictionary(scenes.columns, scene);
+    console.log(sceneData)
+    
+    // populate resulting scene data
+    let resultSceneData = { 
+      preload: sceneData.PRELOAD == 1,
+      mode: sceneData.MODE,
+      sceneName: sceneData.LEVELNAME,
+      layers: []
+    }
+    
+    // gather initial screen data
+    let cameraData = db.exec("select * from zcameradata where ZLEVEL = " + sceneData._PK)[0];
+    cameraData = mapDictionary(cameraData.columns, cameraData.values[0]);
+    console.log(cameraData)
+    resultSceneData.screenX = cameraData.X_POS;
+    resultSceneData.screenY = cameraData.Y_POS;
+    resultSceneData.zoom = cameraData.SCALE;
+    resultSceneData.backgroundImage = cameraData.BACKGROUNDIMAGE;
+    resultSceneData.backgroundImageFrame = cameraData.BACKGROUNDIMAGEFRAME;
+    resultSceneData.backgroundFillMode = cameraData.BACKGROUNDFILLMODE;
+    let bgColor = [
+      cameraData.BACKGROUNDCOLORR || 0,
+      cameraData.BACKGROUNDCOLORG || 0,
+      cameraData.BACKGROUNDCOLORB || 0,
+      cameraData.OPACITY || 1
+    ]
+    resultSceneData.backgroundColor = bgColor;
+    
+    // set data in corresponding dictionary
+    if (sceneData.SCENETYPE == 0) {
+      levelIndexes[sceneData.INDEX] = resultSceneData;
+    }
+    if (sceneData.SCENETYPE == 1) {
+      overlayIndexes[sceneData.INDEX] = resultSceneData;
+    }
+    
+  });
+  
+  // sort levels and overlays by index
+  let levelOrder = Object.keys(levelIndexes).sort(function(a, b) {
+    return a - b;
+  });
+  let overlayOrder = Object.keys(overlayIndexes).sort(function(a, b) {
+    return a - b;
+  }); 
+  
+  // add scenes
+  levelOrder.forEach(function(index) {
+    results.levels.push(levelIndexes[index]);
+  });
+  overlayOrder.forEach(function(index) {
+    results.overlays.push(overlayIndexes[index]);
+  });
+  
+  // check world object for additional data
+  let world = db.exec("select * from zobjectdata where ZObjectType = 'World'")[0];
+  let worldData = mapDictionary(world.columns, world.values[0]);
+  worldData = extract(Buffer.from(worldData.GAMEOBJECTDATA));
+  results.ptmRatio = Number(worldData.ptmRatio) || 32;
+  results.physicsIterations = Number(worldData.physicsIterations) || 10;
+  results.physicsRefreshRate = Math.round(1 / worldData.physicsRefreshRate);
+  
+  // check plist file for more pertinent project data
+  let parser = new DOMParser();
+  let plistText = await project.file("gameDetails.plist").async("string");
+  let plistData = parsePlistDocument(plistText);
+  results.gravityX = Number(plistData.gravityX) || 0;
+  results.gravityY = Number(plistData.gravityY) || -10;
+  results.orientation = plistData.targetOrientation || "landscape";
+  results.supportedAspectRatios = plistData.aspectRatio;
+  results.targetDevices = plistData.targetDevices;
+  
+  // show result
+  window.results = results;
+  showResult();
+  
+}
+
+function showResult() {
+  resultDisplay.innerHTML = "<a onclick='downloadFile(result, \"result.json\")' style='color:#00bb78'>Download Result</a><br><br>";
+  resultDisplay.innerHTML += JSON.stringify(results);
+}  
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- download code -->
+<script>
+function downloadFile(text, fileName) {
+        const fileStream = streamSaver.createWriteStream(fileName, {
+          size: text.size // Makes the procentage visiable in the download
+        })
+
+        // One quick alternetive way if you don't want the hole blob.js thing:
+        // const readableStream = new Response(
+        //   Blob || String || ArrayBuffer || ArrayBufferView
+        // ).body
+        const readableStream = new Response(text).body;
+
+        // more optimized pipe version
+        // (Safari may have pipeTo but it's useless without the WritableStream)
+        if (window.WritableStream && readableStream.pipeTo) {
+          return readableStream.pipeTo(fileStream)
+            .then(() => {
+            console.log('done writing');
+          })
+        }
+
+        // Write (pipe) manually
+        window.writer = fileStream.getWriter()
+
+        const reader = readableStream.getReader()
+        const pump = () => reader.read()
+          .then(res => res.done
+            ? writer.close()
+            : writer.write(res.value).then(pump))
+
+        pump()
+}
+</script>
+
+<!-- parse plist files -->
+<script>
+function parsePlistDocument(txt) {
+  let parser = new DOMParser();
+  let plist = parser.parseFromString(txt,"text/xml");
+  plist = cleanWhitespace(plist);
+  return parsePlist(plist);
+}  
+  
+cleanWhitespace = function(element) {
+    
+    if (element.childNodes !== undefined) {
+        for (var i = 0; i < element.childNodes.length; i++) {
+            var node = element.childNodes[i];
+            
+            if (node.nodeType == 3 && !/\S/.test(node.nodeValue)) {
+                
+                element.remove(node);
+            }
+        }
+    }
+    return element;
+}
+
+parsePlist = function(plistDoc) {
+    var doc = plistDoc.childNodes[1];
+    // main dict
+    var dict = doc.childNodes[1];
+    
+
+    for (i in dict.childNodes) {
+        node = dict.childNodes[i];
+        
+    }
+
+    return parsePlistValue(dict);
+}
+
+parsePlistDict = function(dictNode) {
+    var result = new Object();
+    var keyNodes = dictNode.getElementsByTagName("key");
+    for (var i = 0, n = keyNodes.length; i < n; i++) {
+        var key = keyNodes[i].firstChild.nodeValue;
+        var val = parsePlistValue(keyNodes[i].nextSibling.nextSibling);
+        result[key] = val;
+    }
+    return result;
+}
+
+parsePlistValue = function(valueNode) {
+    var result = null;
+    switch (valueNode.nodeName) {
+    case "true":
+        result = true;
+        break;
+    case "false":
+        result = false;
+        break;
+    case "string":
+        if (valueNode.firstChild != undefined) {
+            result = valueNode.firstChild.nodeValue;
+            // result = unescape(result);
+            // result = result.replace(/\+/g, " ");
+        }
+        
+        break;
+    case "dict":
+        result = parsePlistDict(valueNode);
+        break;
+    case "array":
+        result = [];
+        for (var i = 0, n = valueNode.childNodes.length; i < n; i++) {
+            node = valueNode.childNodes[i];
+            if (/\S/.test(node.nodeValue)) {
+                result.push(parsePlistValue(node));
+            }
+        }
+        break;
+    default:
+        
+    }
+    return result;
+}
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
