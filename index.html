@@ -4074,8 +4074,8 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
                     success = false;
                   }
                   
-                  if (Object.keys(codesTested).length !== 3) {
-                    reasons.push("• You must <b>test all of your scripts</b> before submission, even if you just edited them or restarted the playtest.");
+                  if (Object.keys(codesTested).length < 4) {
+                    reasons.push("• You must <b>test some of your scripts</b> before submission, even if you just edited them or restarted the playtest.");
                     success = false;
                   }
                   
@@ -4174,6 +4174,7 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
                 }, 5500);
                 
                 function changeCodeType(type) {
+                  document.getElementById("codeTypeSelector").value = type;
                   codeTypes[type] = codeTypes[type] || "// enter your code here";
                   document.getElementById("codeTypeStr").innerHTML = type;
                   currentCodeType = type;
