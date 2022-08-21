@@ -25,7 +25,7 @@
       <b>Import a project</b>
     </p>
     <input type="file" id="projectImporter" accept=".tap">
-    <p id="result">
+    <p id="result" style="white-space: pre">
       Result will show here...
     </p>
     
@@ -78,7 +78,11 @@ fileSelector.addEventListener('change', (event) => {
            project.file("levels/Level 1/Level.sqlite").async("uint8array")
           .then(function(content) {
              db = new SQL.Database(content);
-             loadProject();
+             try {
+               loadProject();
+             } catch(e) {
+               console.error(e);
+             }
            });
           
         }, function (e) {
@@ -97,7 +101,7 @@ fileSelector.addEventListener('change', (event) => {
 </script>
 
 <!-- load project data -->
-<script>
+<script id="loadProjectDataScript">
 
 // form a dictionary given two arrays
 function mapDictionary(keys, values) {
@@ -118,6 +122,9 @@ function mapDictionary(keys, values) {
 // load the project
 async function loadProject() {
   
+  // check for code errors
+  try {
+    
   let results = {
     levels: [],
     overlays: [],
@@ -129,23 +136,22 @@ async function loadProject() {
   let overlayIndexes = {};
   
   let scenes = db.exec("select * from zleveldata")[0];
-  console.log(scenes)
   scenes.values.forEach(function(scene) {
     let sceneData = mapDictionary(scenes.columns, scene);
-    console.log(sceneData)
     
     // populate resulting scene data
     let resultSceneData = { 
       preload: sceneData.PRELOAD == 1,
       mode: sceneData.MODE,
       sceneName: sceneData.LEVELNAME,
-      layers: []
+      layers: {},
+      index: sceneData.INDEX,
+      referenceID: sceneData._PK
     }
     
     // gather initial screen data
     let cameraData = db.exec("select * from zcameradata where ZLEVEL = " + sceneData._PK)[0];
     cameraData = mapDictionary(cameraData.columns, cameraData.values[0]);
-    console.log(cameraData)
     resultSceneData.screenX = cameraData.X_POS;
     resultSceneData.screenY = cameraData.Y_POS;
     resultSceneData.zoom = cameraData.SCALE;
@@ -159,6 +165,8 @@ async function loadProject() {
       cameraData.OPACITY || 1
     ]
     resultSceneData.backgroundColor = bgColor;
+    
+    console.info(resultSceneData)
     
     // set data in corresponding dictionary
     if (sceneData.SCENETYPE == 0) {
@@ -179,12 +187,26 @@ async function loadProject() {
   }); 
   
   // add scenes
+  let sceneReference = {};
+  let orderIndex = 0;
   levelOrder.forEach(function(index) {
+    sceneReference[levelIndexes[index].referenceID] = {
+      type: "Level",
+      index: orderIndex
+    };
     results.levels.push(levelIndexes[index]);
+    orderIndex++;
   });
+  orderIndex = 0;
   overlayOrder.forEach(function(index) {
+    sceneReference[overlayIndexes[index].referenceID] = {
+      type: "Overlay",
+      index: orderIndex
+    };
     results.overlays.push(overlayIndexes[index]);
+    orderIndex++;
   });
+  console.debug(JSON.stringify(sceneReference, null, "  "));
   
   // check world object for additional data
   let world = db.exec("select * from zobjectdata where ZObjectType = 'World'")[0];
@@ -204,15 +226,77 @@ async function loadProject() {
   results.supportedAspectRatios = plistData.aspectRatio;
   results.targetDevices = plistData.targetDevices;
   
+  // get layer data
+  let layerIterate = db.exec("select * from zlayerdata")[0];
+  layerIterate.values.forEach(function(layerValue) {
+    let layerData = mapDictionary(layerIterate.columns, layerValue);
+    let resultLayerData = {
+      zOrder: layerData.INDEX,
+      visible: layerData.VISIBLE == 1,
+      name: layerData.NAME,
+      levelReference: layerData.LEVEL,
+      referenceID: layerData._PK,
+      UUID: layerData.UUID || "?",
+      objects: {},
+      index: layerData.INDEX,
+      UI: false
+    };
+    
+    console.log(resultLayerData);
+    
+    
+    if (layerData.INDEX == -1) {
+      resultLayerData.name = "Global UI";
+      resultLayerData.UI = true;
+      resultLayerData.zOrder = -2;
+    }
+    if (layerData.INDEX == -2) {
+      resultLayerData.name = "Scene UI";
+      resultLayerData.UI = true;
+      resultLayerData.zOrder = -1;
+    }
+    
+    // put layer data in scene data if possible
+    let refData = sceneReference[layerData.LEVEL];
+    if (refData) {
+      if (refData.type == "Level") {
+        results.levels[refData.index].layers[layerData.INDEX] = resultLayerData;
+      } else {
+        console.info("Overlay layer")
+        console.log(layerData);
+        if (layerData.INDEX == -2) {
+          resultLayerData.name = "Overlay UI";
+        }
+        results.overlays[refData.index].layers[layerData.INDEX] = resultLayerData;
+      }
+    }
+    
+  });
+    
+  // convert layer dictionaries to array
+  Object.keys(results.levels).forEach(function(key) {
+    results.levels[key].layers = Object.values(results.levels[key].layers);
+  });
+  Object.keys(results.overlays).forEach(function(key) {
+    results.overlays[key].layers = Object.values(results.overlays[key].layers);
+  });
+    
+    
   // show result
   window.resultsOutput = JSON.stringify(results, null, "  ");
   showResult();
   
+  // check for code errors  
+  } catch(e) {
+    console.error(e);
+  }
+    
 }
 
 function showResult() {
-  resultDisplay.innerHTML = "<a onclick='downloadFile(resultsOutput), \"result.json\")' style='color:#00bb78'>Download Result</a><br><br>";
-  resultDisplay.innerHTML += window.resultsOutput;
+  resultDisplay.innerHTML = "<a onclick='downloadFile(resultsOutput, \"result.json\")' style='color:#00bb78'>Download Result</a><br><br>";
+  resultDisplay.innerHTML += window.resultsOutput.replaceAll("\n", "<br>");
+  console.debug(resultsOutput)
 }  
 </script>
 
@@ -269,7 +353,7 @@ function downloadFile(text, fileName) {
 </script>
 
 <!-- parse plist files -->
-<script>
+<script id="parsePLISTFilesScript">
 function parsePlistDocument(txt) {
   let parser = new DOMParser();
   let plist = parser.parseFromString(txt,"text/xml");
