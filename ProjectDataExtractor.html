@@ -291,10 +291,18 @@ async function loadProject() {
         delete data.tags;
         
         // object color
-        resultObj.color = data.tint.split(" ");
+        let c = [];
+        data.tint.split(" ").forEach(function(n) {
+          c.push(Number(n));
+        });      
+        resultObj.color = c;
         delete data.tint;
-        resultObj.secondaryColor = data.colorSecondary
+        c = [];
+        (data.colorSecondary || "1 1 1").split(" ").forEach(function(n) {
+          c.push(Number(n));
+        });      
         delete data.colorSecondary;
+        resultObj.secondaryColor = c;
        
         // object visibility
         resultObj.visible = (data.hidden == false);
@@ -315,6 +323,71 @@ async function loadProject() {
           resultObj.yPosition = objPos.Y;      
         }       
         delete data.enabledStretchTransform;
+        
+        // blending
+        resultObj.blendingMode = "Normal";
+        if (data.blending) {
+          let normal = {
+            "CCBlendFuncSrcColor": 1,
+            "CCBlendEquationColor": 32774,
+            "CCBlendFuncSrcAlpha": 1,
+            "CCBlendEquationAlpha": 32774,
+            "CCBlendFuncDstColor": 771,
+            "CCBlendFuncDstAlpha": 771
+          };
+
+          let blendType = "Normal";
+          if (data.blending.CCBlendFuncDstAlpha == 769) {
+            blendType = "None";
+          }
+          if (data.blending.CCBlendFuncDstAlpha == 771) {
+            blendType = "Screen";
+          }
+          if (data.blending.CCBlendFuncDstAlpha == 1) {
+            blendType = "Dodge";
+          }
+          if (data.blending.CCBlendFuncSrcColor == 774) {
+            blendType = "Burn";
+          }
+          if (data.blending.CCBlendFuncSrcColor == 1 && data.blending.CCBlendEquationColor == 32774 && data.blending.CCBlendFuncDstAlpha == 771) {
+            blendType = "Normal";
+          }
+          // delete data.blending;
+          resultObj.blendingMode = blendType;
+          delete data.blending;
+        }
+        
+        // collision hitbox
+        if (data.collisionAreaTransformed) {
+          let d = data.collisionAreaTransformed["NS.rectval"].replaceAll("{", "[").replaceAll("}", "]");
+          d = JSON.parse(d);
+          delete data.collisionAreaTransformed;
+          resultObj.collisionAreaTransformed = d;
+        }
+        if (data.collisionArea) {
+          let d = data.collisionArea["NS.rectval"].replaceAll("{", "[").replaceAll("}", "]");
+          d = JSON.parse(d);
+          delete data.collisionArea;
+          resultObj.collisionArea = d;
+        }
+        
+        // other stuff
+        Object.keys(data).forEach(function(key) {
+          try {
+            if ((data[key] || {})["NS.rectval"]) {
+              let d = JSON.parse(data[key]["NS.rectval"].replaceAll("{", "[").replaceAll("}", "]"));
+              data[key] = d;
+            }
+            if ((data[key] || {})["NS.pointval"]) {
+              let d = JSON.parse(data[key]["NS.pointval"].replaceAll("{", "[").replaceAll("}", "]"));
+              data[key] = d;
+            }
+            if ((data[key] || {})["NS.sizeval"]) {
+              let d = JSON.parse(data[key]["NS.sizeval"].replaceAll("{", "[").replaceAll("}", "]"));
+              data[key] = d;
+            }
+          } catch(e) {}
+        });
         
         // unnecessary data
         delete data.enabledScaleTransform;
