@@ -128,6 +128,7 @@ async function loadProject() {
   let results = {
     levels: [],
     overlays: [],
+    globalBehaviors: {},
     creationDate: Date.now()
   };
   
@@ -165,8 +166,6 @@ async function loadProject() {
       cameraData.OPACITY || 1
     ]
     resultSceneData.backgroundColor = bgColor;
-    
-    console.info(resultSceneData)
     
     // set data in corresponding dictionary
     if (sceneData.SCENETYPE == 0) {
@@ -206,7 +205,6 @@ async function loadProject() {
     results.overlays.push(overlayIndexes[index]);
     orderIndex++;
   });
-  console.debug(JSON.stringify(sceneReference, null, "  "));
   
   // check world object for additional data
   let world = db.exec("select * from zobjectdata where ZObjectType = 'World'")[0];
@@ -242,14 +240,104 @@ async function loadProject() {
       UI: false
     };
     
-    console.log(resultLayerData);
+    // get objects in layer
+    let objs = db.exec("SELECT Z_7OBJECTS from z_5objects where Z_5LAYER = " + layerData._PK)[0];
+    let objDict = {};
+    if (objs) {
+      objs.values.forEach(function(value) {
+        let zpk = value[0];
+        
+        // object internal data
+        let objData = db.exec("SELECT * from zobjectdata where Z_PK = " + zpk)[0];
+        objData = mapDictionary(objData.columns, objData.values[0]);
+        console.info(objData)
+        
+        // object position data
+        let objPos = db.exec("SELECT * from zobjectposition where ZOBJECTS = " + zpk)[0];
+        objPos = mapDictionary(objPos.columns, objPos.values[0]);
+        zpk = objPos.OBJECTS;
+        console.log(objPos);
+        
+        // load data
+        let data = extract(Buffer.from(objData.GAMEOBJECTDATA));
+        let resultObj = {
+          mass: objData.MASS,
+          path: objData.PATH,
+          secondaryPath: objData.PATHSECONDARY,
+          name: objData.NAME,
+          id: objData.UNIQUEID,
+          type: objData.OBJECTTYPE,
+          scaleXPercent: objData.X_SCALE * 100,
+          scaleYPercent: objData.Y_SCALE * 100,
+          physicsMode: objData["PHYSICS MODE"],
+          rotation: objData.ROTATION,
+          flipX: objData.FLIPX == 1,
+          flipY: objData.FLIPY == 1,
+          zOrder: objData.Z_INDEX,
+          bounce: objData.RESTITUTION,
+          linearDamping: objData.LINEARDAMPING,
+          friction: objData.FRICTION,
+          anchorX: objData.ANCHORX * 100,
+          anchorY: objData.ANCHORY * 100,
+          behaviors: {}
+        }
+        
+        // object attributes
+        resultObj.attributes = data.GameObjectAttributes || {};
+        delete data.GameObjectAttributes;
+        
+        // object tags
+        resultObj.tags = data.tags["NS.objects"] || {};
+        delete data.tags;
+        
+        // object color
+        resultObj.color = data.tint.split(" ");
+        delete data.tint;
+        resultObj.secondaryColor = data.colorSecondary
+        delete data.colorSecondary;
+       
+        // object visibility
+        resultObj.visible = (data.hidden == false);
+        delete data.hidden;
+        
+        // object shape
+        resultObj.shape = data.shape;
+        delete data.shape;
+        
+        // positioning
+        if (data.enabledStretchTransform) {
+          resultObj.relativePosition = true;          
+          resultObj.xPosition = objPos.X * 100;
+          resultObj.yPosition = objPos.Y * 100;      
+        } else {
+          resultObj.relativePosition = false;
+          resultObj.xPosition = objPos.X;
+          resultObj.yPosition = objPos.Y;      
+        }       
+        delete data.enabledStretchTransform;
+        
+        // unnecessary data
+        delete data.enabledScaleTransform;
+        delete data.enabledRotationTransform;
+        delete data.enabledAnchorTransform;
+        
+        resultObj.meta = data;
+        
+        console.log(JSON.stringify(data, null, "  "))
+        objDict[objData.UNIQUEID] = resultObj;
+        
+      });
+      resultLayerData.objects = objDict;
+    }
     
-    
+    // set data depending on index
     if (layerData.INDEX == -1) {
       resultLayerData.name = "Global UI";
       resultLayerData.UI = true;
       resultLayerData.zOrder = -2;
+      results.globalLayer = resultLayerData;
     }
+    
     if (layerData.INDEX == -2) {
       resultLayerData.name = "Scene UI";
       resultLayerData.UI = true;
@@ -262,8 +350,6 @@ async function loadProject() {
       if (refData.type == "Level") {
         results.levels[refData.index].layers[layerData.INDEX] = resultLayerData;
       } else {
-        console.info("Overlay layer")
-        console.log(layerData);
         if (layerData.INDEX == -2) {
           resultLayerData.name = "Overlay UI";
         }
@@ -296,7 +382,7 @@ async function loadProject() {
 function showResult() {
   resultDisplay.innerHTML = "<a onclick='downloadFile(resultsOutput, \"result.json\")' style='color:#00bb78'>Download Result</a><br><br>";
   resultDisplay.innerHTML += window.resultsOutput.replaceAll("\n", "<br>");
-  console.debug(resultsOutput)
+  // console.debug(resultsOutput)
 }  
 </script>
 
