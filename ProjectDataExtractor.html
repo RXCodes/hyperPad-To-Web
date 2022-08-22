@@ -132,7 +132,8 @@ async function loadProject() {
     overlays: [],
     globalBehaviors: {},
     creationDate: Date.now(),
-    assets: {}
+    assets: {},
+    globalBehaviors: {}
   };
     
   // load behavior data
@@ -220,6 +221,44 @@ async function loadProject() {
   // check world object for additional data
   let world = db.exec("select * from zobjectdata where ZObjectType = 'World'")[0];
   let worldData = mapDictionary(world.columns, world.values[0]);
+  let globalBehaviors = db.exec("select * from zbehaviourdata where zobject = " + worldData._PK)[0];
+    if (globalBehaviors !== undefined) {
+      globalBehaviors.values.forEach(function(values) {
+        let behavior = mapDictionary(globalBehaviors.columns, values);
+        let resultBehavior = {
+          behavior: behavior.NAME,
+          xPosition: behavior.X_POS,
+          yPosition: behavior.Y_POS,
+          isRoot: behavior.ISROOT == 1,
+          objectReference: data.OBJECT,
+          global: true
+        }
+            
+        let internals = extract(Buffer.from(behavior.ACTIONS));
+        console.debug(JSON.stringify(internals, null, "  "));
+        resultBehavior.name = internals.alias;
+        resultBehavior.active = internals.active;
+        resultBehavior.children = ((internals.outputs || {})["NS.objects"]) || [];
+        resultBehavior.inputs = {};
+            
+        // get inputs
+        let defaults = ((behaviorDefaults[behavior.NAME] || {}).inputs || {})
+        Object.keys(defaults).forEach(function(key) {
+              
+          behavior[key] = behavior[key] || {};
+          let inputData = {
+            value: behavior[key].value || defaults[key].defaultValue,
+            key: behavior[key].valueKey || null,
+            controller: behavior[key].controlledBy || "self",
+            type: behavior[key].type || null
+          }
+          resultBehavior.inputs[key] = inputData;
+                            
+       });
+            
+       results.globalBehavior[behavior.TAG] = resultBehavior;
+    });
+  }
   worldData = extract(Buffer.from(worldData.GAMEOBJECTDATA));
   results.ptmRatio = Number(worldData.ptmRatio) || 32;
   results.physicsIterations = Number(worldData.physicsIterations) || 10;
@@ -289,6 +328,14 @@ async function loadProject() {
           anchorX: objData.ANCHORX * 100,
           anchorY: objData.ANCHORY * 100,
           behaviors: {}
+        }
+        
+        // fix anchor if none
+        if (resultObj.anchorX == null) {
+          resultObj.anchorX = 50;
+        }
+        if (resultObj.anchorY == null) {
+          resultObj.anchorY = 50;
         }
         
         // object attributes
@@ -469,7 +516,8 @@ async function loadProject() {
               xPosition: behavior.X_POS,
               yPosition: behavior.Y_POS,
               isRoot: behavior.ISROOT == 1,
-              objectReference: data.OBJECT
+              objectReference: data.OBJECT,
+              global: false
             }
             
             let internals = extract(Buffer.from(behavior.ACTIONS));
