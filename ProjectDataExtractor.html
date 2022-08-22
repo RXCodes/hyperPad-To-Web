@@ -129,7 +129,8 @@ async function loadProject() {
     levels: [],
     overlays: [],
     globalBehaviors: {},
-    creationDate: Date.now()
+    creationDate: Date.now(),
+    assets: {}
   };
   
   // load scene data (levels and overlays)
@@ -440,6 +441,25 @@ async function loadProject() {
     results.overlays[key].layers = Object.values(results.overlays[key].layers);
   });
     
+  // asset path data
+  let assets = db.exec("SELECT * from zpathdata")[0];
+  assets.values.forEach(function(values) {
+    let assetData = mapDictionary(assets.columns, values);
+    
+    let extra = {};
+    try {
+      extra = extract(Buffer.from(assetData.DATA))
+    } catch(e) {};
+    
+    let resultAsset = {
+      type: assetData.ASSETTYPE,
+      path: assetData.PATH,
+      reference: assetData._PK,
+      extra
+    }
+    results.assets[assetData.UNIQUEID] = resultAsset;
+  });
+  
     
   // show result
   window.resultsOutput = JSON.stringify(results, null, "  ");
