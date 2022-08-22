@@ -41,6 +41,7 @@
 <script src="https://rxcodes.github.io/hyperPad-Project-Modder/LZString.js"></script>
 <script src="https://rxcodes.github.io/hyperPad-Project-Modder/BPListParser.js"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.js'></script>
+<script src="https://hyperpadtoweb.rxcodes.repl.co/behaviorBaseScript"></script>
 
 <!-- initialize SQLite -->
 <script>
@@ -125,6 +126,7 @@ async function loadProject() {
   // check for code errors
   try {
     
+  // initialize results dictionary
   let results = {
     levels: [],
     overlays: [],
@@ -132,6 +134,14 @@ async function loadProject() {
     creationDate: Date.now(),
     assets: {}
   };
+    
+  // load behavior data
+  let behaviorDefaults = {};
+  Object.keys(behaviorBase).forEach(function(behavior) {
+    let data = behaviorBase[behavior];
+    behaviorDefaults[data.behavior] = data;
+  });
+  let unknownBehaviors = {};
   
   // load scene data (levels and overlays)
   let levelIndexes = {};
@@ -251,13 +261,11 @@ async function loadProject() {
         // object internal data
         let objData = db.exec("SELECT * from zobjectdata where Z_PK = " + zpk)[0];
         objData = mapDictionary(objData.columns, objData.values[0]);
-        console.info(objData)
         
         // object position data
         let objPos = db.exec("SELECT * from zobjectposition where ZOBJECTS = " + zpk)[0];
         objPos = mapDictionary(objPos.columns, objPos.values[0]);
         zpk = objPos.OBJECTS;
-        console.log(objPos);
         
         // load data
         let data = extract(Buffer.from(objData.GAMEOBJECTDATA));
@@ -288,7 +296,7 @@ async function loadProject() {
         delete data.GameObjectAttributes;
         
         // object tags
-        resultObj.tags = data.tags["NS.objects"] || {};
+        resultObj.tags = data.tags["NS.objects"] || [];
         delete data.tags;
         
         // object color
@@ -336,24 +344,66 @@ async function loadProject() {
             "CCBlendFuncDstColor": 771,
             "CCBlendFuncDstAlpha": 771
           };
+          let screen = {
+            "CCBlendFuncSrcColor": 1,
+            "CCBlendEquationColor": 32774,
+            "CCBlendFuncSrcAlpha": 1,
+            "CCBlendEquationAlpha": 32774,
+            "CCBlendFuncDstColor": 769,
+            "CCBlendFuncDstAlpha": 769
+          }
+          let dodge = {
+            "CCBlendFuncSrcColor": 1,
+            "CCBlendEquationColor": 32774,
+            "CCBlendFuncSrcAlpha": 1,
+            "CCBlendEquationAlpha": 32774,
+            "CCBlendFuncDstColor": 1,
+            "CCBlendFuncDstAlpha": 1
+          };
+          let burn = {
+            "CCBlendFuncSrcColor": 774,
+            "CCBlendEquationColor": 32774,
+            "CCBlendFuncSrcAlpha": 774,
+            "CCBlendEquationAlpha": 32774,
+            "CCBlendFuncDstColor": 771,
+            "CCBlendFuncDstAlpha": 771
+          };
+          let none ={
+            "CCBlendFuncSrcColor": 1,
+            "CCBlendEquationColor": 32774,
+            "CCBlendFuncSrcAlpha": 1,
+            "CCBlendEquationAlpha": 32774,
+            "CCBlendFuncDstColor": 0,
+            "CCBlendFuncDstAlpha": 0
+          }
 
           let blendType = "Normal";
-          if (data.blending.CCBlendFuncDstAlpha == 769) {
-            blendType = "None";
+          function matchBlend(input, output) {
+            let same = true;
+            Object.keys(input).forEach(function(key) {
+              if (input[key] !== output[key]) {
+                same = false;
+              }
+            });
+            return same;
           }
-          if (data.blending.CCBlendFuncDstAlpha == 771) {
-            blendType = "Screen";
-          }
-          if (data.blending.CCBlendFuncDstAlpha == 1) {
-            blendType = "Dodge";
-          }
-          if (data.blending.CCBlendFuncSrcColor == 774) {
-            blendType = "Burn";
-          }
-          if (data.blending.CCBlendFuncSrcColor == 1 && data.blending.CCBlendEquationColor == 32774 && data.blending.CCBlendFuncDstAlpha == 771) {
+          
+          if (matchBlend(data.blending, normal)) {
             blendType = "Normal";
           }
-          // delete data.blending;
+          if (matchBlend(data.blending, screen)) {
+            blendType = "Screen";
+          }
+          if (matchBlend(data.blending, dodge)) {
+            blendType = "Dodge";
+          }
+          if (matchBlend(data.blending, burn)) {
+            blendType = "Burn";
+          }
+          if (matchBlend(data.blending, none)) {
+            blendType = "None";
+          }
+          
           resultObj.blendingMode = blendType;
           delete data.blending;
         }
@@ -387,17 +437,67 @@ async function loadProject() {
               let d = JSON.parse(data[key]["NS.sizeval"].replaceAll("{", "[").replaceAll("}", "]"));
               data[key] = d;
             }
+            
+            // color
+            if (key.endsWith("color") || key.endsWith("Color")) {
+              let c = [];
+              data[key].split(" ").forEach(function(val) {
+                c.push(Number(val))
+              });
+            }
+            
           } catch(e) {}
         });
+        
+        
         
         // unnecessary data
         delete data.enabledScaleTransform;
         delete data.enabledRotationTransform;
         delete data.enabledAnchorTransform;
         
+        // save the additional data to object
         resultObj.meta = data;
         
-        console.log(JSON.stringify(data, null, "  "))
+        // behaviors
+        let behaviors = db.exec("select * from zbehaviourdata where zobject = " + zpk)[0];
+        if (behaviors !== undefined) {
+          behaviors.values.forEach(function(values) {
+            let behavior = mapDictionary(behaviors.columns, values);
+            let resultBehavior = {
+              behavior: behavior.NAME,
+              xPosition: behavior.X_POS,
+              yPosition: behavior.Y_POS,
+              isRoot: behavior.ISROOT == 1,
+              objectReference: data.OBJECT
+            }
+            
+            let internals = extract(Buffer.from(behavior.ACTIONS));
+            console.debug(JSON.stringify(internals, null, "  "));
+            resultBehavior.name = internals.alias;
+            resultBehavior.active = internals.active;
+            resultBehavior.children = ((internals.outputs || {})["NS.objects"]) || [];
+            resultBehavior.inputs = {};
+            
+            // get inputs
+            let defaults = ((behaviorDefaults[behavior.NAME] || {}).inputs || {})
+            Object.keys(defaults).forEach(function(key) {
+              
+              behavior[key] = behavior[key] || {};
+              let inputData = {
+                value: behavior[key].value || defaults[key].defaultValue,
+                key: behavior[key].valueKey || null,
+                controller: behavior[key].controlledBy || "self",
+                type: behavior[key].type || null
+              }
+              resultBehavior.inputs[key] = inputData;
+                            
+            });
+            
+            resultObj.behaviors[behavior.TAG] = resultBehavior;
+          });
+        }
+        
         objDict[objData.UNIQUEID] = resultObj;
         
       });
