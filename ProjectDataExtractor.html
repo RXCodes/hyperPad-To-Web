@@ -105,7 +105,7 @@ fileSelector.addEventListener('change', (event) => {
 <script id="loadProjectDataScript">
 
 // form a dictionary given two arrays
-function mapDictionary(keys, values) {
+window.mapDictionary = function(keys, values) {
   try {
     let result = {};
     let i = 0;
@@ -121,7 +121,7 @@ function mapDictionary(keys, values) {
 }
   
 // load the project
-function loadProject() {
+window.loadProject = function() {
   
   // check for code errors
   try {
