@@ -690,14 +690,14 @@ function downloadFile(text, fileName) {
 
 <!-- parse plist files -->
 <script id="parsePLISTFilesScript">
-function parsePlistDocument(txt) {
+window.parsePlistDocument = function(txt) {
   let parser = new DOMParser();
   let plist = parser.parseFromString(txt,"text/xml");
   plist = cleanWhitespace(plist);
   return parsePlist(plist);
 }  
   
-cleanWhitespace = function(element) {
+window.cleanWhitespace = function(element) {
     
     if (element.childNodes !== undefined) {
         for (var i = 0; i < element.childNodes.length; i++) {
@@ -712,7 +712,7 @@ cleanWhitespace = function(element) {
     return element;
 }
 
-parsePlist = function(plistDoc) {
+window.parsePlist = function(plistDoc) {
     var doc = plistDoc.childNodes[1];
     // main dict
     var dict = doc.childNodes[1];
@@ -726,7 +726,7 @@ parsePlist = function(plistDoc) {
     return parsePlistValue(dict);
 }
 
-parsePlistDict = function(dictNode) {
+window.parsePlistDict = function(dictNode) {
     var result = new Object();
     var keyNodes = dictNode.getElementsByTagName("key");
     for (var i = 0, n = keyNodes.length; i < n; i++) {
@@ -737,7 +737,7 @@ parsePlistDict = function(dictNode) {
     return result;
 }
 
-parsePlistValue = function(valueNode) {
+window.parsePlistValue = function(valueNode) {
     var result = null;
     switch (valueNode.nodeName) {
     case "true":
