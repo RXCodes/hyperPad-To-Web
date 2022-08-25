@@ -2560,11 +2560,14 @@ body {font-family: Arial, Helvetica, sans-serif;}
               return timer;
             }
          
+            // behavior id
+            let behaviorID - "<behaviorID>";
          
               // children count
               let childrenCount = Number(document.getElementById("childrenCount").value) || 0;
               if (childrenCount < 0) {
                 childrenCount = 0;
+                document.getElementById("childrenCount").value = 0;
               }
               
               // behavior actions
@@ -2743,7 +2746,13 @@ body {font-family: Arial, Helvetica, sans-serif;}
                 
               };
               
+         try {
               [CodeToRun]
+         } catch(e) {
+           console.error("<i>[SYSTEM]</i> Encountered error: " + e.message);
+           encounteredError = true;
+           errorEncountered = e.message;
+         }
               
        });
               
