@@ -82,9 +82,8 @@ fileSelector.addEventListener('change', (event) => {
                let assets = await spliceAssets(data);
                document.getElementById("data").innerHTML = "Compiling Project...";
                let html = await generateHTML(data, assets);
-               document.getElementById("data").innerHTML = "Playing Project...";
-               document.getElementById("page").innerHTML = html;
-               downloadFile("fart.html", html);
+               document.getElementById("data").innerHTML = "Downloaded Project.";
+               downloadFile(html, "fart.html");
                
              } catch(e) {
                console.error(e);
