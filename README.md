@@ -10,6 +10,9 @@ A community-driven collaborative project to push hyperPad to the web.
 **Project Asset Splicer**: https://rxcodes.github.io/hyperPad-To-Web/ProjectAssetSplicer
 - Extracts every single *asset* `(graphics, sounds, fonts, etc.)` available from the hyperPad project to use in the final HTML output.
 
+**Project Compiler**: https://rxcodes.github.io/hyperPad-To-Web/ProjectCompiler
+- **(BETA - NOT FINISHED)** Takes asset files and project data to form a HTML game.
+
 **Behaviors JSON**: https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/AllBehaviors.json
 - A big `JSON file` database containing a record of every single behavior that contains default input values, output fields, name and behavior identifier.
 
