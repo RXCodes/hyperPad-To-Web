@@ -5,7 +5,7 @@ A community-driven collaborative project to push hyperPad to the web.
 
 # Modules
 **Project Data Extractor**: https://rxcodes.github.io/hyperPad-To-Web/ProjectDataExtractor
-- Transform a hyperPad project into a `JSON file` containing most of the project's data.
+- Transform a hyperPad project into a `JSON file` containing most of the project's data to be used in the compiler.
 
 **Project Asset Splicer**: https://rxcodes.github.io/hyperPad-To-Web/ProjectAssetSplicer
 - Extracts every single *asset* `(graphics, sounds, fonts, etc.)` available from the hyperPad project to use in the final HTML output.
