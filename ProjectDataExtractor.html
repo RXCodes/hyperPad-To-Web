@@ -122,11 +122,10 @@ window.mapDictionary = function(keys, values) {
   
 // load the project
 window.loadProject = function() {
-  
-  // check for code errors
-  try {
     
-  return new Promise(async function(resolve) { 
+  return new Promise(async function(resolve) {
+    
+  try {  
     
   // initialize results dictionary
   let results = {
@@ -237,7 +236,6 @@ window.loadProject = function() {
         }
             
         let internals = extract(Buffer.from(behavior.ACTIONS));
-        console.debug(JSON.stringify(internals, null, "  "));
         resultBehavior.name = internals.alias;
         resultBehavior.active = internals.active;
         resultBehavior.children = ((internals.outputs || {})["NS.objects"]) || [];
@@ -350,7 +348,7 @@ window.loadProject = function() {
         
         // object color
         let c = [];
-        data.tint.split(" ").forEach(function(n) {
+        (data.tint || "1 1 1").split(" ").forEach(function(n) {
           c.push(Number(n));
         });      
         resultObj.color = c;
@@ -523,7 +521,6 @@ window.loadProject = function() {
             }
             
             let internals = extract(Buffer.from(behavior.ACTIONS));
-            console.debug(JSON.stringify(internals, null, "  "));
             resultBehavior.name = internals.alias;
             resultBehavior.active = internals.active;
             resultBehavior.children = ((internals.outputs || {})["NS.objects"]) || [];
@@ -617,12 +614,12 @@ window.loadProject = function() {
   } catch(e) {};
   
     resolve(results);
-  });
-  
-  // check for code errors  
   } catch(e) {
     console.error(e);
   }
+    
+  });
+  
     
 }
 
