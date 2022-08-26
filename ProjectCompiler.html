@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<main id="page">
+<html>
+  <head>
+    <meta name="viewport" content="width=320, initial-scale=1">
+    <meta charset="utf-8">
+    <style>
+      body, html {
+        min-width: 100%;
+        min-height: 100%;
+        margin: 0;
+        padding: 0;
+        font: Arial 14px;
+      }
+      
+      p {
+        padding-left: 10px;
+      }
+    </style>
+    <!--<link rel="stylesheet" href="style.css"/>-->
+    <!--<script defer src="script.js"></script>-->
+  </head>
+  <body>
+    
+    <!-- display stuff -->
+    <p>
+      <b>Import a project</b>
+    </p>
+    <input type="file" id="projectImporter" accept=".tap">
+    <p id="data">
+      
+    </p>
+    
+  </body>
+</html>
+
+<!-- setup all the scripts you need -->
+<script src="https://cdn.jsdelivr.net/npm/web-streams-polyfill@2.0.2/dist/ponyfill.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/eligrey/Blob.js/Blob.js"></script>
+<script src="https://rxcodes.github.io/hyperPad-Project-Modder/saveFile.js"></script>   
+<script src="https://rxcodes.github.io/hyperPad-Project-Modder/JSZip.js"></script>
+<script src="https://rxcodes.github.io/hyperPad-Project-Modder/LZString.js"></script>
+<script src="https://rxcodes.github.io/hyperPad-Project-Modder/BPListParser.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.js'></script>
+<script src="https://hyperpadtoweb.rxcodes.repl.co/behaviorBaseScript"></script>
+
+<!-- initialize SQLite -->
+<script>
+  const config = {
+    locateFile: (filename, prefix) => {
+      return 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.wasm';
+    }
+  }
+  var SQL;
+  var db;
+  async function start() {
+    SQL = await initSqlJs(config);
+  }
+  start();
+</script>
+
+<!-- project import script -->
+<script>
+var project = new JSZip();
+const fileSelector = document.getElementById("projectImporter");
+fileSelector.addEventListener('change', (event) => {
+  
+    // Closure to capture the file information.
+    function handleFile(f) {
+		file = f;
+      	scenes = {};
+        project.loadAsync(f)              
+        .then(function(zip) {
+            
+           project.file("levels/Level 1/Level.sqlite").async("uint8array")
+          .then(async function(content) {
+             db = new SQL.Database(content);
+             try {
+               document.getElementById("data").innerHTML = "Opening Project...";
+               let data = await loadProject();
+               document.getElementById("data").innerHTML = "Extracting Assets... <i>(This can take a while)</i>";
+               let assets = await spliceAssets(data);
+               document.getElementById("data").innerHTML = "Compiling Project...";
+               let html = await generateHTML(data, assets);
+               document.getElementById("data").innerHTML = "Playing Project...";
+               document.getElementById("page").innerHTML = html;
+               downloadFile("fart.html", html);
+               
+             } catch(e) {
+               console.error(e);
+             }
+           });
+          
+        }, function (e) {
+            console.error(f.name + ": " + e.message);
+        });
+    }
+    
+    var files = event.target.files;
+  	setTimeout(function() {
+      for (var i = 0; i < files.length; i++) {
+        handleFile(files[i]);
+  	  }
+    }, 1);
+  });
+
+</script>
+
+<script>
+
+  async function initLoadProjectScript() {
+    let initScript = await fetch("https://rxcodes.github.io/hyperPad-To-Web/ProjectDataExtractor");
+    initScript = await initScript.text();
+    let script = initScript.split('<script id="loadProjectDataScript">')[1];
+    script = script.split("<\/script>")[0];
+    
+    let script2 = initScript;
+    script2 = script2.split('<script id="parsePLISTFilesScript">')[1];
+    script2 = script2.split("<\/script>")[0];
+    
+    let script3 = await fetch("https://rxcodes.github.io/hyperPad-To-Web/ProjectAssetSplicer");
+    script3 = await script3.text();
+    script3 = script3.split('<script id="spliceAssets">')[1];
+    script3 = script3.split("<\/script>")[0];
+    
+    try {
+      eval(script);
+      eval(script2);
+      eval(script3);
+    } catch(e) {
+      console.error(e);
+    }
+  }
+  initLoadProjectScript()
+  
+</script>
+
+<script id="generateHTML">
+
+  window.generateHTML = async function(projectBase, assetBase) {
+    return new Promise(async function(resolve) {
+      
+      let html = "<head><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></head>";
+      html = '<script src="https://unpkg.com/kaboom/dist/kaboom.js"><\/script>';
+      html += "<div id='screenBG' style='width: 1000%; height: 1000%; margin: 0px; padding: 0px; left: 0px; top: 0px; position: fixed; overflow: hidden; background-color:black;'>";
+      html += "<div id='screen'></div></div>\n<script>";
+      html += "console.debug('test')";
+      html += "const projectBase = " + JSON.stringify(projectBase) + "; \n";
+      html += "const assetBase = " + JSON.stringify(assetBase) + "; \n";
+      html += "document.addEventListener(\"touchmove\", function(e) { e.preventDefault(); console.log(e) });"
+      let launchPaths = [
+        
+      ];
+      
+      let launchPathsLeft = launchPaths.length;
+      launchPaths.forEach(async function(path) {
+        html += "// Inject: " + path + "\n";
+        let code = await fetch(path);
+        code = await code.text();
+        html = html.replace("// Inject: " + path, code + "\n");
+        launchPathsLeft--;
+        if (launchPathsLeft == 0) {
+          html += "<\/script>";
+          resolve(html);
+        }
+      });
+      
+      if (launchPaths.length == 0) {
+        html += "<\/script>";
+        resolve(html);
+      }
+      
+    });
+  }
+  
+</script>
+  
+<!-- download code -->
+<script>
+function downloadFile(text, fileName) {
+        const fileStream = streamSaver.createWriteStream(fileName, {
+          size: text.size // Makes the procentage visiable in the download
+        })
+
+        // One quick alternetive way if you don't want the hole blob.js thing:
+        // const readableStream = new Response(
+        //   Blob || String || ArrayBuffer || ArrayBufferView
+        // ).body
+        const readableStream = new Response(text).body;
+
+        // more optimized pipe version
+        // (Safari may have pipeTo but it's useless without the WritableStream)
+        if (window.WritableStream && readableStream.pipeTo) {
+          return readableStream.pipeTo(fileStream)
+            .then(() => {
+            console.log('done writing');
+          })
+        }
+
+        // Write (pipe) manually
+        window.writer = fileStream.getWriter()
+
+        const reader = readableStream.getReader()
+        const pump = () => reader.read()
+          .then(res => res.done
+            ? writer.close()
+            : writer.write(res.value).then(pump))
+
+        pump()
+}
+</script>  
+  
+</main>
