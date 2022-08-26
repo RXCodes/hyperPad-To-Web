@@ -84,7 +84,7 @@ fileSelector.addEventListener('change', (event) => {
                let html = await generateHTML(data, assets);
                document.getElementById("data").innerHTML = "Playing Project...";
                document.getElementById("page").innerHTML = html;
-               downloadFile(html, "fart.html");
+               downloadFile("fart.html", html);
                
              } catch(e) {
                console.error(e);
