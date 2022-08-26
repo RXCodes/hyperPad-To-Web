@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=320, initial-scale=1">
+    <meta charset="utf-8">
+    <style>
+      body, html {
+        min-width: 100%;
+        min-height: 100%;
+        margin: 0;
+        padding: 0;
+        font: Arial 14px;
+      }
+      
+      div {
+        margin-left: 10px;
+      }
+      p {
+        margin-left: 10px;
+      }
+      img {
+        background-color: #dedede
+      }
+    </style>
+    <!--<link rel="stylesheet" href="style.css"/>-->
+    <!--<script defer src="script.js"></script>-->
+  </head>
+  <body>
+    
+    <!-- display stuff -->
+    <p>
+      <b>Import a project</b>
+    </p>
+    <input type="file" id="projectImporter" accept=".tap">
+    <div id="rawResult">
+      <p>
+        Assets will show here...
+      </p>
+    </div>
+    
+  </body>
+</html>
+
+<!-- setup all the scripts you need -->
+<script src="https://cdn.jsdelivr.net/npm/web-streams-polyfill@2.0.2/dist/ponyfill.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/eligrey/Blob.js/Blob.js"></script>
+<script src="https://rxcodes.github.io/hyperPad-Project-Modder/saveFile.js"></script>   
+<script src="https://rxcodes.github.io/hyperPad-Project-Modder/JSZip.js"></script>
+<script src="https://rxcodes.github.io/hyperPad-Project-Modder/LZString.js"></script>
+<script src="https://rxcodes.github.io/hyperPad-Project-Modder/BPListParser.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.js'></script>
+<script src="https://hyperpadtoweb.rxcodes.repl.co/behaviorBaseScript"></script>
+
+<!-- initialize SQLite -->
+<script>
+  const config = {
+    locateFile: (filename, prefix) => {
+      return 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.wasm';
+    }
+  }
+  var SQL;
+  var db;
+  async function start() {
+    SQL = await initSqlJs(config);
+  }
+  start();
+</script>
+
+<!-- project import script -->
+<script>
+var project = new JSZip();
+const fileSelector = document.getElementById("projectImporter");
+fileSelector.addEventListener('change', (event) => {
+  
+    // Closure to capture the file information.
+    function handleFile(f) {
+		file = f;
+      	scenes = {};
+        project.loadAsync(f)              
+        .then(function(zip) {
+            
+           project.file("levels/Level 1/Level.sqlite").async("uint8array")
+          .then(async function(content) {
+             db = new SQL.Database(content);
+             try {
+               document.getElementById("rawResult").innerHTML = "Loading data..."
+               let data = await loadProject();
+               console.log("Loaded data")
+               document.getElementById("rawResult").innerHTML = "Fetching assets (this may take a while)..."
+               let contents = await spliceAssets(data);
+               console.info(JSON.stringify(contents).length);
+               
+               // display
+               let show = "";
+               
+               Object.keys(contents).forEach(function(key) {
+                 let asset = data.assets[key];
+                 let append = "<b>Asset Path</b>: " + asset.path + " <i>(" + asset.type + ")</i>";
+                 show += append + "<br>";
+                 
+                 if (asset.type == "Graphic" || asset.type == "BMFont" || asset.type == "TTFFont") {
+                   show += '<img src="data:image/png;base64, ' + contents[key].img + "\"><br>";
+                 }
+                 if (asset.type == "Sound") {
+                   show += '<audio controls="controls" autobuffer="autobuffer" autoplay="autoplay"><source src="data:audio/wav;base64,';
+                   show += contents[key].sound + '"></audio><br>'
+                 }
+                 
+               });
+               
+               document.getElementById("rawResult").innerHTML = show;
+               
+             } catch(e) {
+               console.error(e);
+             }
+           });
+          
+        }, function (e) {
+            console.error(f.name + ": " + e.message);
+        });
+    }
+    
+    var files = event.target.files;
+  	setTimeout(function() {
+      for (var i = 0; i < files.length; i++) {
+        handleFile(files[i]);
+  	  }
+    }, 1);
+  });
+
+</script>
+
+<script>
+
+  async function initLoadProjectScript() {
+    let initScript = await fetch("https://rxcodes.github.io/hyperPad-To-Web/ProjectDataExtractor");
+    initScript = await initScript.text();
+    let script = initScript.split('<script id="loadProjectDataScript">')[1];
+    script = script.split("<\/script>")[0];
+    
+    let script2 = initScript;
+    script2 = script2.split('<script id="parsePLISTFilesScript">')[1];
+    script2 = script2.split("<\/script>")[0];
+    
+    try {
+      eval(script);
+      eval(script2);
+    } catch(e) {
+      console.error(e);
+    }
+  }
+  initLoadProjectScript()
+  
+</script>
+
+<script id="spliceAssets">
+
+  window.spliceAssets = async function(json) {
+    
+    return new Promise(async function(resolve) {
+      
+      try {
+    
+      // extract the best quality content from each asset
+      let contents = {};
+      let assetsLeft = Object.keys(json.assets).length;
+      Object.keys(json.assets).forEach(async function(key) {
+        let data = json.assets[key];
+        let mainFile = ".metaData.plist";
+        let assetLevel = 0;
+        project.folder(data.path).forEach(async function(path) {
+          
+          // graphic / font
+          if (path == ".thumbnail.png" && assetLevel < 1) {
+            assetLevel = 1;
+            mainFile = path;
+          }
+          if (path.endsWith(".png") && assetLevel < 2) {
+            assetLevel = 2;
+            mainFile = path;
+          }
+          if (path.endsWith("-hd.png") && assetLevel < 3) {
+            assetLevel = 3;
+            mainFile = path;
+          }
+          
+          // audio
+          if (path.endsWith(".m4a") && assetLevel < 4) {
+            assetLevel = 4;
+            mainFile = path;
+          }
+          
+          // tff font
+          if (path.endsWith(".tff") && assetLevel < 4) {
+            assetLevel = 4;
+            mainFile = path;
+          }
+          
+        });
+
+        console.log(mainFile)
+        
+        try {
+          if (data.type == "Graphic" || data.type == "Animation") {
+            contents[key] = {
+              img: await project.file(data.path + "/" + mainFile).async("base64")
+            }
+          }
+          if (data.type == "BMFont") {
+            contents[key] = {
+              img: await project.file(data.path + "/" + mainFile).async("base64"),
+              fnt: await project.file(data.path + "/" + mainFile.replace(".png", ".fnt")).async("base64")
+            }
+          }
+          if (data.type == "TFFFont") {
+            contents[key] = {
+              tff: await project.file(data.path + "/" + mainFile).async("base64")
+            }
+          }
+          if (data.type == "Particle") {
+            contents[key] = {
+              img: await project.file(data.path + "/" + mainFile).async("base64"),
+              fnt: await project.file(data.path + "/" + mainFile.replace(".png", ".plist")).async("base64")
+            }
+          }
+          if (data.type == "Sound") {
+            contents[key] = {
+              sound: await project.file(data.path + "/" + mainFile).async("base64")
+            }
+          }
+        } catch(e) {};
+          
+        console.log("Loaded: " + mainFile);
+        assetsLeft--;
+
+
+        if (assetsLeft == 0) {
+          resolve(contents);
+        }
+      
+      });
+        
+      } catch(e) {
+        console.error(e);
+      }
+    })
+  }
+  
+</script>
