@@ -4,14 +4,18 @@ var currentSceneIndex = 0;
 var playingAudio = {};
 var activeLayers = {};
 var activeObjects = {};
+var kaboomObjects = {};
 
 // load a level
 function loadLevel(index) {
   
   // remove all objects and behaviors
-  Object.keys(currentObjects).forEach(function(objectID) {
-    destroyObject(currentObjects[objectID]);
+  Object.keys(kaboomObjects).forEach(function(objectID) {
+    try {
+      kaboomObjects[objectID].destroy();
+    } catch(e) {}
   });
+  kaboomObjects = {};
   
   // stop all audio
   Object.keys(playingAudio).forEach(function(soundID) {
@@ -69,9 +73,13 @@ function loadLevel(index) {
     sortedLayers.push(sortLayersIndex[index].UUID);
   });
   
-  // load layers with objects into kaboo
+  // load layers with objects into kaboom
+  sortedLayers.forEach(function(index) {
+    let layer = levelData.layers[index];
+  });
   
   // set scene background
+  
 }
 
 loadScene(0);
