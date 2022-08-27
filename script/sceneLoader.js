@@ -74,8 +74,30 @@ function loadLevel(index) {
   });
   
   // load layers with objects into kaboom
+  let layerIDs = sortedLayers;
+  kaboom.layers(layerIDs, layerIDs[layerIDs.length - 1]);
   sortedLayers.forEach(function(index) {
-    let layer = levelData.layers[index];
+    let layerData = levelData.layers[index];
+    Object.keys(layerData.objects).forEach(function(objectID) {
+      let objData = layerData.objects[objectID];
+      
+      // add object
+      kaboom.add([
+        kaboom.layer(objData.currentLayer), // layer
+        kaboom.pos(objData.xPosition, objData.yPosition), // absolute position in pixels
+        kaboom.sprite(objData.path), // graphic path
+        kaboom.origin(new kaboom.Vec2({
+          x: objData.xAnchor,
+          y: objData.yAnchor
+        }), // object anchor
+        kaboom.color(objData.color[0], objData.color[1], objData.color[2]), // object color
+        kaboom.rotate(objData.rotation), // object rotation
+        kaboom.opacity(objData.color[3] || 1), // object transparency
+        kaboom.rect(objData.scaleXPercentage * projectBase.ptm, objData.scaleYPercentage * projectBase.ptm), // width and height
+        kaboom.z(objData.zOrder) // z index
+      ]);
+      
+    });
   });
   
   // set scene background
