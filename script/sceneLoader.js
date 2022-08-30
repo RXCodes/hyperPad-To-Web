@@ -24,6 +24,9 @@ function loadLevel(index) {
   });
   playingAudio = [];
   
+  // destroy phaser game
+  PhaserGame.destroy(true, false);
+  
   // determine index or scene ID
   let currentSceneIndex = 0;
   let isNumeric = Number(index) == index;
@@ -73,16 +76,16 @@ function loadLevel(index) {
     sortedLayers.push(sortLayersIndex[index].UUID);
   });
   
-  // load layers with objects into kaboom
+  // load layers with objects
   let layerIDs = sortedLayers;
-  kaboom.layers(layerIDs, layerIDs[layerIDs.length - 1]);
+  
   sortedLayers.forEach(function(index) {
     let layerData = levelData.layers[index];
     Object.keys(layerData.objects).forEach(function(objectID) {
       let objData = layerData.objects[objectID];
       
-      // add object
-      
+      // add object for layer
+      // ...
       
     });
   });
