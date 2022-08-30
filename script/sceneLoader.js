@@ -1,21 +1,22 @@
 // initialize object dictionary and initial scene data
-var currentObjects = {};
-var currentSceneIndex = 0;
-var playingAudio = {};
-var activeLayers = {};
-var activeObjects = {};
-var kaboomObjects = {};
+var currentObjects = {}; // in-game representation of the object (color, scale, attributes, tags, etc.) {key: objectID, value: objectData}
+var currentSceneIndex = 0; // current scene that the player is in - by default, the player will load into the first scene
+var playingAudio = {}; // the audio being played {key: audioID, value: audioInterface}
+var currentLayers = {}; // the current layers being displayed {key: layerID, value: layerData}
+var phaserObjects = {}; // object instances in phaser that can make changes to what is being displayed {key: objectID, value: PhaserObjectInstance}
 
 // load a level
 function loadLevel(index) {
   
   // remove all objects and behaviors
-  Object.keys(kaboomObjects).forEach(function(objectID) {
+  Object.keys(phaserObjects).forEach(function(objectID) {
     try {
-      kaboomObjects[objectID].destroy();
+      phaserObjects[objectID].destroy();
     } catch(e) {}
   });
-  kaboomObjects = {};
+  currentObjects = {};
+  phaserObjects = {};
+  currentLayers = {};
   
   // stop all audio
   Object.keys(playingAudio).forEach(function(soundID) {
@@ -40,19 +41,18 @@ function loadLevel(index) {
   
   // load the level data
   let levelData = projectBase.scenes[currentSceneIndex] || {};
-  activeLayers = {};
-  activeObjects = {};
+  currentObjects = {};
   console.log(levelData);
   
   // add layers and objects to structure
   levelData.layers.forEach(function(layer) {
     let data = levelData.layers[layer];
     Object.keys(data.objects).forEach(function(objectID) {
-      activeObjects[objectID] = data.objects[objectID];
-      activeObjects[objectID].currentLayer = data.UUID;
+      currentObjects[objectID] = data.objects[objectID];
+      currentObjects[objectID].currentLayer = data.UUID;
     });
     delete data.objects;
-    activeLayers[data.UUID] = data;
+    currentLayers[data.UUID] = data;
   });
   
   // sort layers by index (global and scene ui layers are on the top)
@@ -62,9 +62,9 @@ function loadLevel(index) {
     sortLayersIndex[layer.index * -1] = layer.UUID;
   });
   let sortedLayersIndex = Object.keys(sortedLayersIndex).sort(function(a, b) {
-    if( a === Infinity ) 
+    if (a === Infinity) 
       return 1; 
-    else if( isNaN(a)) 
+    else if (isNaN(a)) 
       return -1;
     else 
       return a - b;
@@ -82,20 +82,7 @@ function loadLevel(index) {
       let objData = layerData.objects[objectID];
       
       // add object
-      kaboom.add([
-        kaboom.layer(objData.currentLayer), // layer
-        kaboom.pos(objData.xPosition, objData.yPosition), // absolute position in pixels
-        kaboom.sprite(objData.path), // graphic path
-        kaboom.origin(new kaboom.Vec2({
-          x: objData.xAnchor,
-          y: objData.yAnchor
-        }), // object anchor
-        kaboom.color(objData.color[0], objData.color[1], objData.color[2]), // object color
-        kaboom.rotate(objData.rotation), // object rotation
-        kaboom.opacity(objData.color[3] || 1), // object transparency
-        kaboom.rect(objData.scaleXPercentage * projectBase.ptm, objData.scaleYPercentage * projectBase.ptm), // width and height
-        kaboom.z(objData.zOrder) // z index
-      ]);
+      
       
     });
   });
