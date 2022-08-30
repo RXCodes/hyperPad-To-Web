@@ -6,7 +6,10 @@ var currentLayers = {}; // the current layers being displayed {key: layerID, val
 var phaserObjects = {}; // object instances in phaser that can make changes to what is being displayed {key: objectID, value: PhaserObjectInstance}
 
 // load a level
-function loadLevel(index) {
+function loadLevel() {
+  
+  // scene index
+  let index = currentSceneIndex;
   
   // remove all objects and behaviors
   Object.keys(phaserObjects).forEach(function(objectID) {
@@ -23,9 +26,6 @@ function loadLevel(index) {
     playingAudio[soundID].audio.stop();
   });
   playingAudio = [];
-  
-  // destroy phaser game
-  PhaserGame.destroy(true, false);
   
   // determine index or scene ID
   let currentSceneIndex = 0;
@@ -81,16 +81,18 @@ function loadLevel(index) {
   
   sortedLayers.forEach(function(index) {
     let layerData = levelData.layers[index];
+    currentLayers[layerData.UUID].phaserLayer = this.add.layer();
     Object.keys(layerData.objects).forEach(function(objectID) {
       let objData = layerData.objects[objectID];
       
       // add object for layer
-      // ...
+      let object = this.add.sprite(objData.widthPercentage * projectBase.ptm, objData.heightPercentage * projectBase, objData.path || "_Empty");
+      object.setBounce(objData.bounce || 0, objData.bounce || 0);
+      object.setMass(objData.mass || 20);
+      currentLayers[layerData.UUID].phaserLayer.add([object]);
       
     });
   });
-  
-  // set scene background
   
 }
 
