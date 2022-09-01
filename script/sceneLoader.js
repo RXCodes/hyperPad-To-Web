@@ -10,11 +10,6 @@ var game; // the variable holding the instance of the game
 // load a level
 function loadLevelHandler() {
   
-  // stop previous level if already opened
-  try {
-    game.destroy(true, false)
-  } catch(e) {};
-  
   // scene index
   let index = currentSceneIndex;
   gameAudio = {};
