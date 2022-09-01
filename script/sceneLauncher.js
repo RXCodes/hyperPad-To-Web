@@ -70,7 +70,7 @@ function loadLevel(index) {
     },
     scene: {
       preload: function() {}, // preload event does nothing yet
-      create: loadLevelHandler(level || 0)
+      create: loadLevelHandler(index || 0)
     },
     autoCenter: true,
   };
