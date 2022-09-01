@@ -75,8 +75,22 @@ function loadLevel() {
       // set up object for layer
       let object = this.add.sprite(objData.xPosition, objData.yPosition, objData.path); // positioning and asset used
       object.setBounce(objData.bounce || 0, objData.bounce || 0); // object bounce
+      object.setFriction(objData.friction); // object friction
       object.setMass(objData.mass || 20); // object mass
+      object.setAngle(objData.rotation - 90); // object rotation
+      object.setBodySize(objData.widthPercentage * projectBase.ptm, objData.heightPercentage * projectBase.ptm); // scale
+      object.setTint(parseInt(rgbToHex(objectData.color[0], objectData.color[1], objectData.color[2]), 16)); // color
+      object.setOrigin(objData.xAnchor / 100, objData.yAnchor / 100); // anchor
+      object.setDepth(objData.zOrder); // z order
       
+      // visibility
+      if (!objData.visible) {
+        object.setVisible(false);
+      }
+      
+      // flip
+      object.setFlipX(object.flipX);
+      object.setFlipY(object.flipY);
       
       // add object to layer
       gameLayers[layerData.UUID].instance.add([object]);
