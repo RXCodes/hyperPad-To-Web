@@ -39,6 +39,7 @@ function loadLevel(level) {
     type: Phaser.AUTO,
     width: screenWidth,
     height: screenHeight,
+    backgroundColor: convertRGBtoHex()',
     physics: {
       default: 'arcade',
       arcade: {
