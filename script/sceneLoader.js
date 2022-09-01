@@ -11,7 +11,7 @@ var game; // the variable holding the instance of the game
 function loadLevelHandler() {
   
   // scene index
-  let index = currentSceneIndex;
+  let index = window.currentSceneIndex;
   gameAudio = {};
   gameLayers = {};
   gameObjects = {};
