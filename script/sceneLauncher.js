@@ -1,13 +1,13 @@
 // -- sceneLauncher.js: launches the phaser framework with global project data and device data
 
 // load a level by index or id
-function loadLevel(level) {
+function loadLevel(index) {
   
   // kill previous game instance if any
   try {
     game.destroy(true, false)
   } catch(e) {};
-  window.currentSceneIndex = level;
+  window.currentSceneIndex = index;
   
   // determine index or scene ID
   let currentSceneIndex = 0;
