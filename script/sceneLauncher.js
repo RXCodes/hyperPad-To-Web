@@ -70,7 +70,8 @@ function loadLevel(index) {
     },
     scene: {
       preload: function() {}, // preload event does nothing yet
-      create: loadLevelHandler()
+      create: loadLevelHandler(),
+      update: function() {} // frame updates doesn't trigger anything yet
     },
     autoCenter: true,
   };
