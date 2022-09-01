@@ -1,10 +1,12 @@
-// -- sceneLauncher.js: launches the phaser framework with global project data
+// -- sceneLauncher.js: launches the phaser framework with global project data and device data
 
 // load a level by index or id
 function loadLevel(level) {
   
   // kill previous game instance if any
-  
+  try {
+    game.destroy(true, false)
+  } catch(e) {};
   
   // configure phaser scene loader
   let config = {
@@ -26,7 +28,8 @@ function loadLevel(level) {
     }
   };
   
-  
+  // initialize game
+  game = new Phaser.Game(config);
   
 }
 
