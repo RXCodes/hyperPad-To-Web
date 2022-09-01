@@ -23,7 +23,7 @@ function loadLevelHandler() {
     currentSceneIndex = Number(index);
   } else {
     let sceneIndex = 0;
-    Object.keys(projectBase.scenes).forEach(function(scene) {
+    Object.keys(projectBase.levels).forEach(function(scene) {
       if (scene.UUID == index) {
         currentSceneIndex = sceneIndex;
       }
@@ -32,7 +32,7 @@ function loadLevelHandler() {
   }
   
   // load the level data
-  let levelData = projectBase.scenes[currentSceneIndex] || {};
+  let levelData = projectBase.levels[currentSceneIndex] || {};
   console.log(levelData);
   
   // manipulate the screen
