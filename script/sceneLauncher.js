@@ -71,7 +71,8 @@ function loadLevel(level) {
     scene: {
       preload: function() {}, // preload event does nothing yet
       create: loadLevelHandler(level || 0)
-    }
+    },
+    autoCenter: true,
   };
   
   // initialize game
