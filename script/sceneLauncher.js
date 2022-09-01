@@ -8,11 +8,37 @@ function loadLevel(level) {
     game.destroy(true, false)
   } catch(e) {};
   
+  // find most compatible aspect ratio
+  let supportedAspectRatios = {
+     "4:3": 4/3,
+     "16:9": 16/9,
+     "19.5:9": 19.5/9,
+     "199:139": 199/139,
+     "3:2": 3/2,
+     "16:10": 16/10
+  };
+  let diff = 999;
+  let currentAspectRatio;
+  let heightRatio;
+  let aspectRatio = screen.width / screen.height;
+  Object.keys(supportedAspectRatios).forEach(function(ratio) {
+    let value = supportedAspectRatios[ratio];
+    if ((Math.abs(value - aspectRatio)) < diff) {
+      diff = Math.abs(value - aspectRatio);
+      currentAspectRatio = ratio;
+      heightRatio = value;
+    }
+  });
+  
+  // determine window size for game
+  let screenWidth = screen.width;
+  let screenHeight = screen.width * heightRatio;
+  
   // configure phaser scene loader
   let config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: screenWidth,
+    height: screenHeight,
     physics: {
       default: 'arcade',
       arcade: {
