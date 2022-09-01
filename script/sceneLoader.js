@@ -36,9 +36,9 @@ function loadLevelHandler() {
   console.log(levelData);
   
   // manipulate the screen
-  this.cameras.main.midPoint.x = levelData.screenX; 
-  this.cameras.main.midPoint.y = levelData.screenY; 
-  this.cameras.main.zoom = levelData.zoom; 
+  game.camera.midPoint.x = levelData.screenX; 
+  game.camera..midPoint.y = levelData.screenY; 
+  game.camera.zoom = levelData.zoom; 
   
   // add layers and objects to structure
   levelData.layers.forEach(function(layer) {
