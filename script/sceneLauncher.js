@@ -7,7 +7,7 @@ function loadLevel(index) {
   try {
     game.destroy(true, false)
   } catch(e) {};
-  window.currentSceneIndex = index;
+  window.currentSceneIndex = index || 0;
   
   // determine index or scene ID
   let currentSceneIndex = 0;
@@ -70,7 +70,7 @@ function loadLevel(index) {
     },
     scene: {
       preload: function() {}, // preload event does nothing yet
-      create: loadLevelHandler(index || 0)
+      create: loadLevelHandler()
     },
     autoCenter: true,
   };
