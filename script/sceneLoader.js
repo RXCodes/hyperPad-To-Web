@@ -3,9 +3,15 @@ var gameObjects = {}; // in-game representation of the object (color, scale, att
 var currentSceneIndex = 0; // current scene that the player is in - by default, the player will load into the first scene
 var gameAudio = {}; // the audio being played {key: audioID, value: audioInterface}
 var gameLayers = {}; // the current layers being displayed {key: layerID, value: layerData}
+var game; // the variable holding the instance of the game
 
 // load a level
 function loadLevel() {
+  
+  // stop previous level if already opened
+  try {
+    game.destroy(true, false)
+  } catch(e) {};
   
   // scene index
   let index = currentSceneIndex;
@@ -72,6 +78,9 @@ function loadLevel() {
     Object.keys(layerData.objects).forEach(function(objectID) {
       let objData = layerData.objects[objectID];
       
+      // hide layer if inactive
+      gameLayers[layerData.UUID].instance.setActive(gameLayers[layerData.UUID].data.visible);
+      
       // set up object for layer
       let object = this.add.sprite(objData.xPosition, objData.yPosition, objData.path); // positioning and asset used
       object.setBounce(objData.bounce || 0, objData.bounce || 0); // object bounce
@@ -99,6 +108,3 @@ function loadLevel() {
   });
   
 }
-
-// load the very first scene on start
-// ...
