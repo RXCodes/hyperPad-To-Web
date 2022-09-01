@@ -85,7 +85,7 @@ function loadLevelHandler() {
       object.setMass(objData.mass || 20); // object mass
       object.setAngle(objData.rotation - 90); // object rotation
       object.setBodySize(objData.widthPercentage * projectBase.ptm, objData.heightPercentage * projectBase.ptm); // scale
-      object.setTint(parseInt(rgbToHex(objData.color[0], objData.color[1], objData.color[2]), 16)); // color
+      object.setTint(parseInt(rgbToHex(objData.color[0], objData.color[1], objData.color[2], objData.color[3]), 16)); // color
       object.setOrigin(objData.xAnchor / 100, objData.yAnchor / 100); // anchor
       object.setDepth(objData.zOrder); // z order
       
