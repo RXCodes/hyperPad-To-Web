@@ -1,31 +1,17 @@
 // initialize object dictionary and initial scene data
-var currentObjects = {}; // in-game representation of the object (color, scale, attributes, tags, etc.) {key: objectID, value: objectData}
+var gameObjects = {}; // in-game representation of the object (color, scale, attributes, tags, etc.) {key: objectID, value: objectData}
 var currentSceneIndex = 0; // current scene that the player is in - by default, the player will load into the first scene
-var playingAudio = {}; // the audio being played {key: audioID, value: audioInterface}
-var currentLayers = {}; // the current layers being displayed {key: layerID, value: layerData}
-var phaserObjects = {}; // object instances in phaser that can make changes to what is being displayed {key: objectID, value: PhaserObjectInstance}
+var gameAudio = {}; // the audio being played {key: audioID, value: audioInterface}
+var gameLayers = {}; // the current layers being displayed {key: layerID, value: layerData}
 
 // load a level
 function loadLevel() {
   
   // scene index
   let index = currentSceneIndex;
-  
-  // remove all objects and behaviors
-  Object.keys(phaserObjects).forEach(function(objectID) {
-    try {
-      phaserObjects[objectID].destroy();
-    } catch(e) {}
-  });
-  currentObjects = {};
-  phaserObjects = {};
-  currentLayers = {};
-  
-  // stop all audio
-  Object.keys(playingAudio).forEach(function(soundID) {
-    playingAudio[soundID].audio.stop();
-  });
-  playingAudio = [];
+  gameAudio = {};
+  gameLayers = {};
+  gameObjects = {};
   
   // determine index or scene ID
   let currentSceneIndex = 0;
@@ -44,18 +30,19 @@ function loadLevel() {
   
   // load the level data
   let levelData = projectBase.scenes[currentSceneIndex] || {};
-  currentObjects = {};
   console.log(levelData);
   
   // add layers and objects to structure
   levelData.layers.forEach(function(layer) {
     let data = levelData.layers[layer];
     Object.keys(data.objects).forEach(function(objectID) {
-      currentObjects[objectID] = data.objects[objectID];
-      currentObjects[objectID].currentLayer = data.UUID;
+      gameObjects[objectID] = {};
+      gameObjects[objectID].data = data.objects[objectID];
+      gameObjects[objectID].data.currentLayer = data.UUID;
     });
     delete data.objects;
-    currentLayers[data.UUID] = data;
+    gameLayers[data.UUID] = {};
+    gameLayers[data.UUID].data = data;
   });
   
   // sort layers by index (global and scene ui layers are on the top)
@@ -81,15 +68,18 @@ function loadLevel() {
   
   sortedLayers.forEach(function(index) {
     let layerData = levelData.layers[index];
-    currentLayers[layerData.UUID].phaserLayer = this.add.layer();
+    gameLayers[layerData.UUID].instance = this.add.layer();
     Object.keys(layerData.objects).forEach(function(objectID) {
       let objData = layerData.objects[objectID];
       
-      // add object for layer
-      let object = this.add.sprite(objData.widthPercentage * projectBase.ptm, objData.heightPercentage * projectBase, objData.path || "_Empty");
-      object.setBounce(objData.bounce || 0, objData.bounce || 0);
-      object.setMass(objData.mass || 20);
-      currentLayers[layerData.UUID].phaserLayer.add([object]);
+      // set up object for layer
+      let object = this.add.sprite(objData.xPosition, objData.yPosition, objData.path); // positioning and asset used
+      object.setBounce(objData.bounce || 0, objData.bounce || 0); // object bounce
+      object.setMass(objData.mass || 20); // object mass
+      
+      
+      // add object to layer
+      gameLayers[layerData.UUID].instance.add([object]);
       
     });
   });
