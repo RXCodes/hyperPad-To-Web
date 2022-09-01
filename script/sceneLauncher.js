@@ -7,6 +7,25 @@ function loadLevel(level) {
   try {
     game.destroy(true, false)
   } catch(e) {};
+  currentLevelIndex = level;
+  
+  // determine index or scene ID
+  let currentSceneIndex = 0;
+  let isNumeric = Number(index) == index;
+  if (isNumeric) {
+    currentSceneIndex = Number(index);
+  } else {
+    let sceneIndex = 0;
+    Object.keys(projectBase.scenes).forEach(function(scene) {
+      if (scene.UUID == index) {
+        currentSceneIndex = sceneIndex;
+      }
+      sceneIndex++;
+    });
+  }
+  
+  // load the level data
+  let levelData = projectBase.scenes[currentSceneIndex] || {};
   
   // find most compatible aspect ratio
   let supportedAspectRatios = {
