@@ -7,7 +7,7 @@ function loadLevel(level) {
   try {
     game.destroy(true, false)
   } catch(e) {};
-  currentLevelIndex = level;
+  window.currentSceneIndex = level;
   
   // determine index or scene ID
   let currentSceneIndex = 0;
@@ -52,14 +52,13 @@ function loadLevel(level) {
   // determine window size for game
   let screenWidth = screen.width;
   let screenHeight = screen.width * heightRatio;
-  let sceneData = projectBase.scenes;
   
   // configure phaser scene loader
   let config = {
     type: Phaser.AUTO,
     width: screenWidth,
     height: screenHeight,
-    backgroundColor: rbgTohex(),
+    backgroundColor: rbgTohex(levelData.backgroundColor[0], levelData.backgroundColor[1], levelData.backgroundColor[2], levelData.backgroundColor[3]),
     physics: {
       default: 'arcade',
       arcade: {
