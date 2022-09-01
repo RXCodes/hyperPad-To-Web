@@ -76,7 +76,7 @@ function loadLevelHandler() {
   
   sortedLayers.forEach(function(index) {
     let layerData = levelData.layers[index];
-    gameLayers[layerData.UUID].instance = this.add.layer();
+    gameLayers[layerData.UUID].instance = game.add.layer();
     Object.keys(layerData.objects).forEach(function(objectID) {
       let objData = Object.create(layerData.objects[objectID]);
       
@@ -84,7 +84,7 @@ function loadLevelHandler() {
       gameLayers[layerData.UUID].instance.setActive(gameLayers[layerData.UUID].data.visible);
       
       // set up object for layer
-      let object = this.add.sprite(objData.xPosition, objData.yPosition, objData.path); // positioning and asset used
+      let object = game.add.sprite(objData.xPosition, objData.yPosition, objData.path); // positioning and asset used
       object.setBounce(objData.bounce || 0, objData.bounce || 0); // object bounce
       object.setFriction(objData.friction); // object friction
       object.setMass(objData.mass || 20); // object mass
