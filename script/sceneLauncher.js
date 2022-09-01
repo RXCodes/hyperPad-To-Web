@@ -33,13 +33,14 @@ function loadLevel(level) {
   // determine window size for game
   let screenWidth = screen.width;
   let screenHeight = screen.width * heightRatio;
+  let sceneData = projectBase.scenes;
   
   // configure phaser scene loader
   let config = {
     type: Phaser.AUTO,
     width: screenWidth,
     height: screenHeight,
-    backgroundColor: convertRGBtoHex()',
+    backgroundColor: rbgTohex(),
     physics: {
       default: 'arcade',
       arcade: {
