@@ -1,3 +1,5 @@
+// -- sceneLoader.js: script that allows scenes to be populated with layers and objects.
+
 // initialize object dictionary and initial scene data
 var gameObjects = {}; // in-game representation of the object (color, scale, attributes, tags, etc.) {key: objectID, value: objectData}
 var currentSceneIndex = 0; // current scene that the player is in - by default, the player will load into the first scene
@@ -76,7 +78,7 @@ function loadLevel() {
     let layerData = levelData.layers[index];
     gameLayers[layerData.UUID].instance = this.add.layer();
     Object.keys(layerData.objects).forEach(function(objectID) {
-      let objData = layerData.objects[objectID];
+      let objData = Object.create(layerData.objects[objectID]);
       
       // hide layer if inactive
       gameLayers[layerData.UUID].instance.setActive(gameLayers[layerData.UUID].data.visible);
@@ -103,6 +105,12 @@ function loadLevel() {
       
       // add object to layer
       gameLayers[layerData.UUID].instance.add([object]);
+      
+      // keep record of object 
+      gameObjects[object.id] = {
+        data: objData,
+        instance: object
+      };
       
     });
   });
