@@ -58,7 +58,7 @@ function loadLevel(index) {
     type: Phaser.AUTO,
     width: screenWidth,
     height: screenHeight,
-    backgroundColor: rbgTohex(levelData.backgroundColor[0], levelData.backgroundColor[1], levelData.backgroundColor[2], levelData.backgroundColor[3]),
+    backgroundColor: rgbToHex(levelData.backgroundColor[0], levelData.backgroundColor[1], levelData.backgroundColor[2], levelData.backgroundColor[3]),
     physics: {
       default: 'arcade',
       arcade: {
