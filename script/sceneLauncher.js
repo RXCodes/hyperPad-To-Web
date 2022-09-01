@@ -16,7 +16,7 @@ function loadLevel(index) {
     currentSceneIndex = Number(index);
   } else {
     let sceneIndex = 0;
-    Object.keys(projectBase.scenes).forEach(function(scene) {
+    Object.keys(projectBase.levels).forEach(function(scene) {
       if (scene.UUID == index) {
         currentSceneIndex = sceneIndex;
       }
@@ -25,7 +25,7 @@ function loadLevel(index) {
   }
   
   // load the level data
-  let levelData = projectBase.scenes[currentSceneIndex] || {};
+  let levelData = projectBase.levels[currentSceneIndex] || {};
   
   // find most compatible aspect ratio
   let supportedAspectRatios = {
