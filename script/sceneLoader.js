@@ -59,7 +59,7 @@ function loadLevel(index) {
 
   // determine window size for game
   let screenWidth = screen.width;
-  let screenHeight = screen.width * heightRatio;
+  let screenHeight = screen.width * (1 / heightRatio);
   
   // configure phaser scene loader
   let config = {
@@ -94,10 +94,10 @@ function loadLevel(index) {
   
   // add layers and objects to structure
   levelData.layers.forEach(function(layer) {
-    let data = levelData.layers[layer];
+    let data = levelData.layers[layer] || {};
     Object.keys(data.objects || {}).forEach(function(objectID) {
       gameObjects[objectID] = {};
-      gameObjects[objectID].data = data.objects[objectID];
+      gameObjects[objectID].data = data.objects[objectID] || {};
       gameObjects[objectID].data.currentLayer = data.UUID;
     });
     delete data.objects;
