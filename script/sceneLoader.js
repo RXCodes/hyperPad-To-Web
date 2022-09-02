@@ -79,7 +79,9 @@ function loadLevel(index) {
     },
     scene: {
       preload: function() {}, // preload event does nothing yet
-      create: function() {}, // create event does nothing yet
+      create: function() {
+        window.gameManager = this;
+      }, // create event does nothing yet
       update: function() {} // frame updates doesn't trigger anything yet
     },
     autoCenter: true,
@@ -132,7 +134,7 @@ function loadLevel(index) {
     console.log("loading layer: " + index);
     let layerData = levelData.layers[index];
     gameLayers[index] = gameLayers[index] || {};
-    gameLayers[index].instance = window.game.scene.add.layer();
+    gameLayers[index].instance = window.gameManager.add.layer();
     Object.keys(layerData.objects).forEach(function(objectID) {
       let objData = Object.create(layerData.objects[objectID]);
       
@@ -140,7 +142,7 @@ function loadLevel(index) {
       gameLayers[index].instance.setActive(gameLayers[index].data.visible);
       
       // set up object for layer
-      let object = window.game.scene.add.sprite(objData.xPosition, objData.yPosition, objData.path); // positioning and asset used
+      let object = window.gameManager.add.sprite(objData.xPosition, objData.yPosition, objData.path); // positioning and asset used
       object.setBounce(objData.bounce || 0, objData.bounce || 0); // object bounce
       object.setFriction(objData.friction); // object friction
       object.setMass(objData.mass || 20); // object mass
@@ -173,8 +175,8 @@ function loadLevel(index) {
   
   // manipulate the screen
   try {
-    window.game.scene.cameras.main.setZoom(levelData.zoom);
-    window.game.scene.cameras.main.centerOn(levelData.screenX, levelData.screenY);
+    window.gameManager.cameras.main.setZoom(levelData.zoom);
+    window.gameManager.cameras.main.centerOn(levelData.screenX, levelData.screenY);
   } catch(e) {
     console.error("Error setting screen: " + e);
   };
