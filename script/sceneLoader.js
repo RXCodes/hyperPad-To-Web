@@ -9,7 +9,7 @@ var game; // the variable holding the instance of the game
 window.Phaser = Phaser; // add reference to the plugin to the main window
 
 // load a level
-function loadLevel(index) {
+async function loadLevel(index) {
   
   // kill previous game instance if any
   try {
@@ -89,6 +89,15 @@ function loadLevel(index) {
   
   // initialize game
   window.game = new Phaser.Game(config);
+  
+  await new Promise(function(resolve) {
+    let timer = setInterval(function() {
+      if (window.gameManager) {
+        cleatInterval(timer);
+        resolve();
+      }
+    }, 100);
+  });
   
   // reset data
   gameAudio = {};
