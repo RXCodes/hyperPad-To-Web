@@ -111,7 +111,7 @@ function loadLevel(index) {
   Object.keys(levelData.layers).forEach(function(layer) {
     sortLayersIndex[layer.index * -1] = layer.UUID;
   });
-  let sortedLayersIndex = Object.keys(sortedLayersIndex).sort(function(a, b) {
+  let sortedLayersIndex = Object.keys(sortLayersIndex).sort(function(a, b) {
     if (a === Infinity) 
       return 1; 
     else if (isNaN(a)) 
