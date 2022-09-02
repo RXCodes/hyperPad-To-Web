@@ -15,6 +15,25 @@ function loadLevel(index) {
     window.game.destroy(true, false)
   } catch(e) {};
   window.currentSceneIndex = index || 0;
+  
+  // determine index or scene ID
+  let currentSceneIndex = 0;
+  let isNumeric = (Number(index) == index);
+  if (isNumeric) {
+    currentSceneIndex = Number(index);
+  } else {
+    let sceneIndex = 0;
+    Object.keys(projectBase.levels).forEach(function(scene) {
+      if (scene.UUID == index) {
+        currentSceneIndex = sceneIndex;
+      }
+      sceneIndex++;
+    });
+  }
+  
+  // load the level data
+  let levelData = projectBase.levels[currentSceneIndex] || {};
+  console.log(levelData);
 
   // find most compatible aspect ratio
   let supportedAspectRatios = {
@@ -72,25 +91,6 @@ function loadLevel(index) {
   gameAudio = {};
   gameLayers = {};
   gameObjects = {};
-  
-  // determine index or scene ID
-  let currentSceneIndex = 0;
-  let isNumeric = (Number(index) == index);
-  if (isNumeric) {
-    currentSceneIndex = Number(index);
-  } else {
-    let sceneIndex = 0;
-    Object.keys(projectBase.levels).forEach(function(scene) {
-      if (scene.UUID == index) {
-        currentSceneIndex = sceneIndex;
-      }
-      sceneIndex++;
-    });
-  }
-  
-  // load the level data
-  let levelData = projectBase.levels[currentSceneIndex] || {};
-  console.log(levelData);
   
   // add layers and objects to structure
   levelData.layers.forEach(function(layer) {
