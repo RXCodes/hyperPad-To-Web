@@ -93,7 +93,7 @@ async function loadLevel(index) {
   await new Promise(function(resolve) {
     let timer = setInterval(function() {
       if (window.gameManager) {
-        cleatInterval(timer);
+        clearInterval(timer);
         resolve();
       }
     }, 100);
