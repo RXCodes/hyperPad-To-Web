@@ -10,6 +10,72 @@ var game; // the variable holding the instance of the game
 // load a level
 function loadLevel(index) {
   
+  // kill previous game instance if any
+  try {
+    window.game.destroy(true, false)
+  } catch(e) {};
+  window.currentSceneIndex = index || 0;
+
+  // find most compatible aspect ratio
+  let supportedAspectRatios = {
+     "4:3": 4/3,
+     "16:9": 16/9,
+     "19.5:9": 19.5/9,
+     "199:139": 199/139,
+     "3:2": 3/2,
+     "16:10": 16/10
+  };
+  let diff = 999;
+  let currentAspectRatio;
+  let heightRatio;
+  let aspectRatio = screen.width / screen.height;
+  Object.keys(supportedAspectRatios).forEach(function(ratio) {
+    let value = supportedAspectRatios[ratio];
+    if ((Math.abs(value - aspectRatio)) < diff) {
+      diff = Math.abs(value - aspectRatio);
+      currentAspectRatio = ratio;
+      heightRatio = value;
+    }
+  });
+
+  // determine window size for game
+  let screenWidth = screen.width;
+  let screenHeight = screen.width * heightRatio;
+  
+  // configure phaser scene loader
+  let config = {
+    type: Phaser.AUTO,
+    width: screenWidth,
+    height: screenHeight,
+    backgroundColor: rgbToHex(levelData.backgroundColor[0], levelData.backgroundColor[1], levelData.backgroundColor[2], levelData.backgroundColor[3]),
+    physics: {
+      default: 'arcade',
+      arcade: {
+        gravity: { // use the project's gravity settings
+          y: projectBase.yGravity * projectBase.ptm,
+          x: projectBase.xGravity * projectBase.ptm
+        }
+      }
+    },
+    scene: {
+      preload: function() {}, // preload event does nothing yet
+      create: function() {}, // create event does nothing yet
+      update: function() {} // frame updates doesn't trigger anything yet
+    },
+    autoCenter: true,
+  };
+  
+  // initialize game
+  game = new Phaser.Game(config);
+  
+  // manipulate the screen
+  try {
+    game.cameras.main.setZoom(levelData.zoom);
+    game.cameras.main.centerOn(levelData.screenX, levelData.screenY);
+  } catch(e) {
+    console.error("Error setting screen: " + e);
+  };
+  
   // reset data
   gameAudio = {};
   gameLayers = {};
@@ -110,3 +176,5 @@ function loadLevel(index) {
   });
   
 }
+
+loadLevel(0);
