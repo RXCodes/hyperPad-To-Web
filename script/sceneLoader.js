@@ -75,7 +75,7 @@ function loadLevel(index) {
   
   // determine index or scene ID
   let currentSceneIndex = 0;
-  let isNumeric = Number(index) == index;
+  let isNumeric = (Number(index) == index);
   if (isNumeric) {
     currentSceneIndex = Number(index);
   } else {
