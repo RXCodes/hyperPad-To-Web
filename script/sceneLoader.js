@@ -11,6 +11,9 @@ window.Phaser = Phaser; // add reference to the plugin to the main window
 // load a level
 async function loadLevel(index) {
   
+  // try stuff
+  try {
+  
   // kill previous game instance if any
   try {
     window.game.destroy(true, false)
@@ -193,6 +196,10 @@ async function loadLevel(index) {
     console.error("Error setting screen: " + e);
   };
   
+  } catch(e) {
+    console.error(e);
+  }
+    
 }
 
 loadLevel(0);
