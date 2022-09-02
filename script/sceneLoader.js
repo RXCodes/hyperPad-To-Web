@@ -66,7 +66,7 @@ function loadLevel(index) {
     type: Phaser.AUTO,
     width: screenWidth,
     height: screenHeight,
-    backgroundColor: rgbToHex(levelData.backgroundColor[0], levelData.backgroundColor[1], levelData.backgroundColor[2], levelData.backgroundColor[3]),
+    backgroundColor: Phaser.Display.Color.GetColor32(levelData.backgroundColor[0], levelData.backgroundColor[1], levelData.backgroundColor[2], levelData.backgroundColor[3]),
     physics: {
       default: 'arcade',
       arcade: {
@@ -144,7 +144,7 @@ function loadLevel(index) {
       object.setMass(objData.mass || 20); // object mass
       object.setAngle(objData.rotation - 90); // object rotation
       object.setBodySize(objData.widthPercentage * projectBase.ptm, objData.heightPercentage * projectBase.ptm); // scale
-      object.setTint(parseInt(rgbToHex(objData.color[0], objData.color[1], objData.color[2], objData.color[3]), 16)); // color
+      object.setTint(Phaser.Display.Color.GetColor(objData.color[0], objData.color[1], objData.color[2], objData.color[3]); // color
       object.setOrigin(objData.xAnchor / 100, objData.yAnchor / 100); // anchor
       object.setDepth(objData.zOrder); // z order
       
