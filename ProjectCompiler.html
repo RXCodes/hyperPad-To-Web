@@ -161,6 +161,8 @@ fileSelector.addEventListener('change', (event) => {
       
       if (useAssets) {
         html += "const assetBase = " + JSON.stringify(assetBase) + "; \n";
+      } else {
+        html += "const assetBase = {}; \n"
       }
       let launchPaths = [
         "https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js",
