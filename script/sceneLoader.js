@@ -127,7 +127,7 @@ function loadLevel(index) {
   let layerIDs = sortedLayers;
   
   sortedLayers.forEach(function(index) {
-    console.debug("loading layer: " + index);
+    console.log("loading layer: " + index);
     let layerData = levelData.layers[sortLayersIndex[index]];
     gameLayers[layerData.UUID].instance = game.add.layer();
     Object.keys(layerData.objects).forEach(function(objectID) {
