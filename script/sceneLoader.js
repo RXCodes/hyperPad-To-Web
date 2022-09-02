@@ -8,10 +8,9 @@ var gameLayers = {}; // the current layers being displayed {key: layerID, value:
 var game; // the variable holding the instance of the game
 
 // load a level
-function loadLevelHandler() {
+function loadLevel(index) {
   
-  // scene index
-  let index = window.currentSceneIndex;
+  // reset data
   gameAudio = {};
   gameLayers = {};
   gameObjects = {};
