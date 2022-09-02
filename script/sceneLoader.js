@@ -98,6 +98,7 @@ async function loadLevel(index) {
       }
     }, 100);
   });
+  console.log("Loaded game");
   
   // reset data
   gameAudio = {};
