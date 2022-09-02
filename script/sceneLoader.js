@@ -108,9 +108,9 @@ function loadLevel(index) {
   // sort layers by index (global and scene ui layers are on the top)
   let sortedLayers = [];
   let sortLayersIndex = {};
-  Object.keys(levelData.layers).forEach(function(layer) {
+  levelData.layers.forEach(function(layer) {
     console.log(layer);
-    sortLayersIndex[layer.index * -1] = layer.UUID;
+    sortLayersIndex[layer.zOrder * -1] = layer.UUID;
   });
   let sortedLayersIndex = Object.keys(sortLayersIndex).sort(function(a, b) {
     if (a === Infinity) 
