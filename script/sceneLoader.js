@@ -120,7 +120,7 @@ function loadLevel(index) {
       return a - b;
   });
   sortedLayersIndex.forEach(function(index) {
-    sortedLayers.push(sortLayersIndex[index].UUID);
+    sortedLayers.push(sortLayersIndex[index]);
   });
   
   // load layers with objects
