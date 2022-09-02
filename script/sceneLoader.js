@@ -6,6 +6,7 @@ var currentSceneIndex = 0; // current scene that the player is in - by default, 
 var gameAudio = {}; // the audio being played {key: audioID, value: audioInterface}
 var gameLayers = {}; // the current layers being displayed {key: layerID, value: layerData}
 var game; // the variable holding the instance of the game
+window.Phaser = Phaser; // add reference to the plugin to the main window
 
 // load a level
 function loadLevel(index) {
