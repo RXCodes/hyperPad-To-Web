@@ -130,12 +130,13 @@ function loadLevel(index) {
   sortedLayers.forEach(function(index) {
     console.log("loading layer: " + index);
     let layerData = levelData.layers[index];
-    gameLayers[layerData.UUID].instance = game.add.layer();
+    gameLayers[index] = gameLayers[index] || {};
+    gameLayers[index].instance = game.add.layer();
     Object.keys(layerData.objects).forEach(function(objectID) {
       let objData = Object.create(layerData.objects[objectID]);
       
       // hide layer if inactive
-      gameLayers[layerData.UUID].instance.setActive(gameLayers[layerData.UUID].data.visible);
+      gameLayers[index].instance.setActive(gameLayers[index].data.visible);
       
       // set up object for layer
       let object = game.add.sprite(objData.xPosition, objData.yPosition, objData.path); // positioning and asset used
@@ -158,7 +159,7 @@ function loadLevel(index) {
       object.setFlipY(object.flipY);
       
       // add object to layer
-      gameLayers[layerData.UUID].instance.add([object]);
+      gameLayers[index].instance.add([object]);
       
       // keep record of object 
       gameObjects[object.id] = {
