@@ -33,7 +33,7 @@
     <input type="checkbox" id="removeAssetData" name="removeAssetData" value="">
 <label for="removeAssetData">Exclude asset data</label><br>
     <input type="checkbox" id="testProject" name="testProject" value="">
-<label for="testProject">Test script only</label><br>
+<label for="testProject">Run project in browser</label><br>
     
     <p id="data">
       
@@ -98,7 +98,13 @@ fileSelector.addEventListener('change', (event) => {
                } else {
                  let s = html.split("<script>")[1];
                  s = s.split("<\/script>")[0];
-                 eval(s);
+                 try {
+                   eval(s);
+                 } catch(e) {
+                   console.error(e);
+                   console.warn(s.split("\n")[e.line - 1]);
+                   alert("There was an error attempting to run the project:\n\n " + e.message)
+                 }
                }
                
              } catch(e) {
