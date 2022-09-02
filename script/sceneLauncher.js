@@ -5,7 +5,7 @@ function loadLevel(index) {
   
   // kill previous game instance if any
   try {
-    game.destroy(true, false)
+    window.game.destroy(true, false)
   } catch(e) {};
   window.currentSceneIndex = index || 0;
   
@@ -77,7 +77,7 @@ function loadLevel(index) {
   };
   
   // initialize game
-  game = new Phaser.Game(config);
+  window.game = new Phaser.Game(config);
   
 }
 
