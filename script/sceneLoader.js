@@ -85,7 +85,7 @@ function loadLevel(index) {
   };
   
   // initialize game
-  game = new Phaser.Game(config);
+  window.game = new Phaser.Game(config);
   
   // reset data
   gameAudio = {};
@@ -131,7 +131,7 @@ function loadLevel(index) {
     console.log("loading layer: " + index);
     let layerData = levelData.layers[index];
     gameLayers[index] = gameLayers[index] || {};
-    gameLayers[index].instance = game.add.layer();
+    gameLayers[index].instance = window.game.add.layer();
     Object.keys(layerData.objects).forEach(function(objectID) {
       let objData = Object.create(layerData.objects[objectID]);
       
@@ -139,7 +139,7 @@ function loadLevel(index) {
       gameLayers[index].instance.setActive(gameLayers[index].data.visible);
       
       // set up object for layer
-      let object = game.add.sprite(objData.xPosition, objData.yPosition, objData.path); // positioning and asset used
+      let object = window.game.add.sprite(objData.xPosition, objData.yPosition, objData.path); // positioning and asset used
       object.setBounce(objData.bounce || 0, objData.bounce || 0); // object bounce
       object.setFriction(objData.friction); // object friction
       object.setMass(objData.mass || 20); // object mass
@@ -172,8 +172,8 @@ function loadLevel(index) {
   
   // manipulate the screen
   try {
-    game.cameras.main.setZoom(levelData.zoom);
-    game.cameras.main.centerOn(levelData.screenX, levelData.screenY);
+    window.game.cameras.main.setZoom(levelData.zoom);
+    window.game.cameras.main.centerOn(levelData.screenX, levelData.screenY);
   } catch(e) {
     console.error("Error setting screen: " + e);
   };
