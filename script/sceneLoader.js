@@ -35,14 +35,6 @@ function loadLevelHandler() {
   let levelData = projectBase.levels[currentSceneIndex] || {};
   console.log(levelData);
   
-  // manipulate the screen
-  try {
-    game.cameras.main.setZoom(levelData.zoom);
-    game.cameras.main.centerOn(levelData.screenX, levelData.screenY);
-  } catch(e) {
-    console.error("Error setting screen.");
-  };
-  
   // add layers and objects to structure
   levelData.layers.forEach(function(layer) {
     let data = levelData.layers[layer];
