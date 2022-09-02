@@ -46,7 +46,7 @@ function loadLevelHandler() {
   // add layers and objects to structure
   levelData.layers.forEach(function(layer) {
     let data = levelData.layers[layer];
-    Object.keys(data.objects).forEach(function(objectID) {
+    Object.keys(data.objects || {}).forEach(function(objectID) {
       gameObjects[objectID] = {};
       gameObjects[objectID].data = data.objects[objectID];
       gameObjects[objectID].data.currentLayer = data.UUID;
