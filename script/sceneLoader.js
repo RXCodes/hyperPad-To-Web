@@ -109,6 +109,7 @@ function loadLevel(index) {
   let sortedLayers = [];
   let sortLayersIndex = {};
   Object.keys(levelData.layers).forEach(function(layer) {
+    console.log(layer);
     sortLayersIndex[layer.index * -1] = layer.UUID;
   });
   let sortedLayersIndex = Object.keys(sortLayersIndex).sort(function(a, b) {
