@@ -79,6 +79,14 @@ function loadLevel(index) {
   // initialize game
   window.game = new Phaser.Game(config);
   
+  // manipulate the screen
+  try {
+    window.game.cameras.main.setZoom(levelData.zoom);
+    window.game.cameras.main.centerOn(levelData.screenX, levelData.screenY);
+  } catch(e) {
+    console.error("Error setting screen: " + e);
+  };
+  
 }
 
 // load the very first scene
