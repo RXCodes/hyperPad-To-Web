@@ -1,4 +1,4 @@
-// -- colorConverter.js: converts RGB to/from Hex values - useful for object colors
+// -- typeConverter.js: converts one data format to another
 
 // convert RGB values to hex
 function rgbToHex(r, g, b, a) {
