@@ -68,14 +68,6 @@ function loadLevel(index) {
   // initialize game
   game = new Phaser.Game(config);
   
-  // manipulate the screen
-  try {
-    game.cameras.main.setZoom(levelData.zoom);
-    game.cameras.main.centerOn(levelData.screenX, levelData.screenY);
-  } catch(e) {
-    console.error("Error setting screen: " + e);
-  };
-  
   // reset data
   gameAudio = {};
   gameLayers = {};
@@ -174,6 +166,14 @@ function loadLevel(index) {
       
     });
   });
+  
+  // manipulate the screen
+  try {
+    game.cameras.main.setZoom(levelData.zoom);
+    game.cameras.main.centerOn(levelData.screenX, levelData.screenY);
+  } catch(e) {
+    console.error("Error setting screen: " + e);
+  };
   
 }
 
