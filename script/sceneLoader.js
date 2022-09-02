@@ -125,6 +125,7 @@ async function loadLevel(index) {
     console.log(layer);
     sortLayersIndex[layer.zOrder * -1] = layer.UUID;
   });
+  console.log(sortLayersIndex);
   let sortedLayersIndex = Object.keys(sortLayersIndex).sort(function(a, b) {
     if (a === Infinity) 
       return 1; 
