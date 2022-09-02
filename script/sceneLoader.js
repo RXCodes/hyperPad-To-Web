@@ -152,9 +152,11 @@ async function loadLevel(index) {
     console.log(gameLayers[index].instance);
     Object.keys(layerData.objects).forEach(function(objectID) {
       let objData = Object.create(layerData.objects[objectID]);
+      console.log(objData);
       
       // hide layer if inactive
       gameLayers[index].instance.setActive(gameLayers[index].data.visible);
+      console.log("set active");
       
       // set up object for layer
       let object = window.gameManager.add.sprite(objData.xPosition, objData.yPosition, objData.path); // positioning and asset used
@@ -175,6 +177,7 @@ async function loadLevel(index) {
       // flip
       object.setFlipX(object.flipX);
       object.setFlipY(object.flipY);
+      console.log(object);
       
       // add object to layer
       gameLayers[index].instance.add([object]);
