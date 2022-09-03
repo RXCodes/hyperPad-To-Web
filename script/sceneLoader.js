@@ -160,15 +160,27 @@ async function loadLevel(index) {
             object.setTint(Phaser.Display.Color.GetColor(objData.color[0], objData.color[1], objData.color[2], objData.color[3])); // color
             object.setOrigin(objData.xAnchor / 100, objData.yAnchor / 100); // anchor
             object.setDepth(objData.zOrder); // z order
+            object.allowRotation = true;
+            
+            // physics object
+            if (objData.physicsMode == "Physics") {
+              object.allowGravity = true;
+              object.immovable = false;
+              object.moves = true;
+              object.onCollide = true;
+            }
             
             // wall object
             if (objData.physicsMode == "Wall") {
-              
+              object.allowGravity = false;
+              object.immovable = true;
+              object.onCollide = true;
             }
             
             // scenery object
             if (objData.physicsMode == "Scenery") {
-              
+              object.allowGravity = false;
+              object.immovable = true;
             }
 
             // visibility
