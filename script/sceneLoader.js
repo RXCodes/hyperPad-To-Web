@@ -142,7 +142,7 @@ async function loadLevel(index) {
           console.log(layerData);
           Object.keys(layerData.objects).forEach(function(objectID) {
             let objData = Object.create(layerData.objects[objectID]);
-            console.log(objData);
+            console.log(JSON.stringify(objData));
 
             // hide layer if inactive
             gameLayers[index].instance.setActive(layerData.visible);
