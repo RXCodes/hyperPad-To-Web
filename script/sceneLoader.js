@@ -151,7 +151,7 @@ async function loadLevel(index) {
             console.log("set active");
 
             // set up object for layer
-            let object = game.add.sprite(objData.xPosition, objData.yPosition, objData.path); // positioning and asset used
+            let object = game.physics.add.image(objData.xPosition, objData.yPosition, objData.path); // positioning and asset used
             object.setBounce(objData.bounce || 0, objData.bounce || 0); // object bounce
             object.setFriction(objData.friction); // object friction
             object.setMass(objData.mass || 20); // object mass
@@ -160,6 +160,16 @@ async function loadLevel(index) {
             object.setTint(Phaser.Display.Color.GetColor(objData.color[0], objData.color[1], objData.color[2], objData.color[3])); // color
             object.setOrigin(objData.xAnchor / 100, objData.yAnchor / 100); // anchor
             object.setDepth(objData.zOrder); // z order
+            
+            // wall object
+            if (objData.physicsMode == "Wall") {
+              
+            }
+            
+            // scenery object
+            if (objData.physicsMode == "Scenery") {
+              
+            }
 
             // visibility
             if (!objData.visible) {
