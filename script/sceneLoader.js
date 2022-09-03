@@ -80,7 +80,7 @@ async function loadLevel(index) {
       default: 'arcade',
       arcade: {
         gravity: { // use the project's gravity settings
-          y: projectBase.yGravity * projectBase.ptm,
+          y: -1 * projectBase.yGravity * projectBase.ptm,
           x: projectBase.xGravity * projectBase.ptm
         }
       }
@@ -88,7 +88,7 @@ async function loadLevel(index) {
     scene: {
       preload: function() {}, // preload event does nothing yet
       create: function() {
-        var game = this;
+        let game = this;
         
         // add layers and objects to structure
         levelData.layers.forEach(function(layer) {
@@ -173,7 +173,7 @@ async function loadLevel(index) {
             console.log(object);
 
             // add object to layer
-            gameLayers[index].instance.add([object]);
+            gameLayers[index].instance.add(object, false);
 
             // keep record of object 
             gameObjects[object.id] = {
