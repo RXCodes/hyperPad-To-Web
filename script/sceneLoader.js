@@ -147,7 +147,7 @@ async function loadLevel(index) {
             console.log(objData);
 
             // hide layer if inactive
-            gameLayers[index].instance.setActive(gameLayers[index].data.visible);
+            gameLayers[index].instance.setActive(layerData.visible);
             console.log("set active");
 
             // set up object for layer
