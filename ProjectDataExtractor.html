@@ -312,12 +312,12 @@ window.loadProject = function() {
           mass: objData.MASS,
           path: objData.PATH,
           secondaryPath: objData.PATHSECONDARY,
+          physicsMode: objData.PHYSICS_MODE,
           name: objData.NAME,
           id: objData.UNIQUEID,
           type: objData.OBJECTTYPE,
           scaleXPercent: objData.X_SCALE * 100,
           scaleYPercent: objData.Y_SCALE * 100,
-          physicsMode: objData["PHYSICS MODE"],
           rotation: objData.ROTATION,
           flipX: objData.FLIPX == 1,
           flipY: objData.FLIPY == 1,
@@ -328,6 +328,14 @@ window.loadProject = function() {
           anchorX: objData.ANCHORX * 100,
           anchorY: objData.ANCHORY * 100,
           behaviors: {}
+        }
+        
+        // other physics modes
+        if (resultObj.physicsMode == "Kinematic") {
+          resultObj.physicsMode = "Wall";
+        }
+        if (resultObj.physicsMode == "Dynamic") {
+          resultObj.physicsMode = "Physics";
         }
         
         // fix anchor if none
