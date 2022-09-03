@@ -121,7 +121,7 @@ async function loadLevel(index) {
         let sortLayersIndex = {};
         levelData.layers.forEach(function(layer) {
           console.log(layer);
-          sortLayersIndex[layer.zOrder * -1] = layer.UUID;
+          sortLayersIndex[layer.zOrder * -1] = layer;
         });
         console.log(sortLayersIndex);
         let sortedLayersIndex = Object.keys(sortLayersIndex).sort(function(a, b) {
@@ -137,9 +137,8 @@ async function loadLevel(index) {
         });
         
         // load layers with objects
-        sortedLayers.forEach(function(index) {
-          console.log("loading layer: " + index);
-          let layerData = levelData.layers[index];
+        sortedLayers.forEach(function(layerData) {
+          console.log("loading layer: " + layerData);
           gameLayers[index] = gameLayers[index] || {};
           gameLayers[index].instance = game.add.layer(); // add layer
           console.log(layerData);
