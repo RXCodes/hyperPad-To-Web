@@ -121,7 +121,7 @@ async function loadLevel(index) {
         });
         
         // load layers with objects
-        sortedLayers.forEach(function(layerData) {
+        sortedLayers.forEach(function(') {
           console.log("loading layer: " + layerData);
           gameLayers[layerData.UUID].instance = game.add.layer(); // add layer
           console.log(layerData);
