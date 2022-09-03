@@ -123,14 +123,14 @@ async function loadLevel(index) {
         // load layers with objects
         sortedLayers.forEach(function(layerData) {
           console.log("loading layer: " + layerData);
-          gameLayers[index].instance = game.add.layer(); // add layer
+          gameLayers[layerData.UUID].instance = game.add.layer(); // add layer
           console.log(layerData);
           Object.keys(layerData.objects).forEach(function(objectID) {
             let objData = JSON.parse(JSON.stringify(layerData.objects[objectID]));
             console.log(JSON.stringify(objData));
 
             // hide layer if inactive
-            gameLayers[index].instance.setActive(layerData.visible);
+            gameLayers[layerData.UUID].instance.setActive(layerData.visible);
             console.log("set active");
 
             // set up object for layer
@@ -189,10 +189,10 @@ async function loadLevel(index) {
             console.log(object);
 
             // add object to layer
-            gameLayers[index].instance.add(object, false);
+            gameLayers[layerData.UUID].instance.add(object, false);
 
             // keep record of object 
-            gameObjects[object.id] = {
+            gameObjects[objData.id] = {
               data: objData,
               instance: object
             };
