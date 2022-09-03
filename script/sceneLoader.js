@@ -234,6 +234,8 @@ async function loadLevel(index) {
   
   // initialize game
   window.game = new Phaser.Game(config);
+  game.canvas.style.position = "fixed";
+  game.canvas.style.top = "0px";
   console.log("Loaded game");
   
   } catch(e) {
