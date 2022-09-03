@@ -41,29 +41,27 @@ async function loadLevel(index) {
 
   // find most compatible aspect ratio
   let supportedAspectRatios = {
-     "4:3": 4/3,
-     "16:9": 16/9,
-     "19.5:9": 19.5/9,
-     "199:139": 199/139,
-     "3:2": 3/2,
-     "16:10": 16/10
+     "1024,768": 4/3,
+     "1024,579": 16/9,
+     "1024,472": 19.5/9,
+     "1194,834": 199/139,
+     "1023,682": 3/2,
+     "1024,640": 16/10
   };
   let diff = 999;
   let currentAspectRatio;
-  let heightRatio;
   let aspectRatio = screen.width / screen.height;
   Object.keys(supportedAspectRatios).forEach(function(ratio) {
     let value = supportedAspectRatios[ratio];
     if ((Math.abs(value - aspectRatio)) < diff) {
       diff = Math.abs(value - aspectRatio);
       currentAspectRatio = ratio;
-      heightRatio = value;
     }
   });
 
   // determine window size for game
-  let screenWidth = screen.width;
-  let screenHeight = screen.width * (1 / heightRatio);
+  let screenWidth = parseInt(currentAspectRatio.split(",")[0]);
+  let screenHeight = parseInt(currentAspectRatio.split(",")[1]);
   
   // reset data
   gameAudio = {};
