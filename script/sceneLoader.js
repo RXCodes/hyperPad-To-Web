@@ -148,7 +148,7 @@ async function loadLevel(index) {
     console.log("loading layer: " + index);
     let layerData = levelData.layers[index];
     gameLayers[index] = gameLayers[index] || {};
-    gameLayers[index].instance = window.gameManager.add.layer();
+    gameLayers[index].instance = window.gameManager.add.layer(); // add layer
     console.log(layerData);
     Object.keys(layerData.objects).forEach(function(objectID) {
       let objData = Object.create(layerData.objects[objectID]);
