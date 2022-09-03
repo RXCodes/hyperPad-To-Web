@@ -151,7 +151,7 @@ async function loadLevel(index) {
             console.log("set active");
 
             // set up object for layer
-            let object = game.physics.add.image(objData.xPosition, objData.yPosition, objData.path); // positioning and asset used
+            let object = game.physics.add.image(objData.xPosition, objData.yPosition); // position
             object.setBounce(objData.bounce || 0, objData.bounce || 0); // object bounce
             object.setFriction(objData.friction); // object friction
             object.setMass(objData.mass || 20); // object mass
@@ -209,14 +209,14 @@ async function loadLevel(index) {
         try {
           game.cameras.main.setZoom(levelData.zoom);
           game.cameras.main.centerOn(levelData.screenX, levelData.screenY);
-          game.cameras.main.setBackgroundColor(Phaser.Display.Color.GetColor32(levelData.backgroundColor[0], levelData.backgroundColor[1], levelData.backgroundColor[2], levelData.backgroundColor[3]));
+          game.cameras.main.setBackgroundColor(Phaser.Display.Color(levelData.backgroundColor[0], levelData.backgroundColor[1], levelData.backgroundColor[2]));
         } catch(e) {
           console.error("Error setting screen: " + e);
         };
         
       },
       update: function() {
-        console.info("Frame update: " + Date.now());
+        
       } // frame updates doesn't trigger anything yet
     },
     autoCenter: true,
