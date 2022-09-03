@@ -89,24 +89,10 @@ async function loadLevel(index) {
         let game = this;
         
         // add layers and objects to structure
-        levelData.layers.forEach(function(layer) {
-          let data = levelData.layers[layer] || {};
+        levelData.layers.forEach(function(data) {
           Object.keys(data.objects || {}).forEach(function(objectID) {
             gameObjects[objectID] = {};
-            gameObjects[objectID].data = data.objects[objectID] || {};
-            gameObjects[objectID].data.currentLayer = data.UUID;
-          });
-          delete data.objects;
-          gameLayers[data.UUID] = {};
-          gameLayers[data.UUID].data = data;
-        });
-        
-        // add layers and objects to structure
-        levelData.layers.forEach(function(layer) {
-          let data = levelData.layers[layer] || {};
-          Object.keys(data.objects || {}).forEach(function(objectID) {
-            gameObjects[objectID] = {};
-            gameObjects[objectID].data = data.objects[objectID] || {};
+            gameObjects[objectID].data = data.objects[objectID];
             gameObjects[objectID].data.currentLayer = data.UUID;
           });
           delete data.objects;
@@ -137,11 +123,10 @@ async function loadLevel(index) {
         // load layers with objects
         sortedLayers.forEach(function(layerData) {
           console.log("loading layer: " + layerData);
-          gameLayers[index] = gameLayers[index] || {};
           gameLayers[index].instance = game.add.layer(); // add layer
           console.log(layerData);
           Object.keys(layerData.objects).forEach(function(objectID) {
-            let objData = Object.create(layerData.objects[objectID]);
+            let objData = JSON.parse(JSON.stringify(layerData.objects[objectID]));
             console.log(JSON.stringify(objData));
 
             // hide layer if inactive
@@ -236,7 +221,7 @@ async function loadLevel(index) {
   window.game = new Phaser.Game(config);
   window.game.canvas.style.position = "fixed";
   window.game.canvas.style.top = "0px";
-  window.game.canvas.style.height = "100%";
+  window.game.canvas.style.width = "100%";
   console.log("Loaded game");
   
   } catch(e) {
