@@ -209,6 +209,7 @@ async function loadLevel(index) {
         try {
           game.cameras.main.setZoom(levelData.zoom);
           game.cameras.main.centerOn(levelData.screenX, levelData.screenY);
+          game.cameras.main.setBackgroundColor(Phaser.Display.Color.GetColor32(levelData.backgroundColor[0], levelData.backgroundColor[1], levelData.backgroundColor[2], levelData.backgroundColor[3]);
         } catch(e) {
           console.error("Error setting screen: " + e);
         };
