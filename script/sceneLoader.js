@@ -85,7 +85,9 @@ async function loadLevel(index) {
       create: function() {
         window.gameManager = this;
       }, // create event does nothing yet
-      update: function() {} // frame updates doesn't trigger anything yet
+      update: function() {
+        console.info("Frame update: " + Date.now());
+      } // frame updates doesn't trigger anything yet
     },
     autoCenter: true,
   };
