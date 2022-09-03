@@ -162,6 +162,7 @@ async function loadLevel(index) {
             object.setTint(Phaser.Display.Color.GetColor(objData.color[0], objData.color[1], objData.color[2], objData.color[3])); // color
             
             object.setOrigin((objData.xAnchor / 100) * object.displayWidth, (objData.yAnchor / 100) * object.displayHeight); // anchor
+            object.setPosition(objData.xPosition, objData.yPosition); // position
             
             object.setDepth(objData.zOrder); // z order
             object.allowRotation = true;
