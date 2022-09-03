@@ -65,6 +65,11 @@ async function loadLevel(index) {
   let screenWidth = screen.width;
   let screenHeight = screen.width * (1 / heightRatio);
   
+  // reset data
+  gameAudio = {};
+  gameLayers = {};
+  gameObjects = {};  
+    
   // configure phaser scene loader
   let config = {
     type: Phaser.AUTO,
@@ -83,8 +88,111 @@ async function loadLevel(index) {
     scene: {
       preload: function() {}, // preload event does nothing yet
       create: function() {
-        window.gameManager = this;
-      }, // create event does nothing yet
+        var game = this;
+        
+        // add layers and objects to structure
+        levelData.layers.forEach(function(layer) {
+          let data = levelData.layers[layer] || {};
+          Object.keys(data.objects || {}).forEach(function(objectID) {
+            gameObjects[objectID] = {};
+            gameObjects[objectID].data = data.objects[objectID] || {};
+            gameObjects[objectID].data.currentLayer = data.UUID;
+          });
+          delete data.objects;
+          gameLayers[data.UUID] = {};
+          gameLayers[data.UUID].data = data;
+        });
+        
+        // add layers and objects to structure
+        levelData.layers.forEach(function(layer) {
+          let data = levelData.layers[layer] || {};
+          Object.keys(data.objects || {}).forEach(function(objectID) {
+            gameObjects[objectID] = {};
+            gameObjects[objectID].data = data.objects[objectID] || {};
+            gameObjects[objectID].data.currentLayer = data.UUID;
+          });
+          delete data.objects;
+          gameLayers[data.UUID] = {};
+          gameLayers[data.UUID].data = data;
+        });
+
+        // sort layers by index (global and scene ui layers are on the top)
+        let sortedLayers = [];
+        let sortLayersIndex = {};
+        levelData.layers.forEach(function(layer) {
+          console.log(layer);
+          sortLayersIndex[layer.zOrder * -1] = layer.UUID;
+        });
+        console.log(sortLayersIndex);
+        let sortedLayersIndex = Object.keys(sortLayersIndex).sort(function(a, b) {
+          if (a === Infinity) 
+            return 1; 
+          else if (isNaN(a)) 
+            return -1;
+          else 
+            return a - b;
+        });
+        sortedLayersIndex.forEach(function(index) {
+          sortedLayers.push(sortLayersIndex[index]);
+        });
+        
+        // load layers with objects
+        sortedLayers.forEach(function(index) {
+          console.log("loading layer: " + index);
+          let layerData = levelData.layers[index];
+          gameLayers[index] = gameLayers[index] || {};
+          gameLayers[index].instance = game.add.layer(); // add layer
+          console.log(layerData);
+          Object.keys(layerData.objects).forEach(function(objectID) {
+            let objData = Object.create(layerData.objects[objectID]);
+            console.log(objData);
+
+            // hide layer if inactive
+            gameLayers[index].instance.setActive(gameLayers[index].data.visible);
+            console.log("set active");
+
+            // set up object for layer
+            let object = game.add.sprite(objData.xPosition, objData.yPosition, objData.path); // positioning and asset used
+            object.setBounce(objData.bounce || 0, objData.bounce || 0); // object bounce
+            object.setFriction(objData.friction); // object friction
+            object.setMass(objData.mass || 20); // object mass
+            object.setAngle(objData.rotation - 90); // object rotation
+            object.setBodySize(objData.widthPercentage * projectBase.ptm, objData.heightPercentage * projectBase.ptm); // scale
+            object.setTint(Phaser.Display.Color.GetColor(objData.color[0], objData.color[1], objData.color[2], objData.color[3])); // color
+            object.setOrigin(objData.xAnchor / 100, objData.yAnchor / 100); // anchor
+            object.setDepth(objData.zOrder); // z order
+
+            // visibility
+            if (!objData.visible) {
+              object.setVisible(false);
+            }
+
+            // flip
+            object.setFlipX(object.flipX);
+            object.setFlipY(object.flipY);
+            console.log(object);
+
+            // add object to layer
+            gameLayers[index].instance.add([object]);
+
+            // keep record of object 
+            gameObjects[object.id] = {
+              data: objData,
+              instance: object
+            };
+
+          });
+        });
+        
+        // manipulate the screen
+        try {
+          game.cameras.main.setZoom(levelData.zoom);
+          game.cameras.main.centerOn(levelData.screenX, levelData.screenY);
+        } catch(e) {
+          console.error("Error setting screen: " + e);
+        };
+        
+      },
       update: function() {
         console.info("Frame update: " + Date.now());
       } // frame updates doesn't trigger anything yet
@@ -94,112 +202,7 @@ async function loadLevel(index) {
   
   // initialize game
   window.game = new Phaser.Game(config);
-  
-  await new Promise(function(resolve) {
-    let timer = setInterval(function() {
-      if (window.gameManager) {
-        clearInterval(timer);
-        resolve();
-      }
-    }, 100);
-  });
   console.log("Loaded game");
-  
-  // reset data
-  gameAudio = {};
-  gameLayers = {};
-  gameObjects = {};
-  
-  // add layers and objects to structure
-  levelData.layers.forEach(function(layer) {
-    let data = levelData.layers[layer] || {};
-    Object.keys(data.objects || {}).forEach(function(objectID) {
-      gameObjects[objectID] = {};
-      gameObjects[objectID].data = data.objects[objectID] || {};
-      gameObjects[objectID].data.currentLayer = data.UUID;
-    });
-    delete data.objects;
-    gameLayers[data.UUID] = {};
-    gameLayers[data.UUID].data = data;
-  });
-  
-  // sort layers by index (global and scene ui layers are on the top)
-  let sortedLayers = [];
-  let sortLayersIndex = {};
-  levelData.layers.forEach(function(layer) {
-    console.log(layer);
-    sortLayersIndex[layer.zOrder * -1] = layer.UUID;
-  });
-  console.log(sortLayersIndex);
-  let sortedLayersIndex = Object.keys(sortLayersIndex).sort(function(a, b) {
-    if (a === Infinity) 
-      return 1; 
-    else if (isNaN(a)) 
-      return -1;
-    else 
-      return a - b;
-  });
-  sortedLayersIndex.forEach(function(index) {
-    sortedLayers.push(sortLayersIndex[index]);
-  });
-  
-  // load layers with objects
-  let layerIDs = sortedLayers;
-  
-  sortedLayers.forEach(function(index) {
-    console.log("loading layer: " + index);
-    let layerData = levelData.layers[index];
-    gameLayers[index] = gameLayers[index] || {};
-    gameLayers[index].instance = window.gameManager.add.layer(); // add layer
-    console.log(layerData);
-    Object.keys(layerData.objects).forEach(function(objectID) {
-      let objData = Object.create(layerData.objects[objectID]);
-      console.log(objData);
-      
-      // hide layer if inactive
-      gameLayers[index].instance.setActive(gameLayers[index].data.visible);
-      console.log("set active");
-      
-      // set up object for layer
-      let object = window.gameManager.add.sprite(objData.xPosition, objData.yPosition, objData.path); // positioning and asset used
-      object.setBounce(objData.bounce || 0, objData.bounce || 0); // object bounce
-      object.setFriction(objData.friction); // object friction
-      object.setMass(objData.mass || 20); // object mass
-      object.setAngle(objData.rotation - 90); // object rotation
-      object.setBodySize(objData.widthPercentage * projectBase.ptm, objData.heightPercentage * projectBase.ptm); // scale
-      object.setTint(Phaser.Display.Color.GetColor(objData.color[0], objData.color[1], objData.color[2], objData.color[3])); // color
-      object.setOrigin(objData.xAnchor / 100, objData.yAnchor / 100); // anchor
-      object.setDepth(objData.zOrder); // z order
-      
-      // visibility
-      if (!objData.visible) {
-        object.setVisible(false);
-      }
-      
-      // flip
-      object.setFlipX(object.flipX);
-      object.setFlipY(object.flipY);
-      console.log(object);
-      
-      // add object to layer
-      gameLayers[index].instance.add([object]);
-      
-      // keep record of object 
-      gameObjects[object.id] = {
-        data: objData,
-        instance: object
-      };
-      
-    });
-  });
-  
-  // manipulate the screen
-  try {
-    window.gameManager.cameras.main.setZoom(levelData.zoom);
-    window.gameManager.cameras.main.centerOn(levelData.screenX, levelData.screenY);
-  } catch(e) {
-    console.error("Error setting screen: " + e);
-  };
   
   } catch(e) {
     console.error(e);
