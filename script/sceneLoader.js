@@ -118,7 +118,7 @@ async function loadLevel(index) {
         });
         
         // load layers with objects
-        sortedLayers.forEach(function(') {
+        sortedLayers.forEach(function() {
           console.log("loading layer: " + layerData);
           gameLayers[layerData.UUID].instance = game.add.layer(); // add layer
           console.log(layerData);
@@ -220,10 +220,6 @@ async function loadLevel(index) {
   window.game.canvas.style.top = "0px";
   window.game.canvas.style.width = "100%";
   console.log("Loaded game");
-  
-  } catch(e) {
-    console.error(e);
-  }
     
 }
 
