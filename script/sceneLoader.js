@@ -157,9 +157,16 @@ async function loadLevel(index) {
             object.setFriction(objData.friction); // object friction
             object.setMass(objData.mass || 20); // object mass
             object.setAngle(objData.rotation - 90); // object rotation
-            object.displayWidth = objData.widthPercentage * projectBase.ptm; // scale x
-            object.displayHeight = objData.heightPercentage * projectBase.ptm; // scale y
             object.setTint(Phaser.Display.Color.GetColor(objData.color[0], objData.color[1], objData.color[2], objData.color[3])); // color
+           
+            object.displayWidth = objData.scaleXPercent; // scale x
+            object.displayHeight = objData.scaleYPercent; // scale y
+            
+            // empty object scaling
+            if (objData.type == "Empty") {
+              object.displayWidth = objData.scaleXPercent * 0.64; // scale x
+              object.displayHeight = objData.scaleYPercent * 0.64; // scale y
+            }
             
             object.setOrigin((objData.xAnchor / 100) * object.displayWidth, (objData.yAnchor / 100) * object.displayHeight); // anchor
             object.setPosition(objData.xPosition, objData.yPosition); // position
