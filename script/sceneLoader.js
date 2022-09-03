@@ -151,14 +151,18 @@ async function loadLevel(index) {
             console.log("set active");
 
             // set up object for layer
-            let object = game.physics.add.image(objData.xPosition, objData.yPosition); // position
+            let object = game.physics.add.image(objData.xPosition, objData.yPosition, "empty"); // spawn object
+            
             object.setBounce(objData.bounce || 0, objData.bounce || 0); // object bounce
             object.setFriction(objData.friction); // object friction
             object.setMass(objData.mass || 20); // object mass
             object.setAngle(objData.rotation - 90); // object rotation
-            object.setBodySize(objData.widthPercentage * projectBase.ptm, objData.heightPercentage * projectBase.ptm); // scale
+            object.displayWidth = objData.widthPercentage * projectBase.ptm; // scale x
+            object.displayHeight = objData.heightPercentage * projectBase.ptm; // scale y
             object.setTint(Phaser.Display.Color.GetColor(objData.color[0], objData.color[1], objData.color[2], objData.color[3])); // color
-            object.setOrigin(objData.xAnchor / 100, objData.yAnchor / 100); // anchor
+            
+            object.setOrigin((objData.xAnchor / 100) * object.displayWidth, (objData.yAnchor / 100) * object.displayHeight); // anchor
+            
             object.setDepth(objData.zOrder); // z order
             object.allowRotation = true;
             
