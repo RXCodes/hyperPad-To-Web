@@ -148,7 +148,8 @@ async function loadLevel(index) {
               object.displayHeight = objData.scaleYPercent * 0.64; // scale y
             }
             
-            object.setOrigin((objData.xAnchor / 100) * object.displayWidth, (objData.yAnchor / 100) * object.displayHeight); // anchor
+            object.setOriginX(Number(objData.xAnchor / 100) || 0.5); // anchor x
+            object.setOriginY(Number(objData.yAnchor / 100) || 0.5); // anchor y
             object.setPosition(objData.xPosition, objData.yPosition); // position
             
             object.setDepth(objData.zOrder); // z order
