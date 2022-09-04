@@ -131,7 +131,7 @@ async function loadLevel(index) {
             console.log("set active");
 
             // set up object for layer
-            let object = game.physics.add.image(objData.xPosition, objData.yPosition, "empty"); // spawn object
+            let object = game.physics.add.image(0, 0, "empty"); // spawn object
             
             object.setBounce(objData.bounce || 0, objData.bounce || 0); // object bounce
             object.setFriction(objData.friction); // object friction
@@ -149,7 +149,7 @@ async function loadLevel(index) {
             }
             
             object.setOrigin(objData.anchorX / 100, objData.anchorY / 100);
-            object.setPosition(objData.xPosition, objData.yPosition); // position
+            object.setPosition(objData.xPosition / projectBase.ptm, objData.yPosition / projectBase.ptm); // position
             
             object.setDepth(objData.zOrder); // z order
             object.allowRotation = true;
