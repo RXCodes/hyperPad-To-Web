@@ -308,6 +308,7 @@ window.loadProject = function() {
         
         // load data
         let data = extract(Buffer.from(objData.GAMEOBJECTDATA));
+        console.log(objData);
         let resultObj = {
           mass: objData.MASS,
           path: objData.PATH,
@@ -325,8 +326,8 @@ window.loadProject = function() {
           bounce: objData.RESTITUTION,
           linearDamping: objData.LINEARDAMPING,
           friction: objData.FRICTION,
-          anchorX: objData.ANCHORX * 100,
-          anchorY: objData.ANCHORY * 100,
+          anchorX: objPos.ANCHORX * 100,
+          anchorY: objPos.ANCHORY * 100,
           behaviors: {}
         }
         
