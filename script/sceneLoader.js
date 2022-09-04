@@ -7,6 +7,7 @@ var gameAudio = {}; // the audio being played {key: audioID, value: audioInterfa
 var gameLayers = {}; // the current layers being displayed {key: layerID, value: layerData}
 var game; // the variable holding the instance of the game
 window.Phaser = Phaser; // add reference to the plugin to the main window
+window.projectBase = projectBase; // add reference to the project database to the main window
 
 // load a level
 async function loadLevel(index) {
