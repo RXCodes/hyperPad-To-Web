@@ -76,8 +76,8 @@ async function loadLevel(index) {
       default: 'arcade',
       arcade: {
         gravity: { // use the project's gravity settings
-          y: -1 * projectBase.yGravity * projectBase.ptm,
-          x: projectBase.xGravity * projectBase.ptm
+          y: -1 * projectBase.yGravity * projectBase.ptmRatio,
+          x: projectBase.xGravity * projectBase.ptmRatio
         }
       }
     },
@@ -150,7 +150,7 @@ async function loadLevel(index) {
             }
             
             object.setOrigin(objData.anchorX / 100, objData.anchorY / 100);
-            object.setPosition(objData.xPosition / projectBase.ptm, objData.yPosition / projectBase.ptm); // position
+            object.setPosition(objData.xPosition / projectBase.ptmRatio, objData.yPosition / projectBase.ptmRatio); // position
             
             object.setDepth(objData.zOrder); // z order
             object.allowRotation = true;
