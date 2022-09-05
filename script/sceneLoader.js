@@ -150,7 +150,7 @@ async function loadLevel(index) {
             }
             
             object.setOrigin(objData.anchorX / 100, objData.anchorY / 100);
-            object.setPosition(objData.xPosition / projectBase.ptmRatio, objData.yPosition / projectBase.ptmRatio); // position
+            object.setPosition(objData.xPosition / projectBase.ptmRatio, (objData.yPosition * -1) / projectBase.ptmRatio); // position
             
             object.setDepth(objData.zOrder); // z order
             object.allowRotation = true;
@@ -201,7 +201,7 @@ async function loadLevel(index) {
         // manipulate the screen
         try {
           game.cameras.main.setZoom(levelData.zoom);
-          game.cameras.main.centerOn(levelData.screenX, levelData.screenY);
+          game.cameras.main.centerOn(levelData.screenX + (screenWidth / 2), -1 * levelData.screenY + (screenHeight / -2));
           game.cameras.main.setBackgroundColor(Phaser.Display.Color.GetColor(levelData.backgroundColor[0], levelData.backgroundColor[1], levelData.backgroundColor[2]));
         } catch(e) {
           console.error("Error setting screen: " + e);
