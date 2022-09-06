@@ -138,7 +138,7 @@ async function loadLevel(index) {
             object.setFriction(objData.friction); // object friction
             object.setMass(objData.mass || 20); // object mass
             object.setAngle(objData.rotation - 90); // object rotation
-            object.setTint(Phaser.Display.Color.GetColor(objData.color[0], objData.color[1], objData.color[2], objData.color[3])); // color
+            object.setTint(Phaser.Display.Color.GetColor32(objData.color[0], objData.color[1], objData.color[2], objData.color[3])); // color
            
             object.displayWidth = objData.scaleXPercent; // scale x
             object.displayHeight = objData.scaleYPercent; // scale y
@@ -201,7 +201,8 @@ async function loadLevel(index) {
         // manipulate the screen
         try {
           game.cameras.main.setZoom(levelData.zoom);
-          game.cameras.main.centerOn(levelData.screenX + (screenWidth / 2), -1 * levelData.screenY + (screenHeight / -2));
+          game.cameras.main.worldView.left = levelData.screenX
+          game.cameras.main.worldView.bottom = levelData.screenY;
           game.cameras.main.setBackgroundColor(Phaser.Display.Color.GetColor(levelData.backgroundColor[0], levelData.backgroundColor[1], levelData.backgroundColor[2]));
         } catch(e) {
           console.error("Error setting screen: " + e);
