@@ -145,12 +145,15 @@ async function loadLevel(index) {
             
             // empty object scaling
             if (objData.type == "Empty") {
-              object.displayWidth = objData.scaleXPercent * 64; // scale x
-              object.displayHeight = objData.scaleYPercent * 64; // scale y
+              object.displayWidth = objData.scaleXPercent * 0.64; // scale x
+              object.displayHeight = objData.scaleYPercent * 0.64; // scale y
             }
             
             object.setOrigin(objData.anchorX / 100, objData.anchorY / 100);
-            object.setPosition(objData.xPosition / projectBase.ptmRatio, (objData.yPosition * -1) / projectBase.ptmRatio); // position
+            let posSetter = new Phaser.Math.Vector2();;
+            posSetter.x = objData.xPosition;
+            posSetter.y = objData.yPosition;
+            object.setPosition(posSetter); // position
             
             object.setDepth(objData.zOrder); // z order
             object.allowRotation = true;
