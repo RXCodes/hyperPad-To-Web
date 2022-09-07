@@ -145,8 +145,8 @@ async function loadLevel(index) {
             
             // empty object scaling
             if (objData.type == "Empty") {
-              object.displayWidth = objData.scaleXPercent * 0.64; // scale x
-              object.displayHeight = objData.scaleYPercent * 0.64; // scale y
+              object.displayWidth = objData.scaleXPercent * 64; // scale x
+              object.displayHeight = objData.scaleYPercent * 64; // scale y
             }
             
             object.setOrigin(objData.anchorX / 100, objData.anchorY / 100);
@@ -187,7 +187,7 @@ async function loadLevel(index) {
             console.log(object);
 
             // add object to layer
-            gameLayers[layerData.UUID].instance.add(object, false);
+            gameLayers[layerData.UUID].instance.add([object]);
 
             // keep record of object 
             gameObjects[objData.id] = {
@@ -200,7 +200,7 @@ async function loadLevel(index) {
         
         // manipulate the screen
         try {
-          game.cameras.main.setZoom(levelData.zoom);
+          game.cameras.main.setZoom(levelData.zoom * 0.1);
           game.cameras.main.worldView.left = levelData.screenX
           game.cameras.main.worldView.bottom = levelData.screenY;
           game.cameras.main.setBackgroundColor(Phaser.Display.Color.GetColor(levelData.backgroundColor[0], levelData.backgroundColor[1], levelData.backgroundColor[2]));
