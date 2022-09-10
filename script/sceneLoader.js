@@ -207,7 +207,7 @@ async function loadLevel(index) {
         try {
           game.cameras.main.setZoom(levelData.zoom);
           game.cameras.main.worldView.left = levelData.screenX
-          game.cameras.main.worldView.top = levelData.screenY;
+          game.cameras.main.worldView.bottom = levelData.screenY;
           game.cameras.main.setBackgroundColor(Phaser.Display.Color.GetColor(
             Math.round(levelData.backgroundColor[0] * 255),
             Math.round(levelData.backgroundColor[1] * 255),
