@@ -132,7 +132,7 @@ async function loadLevel(index) {
             console.log("set active");
 
             // set up object for layer
-            let object = game.physics.add.image(objData.xPosition / 100, objData.yPosition / 100, "empty"); // spawn object
+            let object = game.physics.add.image(objData.xPosition / 100, objData.yPosition / -100, "empty"); // spawn object
             
             object.setBounce(objData.bounce || 0, objData.bounce || 0); // object bounce
             object.setFriction(objData.friction); // object friction
@@ -206,7 +206,7 @@ async function loadLevel(index) {
         try {
           game.cameras.main.setZoom(levelData.zoom);
           game.cameras.main.worldView.left = levelData.screenX
-          game.cameras.main.worldView.bottom = levelData.screenY;
+          game.cameras.main.worldView.top = levelData.screenY;
           game.cameras.main.setBackgroundColor(Phaser.Display.Color.GetColor(
             Math.round(levelData.backgroundColor[0] * 255),
             Math.round(levelData.backgroundColor[1] * 255),
@@ -228,6 +228,7 @@ async function loadLevel(index) {
   window.game = new Phaser.Game(config);
   window.game.canvas.style.position = "fixed";
   window.game.canvas.style.top = "0px";
+  window.game.canvas.style.left = "0px";
   window.game.canvas.style.width = "100%";
   console.log("Loaded game");
     
