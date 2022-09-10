@@ -132,7 +132,7 @@ async function loadLevel(index) {
             console.log("set active");
 
             // set up object for layer
-            let object = game.physics.add.image(objData.xPosition, objData.yPosition, "empty"); // spawn object
+            let object = game.physics.add.image(objData.xPosition / 100, objData.yPosition / 100, "empty"); // spawn object
             
             object.setBounce(objData.bounce || 0, objData.bounce || 0); // object bounce
             object.setFriction(objData.friction); // object friction
