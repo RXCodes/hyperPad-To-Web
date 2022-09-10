@@ -138,11 +138,12 @@ async function loadLevel(index) {
             object.setFriction(objData.friction); // object friction
             object.setMass(objData.mass || 20); // object mass
             object.setAngle(objData.rotation - 90); // object rotation
+            let objectOpacity = 255;
             object.setTint(Phaser.Display.Color.GetColor32(
               Math.round(objData.color[0] * 255), 
               Math.round(objData.color[1] * 255), 
               Math.round(objData.color[2] * 255), 
-              Math.round(objData.color[3] * 255)
+              objectOpacity
             )); // color
            
             object.displayWidth = objData.scaleXPercent; // scale x
