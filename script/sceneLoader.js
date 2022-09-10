@@ -136,11 +136,12 @@ async function loadLevel(index) {
             let yPos = screenHeight - (objData.yPosition / 100);
             
             // spawn object
+            let object;
             if (objData.type == "Empty") {
-              let object = game.add.rectangle(xPos, yPos); 
+              object = game.add.rectangle(xPos, yPos); 
             }
             if (objData.type == "Graphic") {
-              let object = game.add.image(xPos, yPos, "empty"); 
+              object = game.add.image(xPos, yPos, "empty"); 
             }
             
             object.setBounce(objData.bounce || 0, objData.bounce || 0); // object bounce
