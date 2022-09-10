@@ -138,25 +138,22 @@ async function loadLevel(index) {
             // spawn object
             let object = null;
             if (objData.type == "Empty") {
-              object = game.physics.add.rectangle(xPos, yPos); 
+              object = game.add.rectangle(xPos, yPos); 
             }
             if (objData.type == "Graphic") {
-              object = game.physics.add.image(xPos, yPos, "empty"); 
+              object = game.add.image(xPos, yPos, "empty"); 
             }
             if (object == null) {
-              object = game.physics.add.image(xPos, yPos, "empty"); // use empty object for default
+              object = game.add.image(xPos, yPos, "empty"); // use empty object for default
             }
-            
-            object.setBounce(objData.bounce || 0, objData.bounce || 0); // object bounce
-            object.setFriction(objData.friction); // object friction
-            object.setMass(objData.mass || 20); // object mass
+         
+            // object properties
             object.setAngle(objData.rotation - 90); // object rotation
             object.setTint(Phaser.Display.Color.GetColor(
               Math.round(objData.color[0] * 255), 
               Math.round(objData.color[1] * 255), 
               Math.round(objData.color[2] * 255)
-            )); // color
-           
+            )); // color    
             object.displayWidth = objData.scaleXPercent; // scale x
             object.displayHeight = objData.scaleYPercent; // scale y
             
@@ -171,27 +168,16 @@ async function loadLevel(index) {
             object.setDepth(objData.zOrder); // z order
             object.allowRotation = true;
             
-            // physics object
-            if (objData.physicsMode == "Physics") {
-              object.allowGravity = true;
-              object.immovable = false;
-              object.moves = true;
-              object.onCollide = true;
+            // physics & wall objects get rigid bodies
+            if (objData.physicsMode == "Physics" || objData.physicsMode == "Wall") {
+              game.physics.add.existing(object, objData.physicsMode == "Wall"); // add rigid body - static for wall objects
+              object.body.bounce.x = objData.bounce || 0; // object bounce
+              object.body.bounce.y = objData.bounce || 0; // object bounce
+              object.body.friction.x = objData.friction || 0; // object friction
+              object.body.friction.y = objData.friction || 0; // object friction
+              object.body.mass = objData.mass || 20; // object mass
             }
             
-            // wall object
-            if (objData.physicsMode == "Wall") {
-              object.allowGravity = false;
-              object.immovable = true;
-              object.onCollide = true;
-            }
-            
-            // scenery object
-            if (objData.physicsMode == "Scenery") {
-              object.allowGravity = false;
-              object.immovable = true;
-            }
-
             // visibility
             if (!objData.visible) {
               object.setVisible(false);
