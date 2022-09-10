@@ -132,7 +132,16 @@ async function loadLevel(index) {
             console.log("set active");
 
             // set up object for layer
-            let object = game.physics.add.image(objData.xPosition / 100, screenHeight - (objData.yPosition / 100), "empty"); // spawn object
+            let xPos = objData.xPosition / 100;
+            let yPos = screenHeight - (objData.yPosition / 100);
+            
+            // spawn object
+            if (objData.type == "Empty") {
+              let object = game.physics.add.rectangle(xPos, yPos); 
+            }
+            if (objData.type == "Graphic") {
+              let object = game.physics.add.image(xPos, yPos, "empty"); 
+            }
             
             object.setBounce(objData.bounce || 0, objData.bounce || 0); // object bounce
             object.setFriction(objData.friction); // object friction
