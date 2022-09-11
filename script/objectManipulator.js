@@ -14,6 +14,6 @@ function setColor(object, r, g, b, a) {
   if (object.type == "Graphic") {
     object.fillColor = Phaser.Display.Color.GetColor(
       r, g, b
-    ));   
+    );   
   }
 }
