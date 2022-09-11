@@ -149,6 +149,8 @@ async function loadLevel(index) {
          
             // object properties
             object.setAngle(objData.rotation - 90); // object rotation
+            object.type = objData.type; // object type (Empty, Graphic, etc.)
+            object.id = objData.id; // object id
             setColor(object, Math.round(objData.color[0] * 255)); // set object color
             object.displayWidth = objData.scaleXPercent; // scale x
             object.displayHeight = objData.scaleYPercent; // scale y
