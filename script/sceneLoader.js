@@ -149,11 +149,7 @@ async function loadLevel(index) {
          
             // object properties
             object.setAngle(objData.rotation - 90); // object rotation
-            object.setTint(Phaser.Display.Color.GetColor(
-              Math.round(objData.color[0] * 255), 
-              Math.round(objData.color[1] * 255), 
-              Math.round(objData.color[2] * 255)
-            )); // color    
+            setColor(object, Math.round(objData.color[0] * 255)); // set object color
             object.displayWidth = objData.scaleXPercent; // scale x
             object.displayHeight = objData.scaleYPercent; // scale y
             
@@ -163,10 +159,8 @@ async function loadLevel(index) {
               object.displayHeight = objData.scaleYPercent * 0.64; // scale y
             }
             
-            object.setOrigin(objData.anchorX / 100, objData.anchorY / 100);
-            
+            object.setOrigin(objData.anchorX / 100, objData.anchorY / 100); // anchor      
             object.setDepth(objData.zOrder); // z order
-            object.allowRotation = true;
             
             // physics & wall objects get rigid bodies
             if (objData.physicsMode == "Physics" || objData.physicsMode == "Wall") {
