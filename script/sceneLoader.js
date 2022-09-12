@@ -136,7 +136,12 @@ async function loadLevel(index) {
             let yPos = screenHeight - (objData.yPosition / 100);
             
             // spawn object
-            let properties = {};
+            let properties = {
+              isStatic: objData.physicsMode == "Wall",
+              friction: objData.friction,
+              restitution: objData.bounce,
+              mass: objData.mass
+            };
             let object = null;
             if (objData.type == "Empty") {
               object = game.matter.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64, properties); 
