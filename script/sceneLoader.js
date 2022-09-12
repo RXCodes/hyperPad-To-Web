@@ -73,8 +73,8 @@ async function loadLevel(index) {
     height: screenHeight,
     backgroundColor: Phaser.Display.Color.GetColor32(levelData.backgroundColor[0], levelData.backgroundColor[1], levelData.backgroundColor[2], levelData.backgroundColor[3]),
     physics: {
-      default: 'arcade',
-      arcade: {
+      default: 'matter',
+      matter: {
         gravity: { // use the project's gravity settings
           y: -1 * projectBase.yGravity * projectBase.ptmRatio,
           x: projectBase.xGravity * projectBase.ptmRatio
@@ -138,50 +138,25 @@ async function loadLevel(index) {
             // spawn object
             let object = null;
             if (objData.type == "Empty") {
-              object = game.add.rectangle(xPos, yPos); 
-            }
-            if (objData.type == "Graphic") {
-              object = game.add.image(xPos, yPos, objData.path); 
+              object = game.matter.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64); 
             }
             if (object == null) {
-              object = game.add.image(xPos, yPos, "placeholder"); // use placeholder object for default
+              object = game.matter.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64); // use placeholder object for default
             }
          
             // object properties
-            object.setAngle(objData.rotation - 90); // object rotation
             object.type = objData.type; // object type (Empty, Graphic, etc.)
             object.id = objData.id; // object id
-            setColor(object, Math.round(objData.color[0] * 255), Math.round(objData.color[1] * 255), Math.round(objData.color[2] * 255)); // set object color
-            object.displayWidth = objData.scaleXPercent; // scale x
-            object.displayHeight = objData.scaleYPercent; // scale y
-            
-            // empty object scaling
-            if (objData.type == "Empty") {
-              object.displayWidth = objData.scaleXPercent * 0.64; // scale x
-              object.displayHeight = objData.scaleYPercent * 0.64; // scale y
-            }
-            
+                       
             object.setOrigin(objData.anchorX / 100, objData.anchorY / 100); // anchor      
             object.setDepth(objData.zOrder); // z order
-            
-            // physics & wall objects get rigid bodies
-            if (objData.physicsMode == "Physics" || objData.physicsMode == "Wall") {
-              game.physics.add.existing(object, objData.physicsMode == "Wall"); // add rigid body - static for wall objects
-              object.body.bounce.x = objData.bounce || 0; // object bounce
-              object.body.bounce.y = objData.bounce || 0; // object bounce
-              object.body.friction.x = objData.friction || 0; // object friction
-              object.body.friction.y = objData.friction || 0; // object friction
-              object.body.mass = objData.mass || 20; // object mass
-            }
-            
+                        
             // visibility
             if (!objData.visible) {
               object.setVisible(false);
             }
 
             // flip
-            object.setFlipX(object.flipX);
-            object.setFlipY(object.flipY);
             console.log(object);
 
             // add object to layer
