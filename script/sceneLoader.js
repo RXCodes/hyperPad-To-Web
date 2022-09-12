@@ -156,7 +156,7 @@ async function loadLevel(index) {
             console.log(object);
 
             // add object to layer
-            gameLayers[layerData.UUID].instance.add([object]);
+            // gameLayers[layerData.UUID].instance.add([object]);
 
             // keep record of object 
             gameObjects[objData.id] = {
