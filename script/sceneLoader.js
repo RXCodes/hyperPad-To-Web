@@ -136,9 +136,10 @@ async function loadLevel(index) {
             let yPos = screenHeight - (objData.yPosition / 100);
             
             // spawn object
+            let properties = {};
             let object = null;
             if (objData.type == "Empty") {
-              object = game.matter.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64); 
+              object = game.matter.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64, properties); 
             }
             if (object == null) {
               object = game.matter.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64); // use placeholder object for default
@@ -147,16 +148,6 @@ async function loadLevel(index) {
             // object properties
             object.type = objData.type; // object type (Empty, Graphic, etc.)
             object.id = objData.id; // object id
-                       
-            object.setOrigin(objData.anchorX / 100, objData.anchorY / 100); // anchor      
-            object.setDepth(objData.zOrder); // z order
-                        
-            // visibility
-            if (!objData.visible) {
-              object.setVisible(false);
-            }
-
-            // flip
             console.log(object);
 
             // add object to layer
