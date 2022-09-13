@@ -76,8 +76,8 @@ async function loadLevel(index) {
       default: 'matter',
       matter: {
         gravity: { // use the project's gravity settings
-          y: -1 * projectBase.yGravity * projectBase.ptmRatio,
-          x: projectBase.xGravity * projectBase.ptmRatio
+          y: -1 * projectBase.yGravity,
+          x: projectBase.xGravity
         }
       }
     },
@@ -129,31 +129,44 @@ async function loadLevel(index) {
 
             // hide layer if inactive
             gameLayers[layerData.UUID].instance.setActive(layerData.visible);
-            console.log("set active");
 
             // set up object for layer
             let xPos = objData.xPosition / 100;
             let yPos = screenHeight - (objData.yPosition / 100);
             
             // spawn object
-            let properties = {
-              isStatic: objData.physicsMode == "Wall",
-              friction: objData.friction,
-              restitution: objData.bounce,
-              mass: objData.mass
-            };
             let object = null;
+            let properties = {
+              visible: objData.visible, // visibility
+              angle: objData.rotation, // rotation
+              origin: [objData.anchorX, objData.anchorY], // anchor
+              depth: objData.zOrder, // z order
+              flipX: objData.flipX, // x flip
+              flipY: objData.flipY // y flip
+            };
             if (objData.type == "Empty") {
-              object = game.matter.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64, properties); 
+              object = game.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64, properties); 
             }
+            
+            // for unsupported object types, spawn an empty object instead
             if (object == null) {
-              object = game.matter.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64); // use placeholder object for default
+              object = game.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64, properties);
             }
          
-            // object properties
+            // additional object properties
             object.type = objData.type; // object type (Empty, Graphic, etc.)
             object.id = objData.id; // object id
-            console.log(object);
+            
+            // add game object to matter.js as a rigid body for wall and physics objects
+            if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
+              game.matter.add.gameObject(object);
+              
+              // set physics properties
+              object.setFriction(objData.friction);
+              object.setBounce(objData.bounce);
+              object.setStatic(objData.physicsMode == "Wall");
+              
+            }
 
             // add object to layer group
             gameLayers[layerData.UUID].instance.add([object]);
@@ -163,6 +176,9 @@ async function loadLevel(index) {
               data: objData,
               instance: object
             };
+            
+            // debugging purposes
+            console.log(object);
 
           });
         });
