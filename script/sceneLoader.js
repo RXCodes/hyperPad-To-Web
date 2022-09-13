@@ -156,6 +156,12 @@ async function loadLevel(index) {
             // additional object properties
             object.type = objData.type; // object type (Empty, Graphic, etc.)
             object.id = objData.id; // object id
+            let blendModes = {
+              "Screen": "SCREEN",
+              "Dodge": "ADD",
+              "Burn": "MULTIPLY"
+            };
+            object.setBlendMode(Phaser.blendModes[blendModes[objData.blendingMode] || "NORMAL"]); // blending mode
             
             // add game object to matter.js as a rigid body for wall and physics objects
             if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
