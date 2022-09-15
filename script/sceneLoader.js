@@ -131,7 +131,9 @@ async function loadLevel(index) {
         // add blend modes
         addBlendingMode("Normal", [1, 7, 1, 1, 0]);
         addBlendingMode("None", [1, 10, 1, 1, 0]);
-        
+        addBlendingMode("Screen", [2, 8, 1, 1, 0]);
+        addBlendingMode("Dodge", [1, 8, 1, 1, 0]);
+        addBlendingMode("Burn", [2, 8, 1, 1, 0]);
         
         // add layers and objects to structure
         levelData.layers.forEach(function(data) {
@@ -202,11 +204,8 @@ async function loadLevel(index) {
          
             // additional object properties
             object.type = objData.type; // object type (Empty, Graphic, etc.)
-            object.id = objData.id; // object id
-            
-            // set blending mode
-            
-            object.setBlendMode(Phaser.blendModes[blendModes[objData.blendingMode] || "NORMAL"]); // blending mode
+            object.id = objData.id; // object id 
+            object.setBlendMode(window.rendererBlendModes[objData.blendingMode]); // blend mode
             
             // add game object to matter.js as a rigid body for wall and physics objects
             if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
