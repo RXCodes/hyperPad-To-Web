@@ -222,13 +222,14 @@ async function loadLevel(index) {
               // set physics properties
               object.setFriction(objData.friction);
               object.setBounce(objData.bounce);
+              object.setMass(objData.mass);
               object.setStatic(objData.physicsMode == "Wall");
               
             }
             
             // matter.js properties
             setColor(object, color[0], color[1], color[2], color[3]);
-            object.setAngle(Phaser.Math.RadToDeg(objData.rotation));
+            object.setAngle(Phaser.Math.DegToRad(objData.rotation));
 
             // add object to layer group
             gameLayers[layerData.UUID].instance.add([object]);
