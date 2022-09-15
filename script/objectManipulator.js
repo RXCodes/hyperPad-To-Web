@@ -21,7 +21,7 @@ function setColor(object, r, g, b, a) {
 
 
 // change blending mode of an object
-function setBlendingMode(object, mode) {
+function setBlendMode(object, mode) {
   switch (mode) {
     case "Normal":
       object.setBlendMode(Phaser.BlendModes.NORMAL);
