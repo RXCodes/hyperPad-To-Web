@@ -50,7 +50,16 @@
 <script src="https://rxcodes.github.io/hyperPad-Project-Modder/LZString.js"></script>
 <script src="https://rxcodes.github.io/hyperPad-Project-Modder/BPListParser.js"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.js'></script>
-<script src="https://hyperpadtoweb.rxcodes.repl.co/behaviorBaseScript"></script>
+<script>
+
+  async function loadBehaviorBase() {
+    let json = await fetch("https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/AllBehaviors.json");
+    json = await json.text();
+    window.behaviorBase = JSON.parse(json);
+  }
+  loadBehaviorBase();
+  
+</script>
 
 <!-- initialize SQLite -->
 <script>
@@ -96,13 +105,16 @@ fileSelector.addEventListener('change', (event) => {
                if (!document.getElementById("testProject").checked) {
                  downloadFile(html, "fart.html");
                } else {
+                 window.game = {};
                  let s = html.split("<script>")[1];
                  s = s.split("<\/script>")[0];
                  try {
                    eval(s);
                  } catch(e) {
                    console.error(e);
+                   console.warn(s.split("\n")[e.line - 2])
                    console.warn(s.split("\n")[e.line - 1]);
+                   console.warn(s.split("\n")[e.line])
                    alert("There was an error attempting to run the project:\n\n " + e.message)
                  }
                }
@@ -182,12 +194,13 @@ fileSelector.addEventListener('change', (event) => {
       }
       let launchPaths = [
         "https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js",
-        "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/script/typeConverter.js",
-        "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/script/sceneLoader.js",
+        "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/script/objectManipulator.js",
+        "https://raw.githubusercontent.com/RXCodes/hyperPad-To-Web/main/script/sceneLoader.js"
       ];
       
       let launchPathsLeft = launchPaths.length;
       launchPaths.forEach(async function(path) {
+        console.log(path);
         html += "// Inject: " + path + "\n";
         let code = await fetch(path);
         code = await code.text();
