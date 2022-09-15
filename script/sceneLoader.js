@@ -229,7 +229,7 @@ async function loadLevel(index) {
             
             // matter.js properties
             setColor(object, color[0], color[1], color[2], color[3]);
-            object.setAngle(Phaser.Math.DegToRad(objData.rotation));
+            object.setAngle(objData.rotation);
 
             // add object to layer group
             gameLayers[layerData.UUID].instance.add([object]);
