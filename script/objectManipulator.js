@@ -5,15 +5,15 @@ function setColor(object, r, g, b, a) {
   
   // graphic objects
   if (object.type == "Graphic") {
-    object.setTint(Phaser.Display.Color.GetColor(
-      r, g, b
+    object.setTint(Phaser.Display.Color.GetColor32(
+      r, g, b, a
     ));    
   }
   
   // empty objects
   if (object.type == "Empty") {
-    object.fillColor = Phaser.Display.Color.GetColor(
-      r, g, b
+    object.fillColor = Phaser.Display.Color.GetColor32(
+      r, g, b, a
     );   
   }
 }
