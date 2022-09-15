@@ -273,7 +273,9 @@ async function loadLevel(index) {
   window.game.canvas.style.position = "fixed";
   window.game.canvas.style.top = "0px";
   window.game.canvas.style.left = "0px";
+  window.game.canvas.style.margin = "0";
   window.game.canvas.style.width = "100%";
+  window.game.scale.startFullScreen(false);
   console.log("Loaded game");
     
 }
