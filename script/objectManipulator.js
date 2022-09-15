@@ -15,5 +15,6 @@ function setColor(object, r, g, b, a) {
     object.fillColor = Phaser.Display.Color.GetColor32(
       r, g, b, a
     );  
+    object.setAlpha(a / 255);
   }
 }
