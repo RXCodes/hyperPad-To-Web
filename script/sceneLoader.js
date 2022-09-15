@@ -130,6 +130,8 @@ async function loadLevel(index) {
         
         // add blend modes
         addBlendingMode("Normal", [1, 7, 1, 1, 0]);
+        addBlendingMode("None", [1, 10, 1, 1, 0]);
+        
         
         // add layers and objects to structure
         levelData.layers.forEach(function(data) {
