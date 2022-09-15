@@ -22,5 +22,20 @@ function setColor(object, r, g, b, a) {
 
 // change blending mode of an object
 function setBlendingMode(object, mode) {
-  
+  switch (mode) {
+    case "Normal":
+      object.setBlendMode(Phaser.BlendModes.NORMAL);
+      break;
+    case "Burn": 
+      object.setBlendMode(Phaser.BlendModes.MULTIPLY);
+      break;
+    case "Screen":
+      object.setBlendMode(Phaser.BlendModes.SCREEN);
+      break;
+    case "Dodge":
+      object.setBlendMode(Phaser.BlendModes.ADD);
+      break;
+    case "None":
+      object.setBlendMode(Phaser.BlendModes.SKIP_CHECK);
+      break;
 }
