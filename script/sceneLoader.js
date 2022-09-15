@@ -206,7 +206,8 @@ async function loadLevel(index) {
             // additional object properties
             object.type = objData.type; // object type (Empty, Graphic, etc.)
             object.id = objData.id; // object id 
-            // object.setBlendMode(window.rendererBlendModes[objData.blendingMode]); // blend mode
+            
+            setBlendMode(object, object.blendingMode); // blend mode
             let color = objData.color;
             if (color[3] === undefined) {
               color[3] = 1;
