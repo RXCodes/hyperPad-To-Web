@@ -202,9 +202,6 @@ async function loadLevel(index) {
             if (object == null) {
               object = game.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64, properties);
             }
-         
-            // transformations
-            object.setAngle(objData.rotation);
             
             // additional object properties
             object.type = objData.type; // object type (Empty, Graphic, etc.)
@@ -217,7 +214,6 @@ async function loadLevel(index) {
             for (let i = 0; i < 4; i++) {
               color[i] = Math.round(color[i] * 255);
             }  
-            setColor(object, color[0], color[1], color[2], color[3]);
             
             // add game object to matter.js as a rigid body for wall and physics objects
             if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
@@ -229,6 +225,10 @@ async function loadLevel(index) {
               object.setStatic(objData.physicsMode == "Wall");
               
             }
+            
+            // matter.js properties
+            setColor(object, color[0], color[1], color[2], color[3]);
+            object.setRotation(objData.rotation);
 
             // add object to layer group
             gameLayers[layerData.UUID].instance.add([object]);
