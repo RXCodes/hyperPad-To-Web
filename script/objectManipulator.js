@@ -18,3 +18,9 @@ function setColor(object, r, g, b, a) {
     object.setAlpha(a / 255);
   }
 }
+
+
+// change blending mode of an object
+function setBlendingMode(object, mode) {
+  
+}
