@@ -87,55 +87,6 @@ async function loadLevel(index) {
       create: function() {
         let game = this;
         
-        // load blending
-        const gl = game.sys.game.renderer.gl;
-        const blendConstants = [
-          gl.ZERO,
-          gl.ONE,
-          gl.SRC_COLOR,
-          gl.ONE_MINUS_SRC_COLOR,
-          gl.DST_COLOR,
-          gl.ONE_MINUS_DST_COLOR,
-          gl.SRC_ALPHA,
-          gl.ONE_MINUS_DST_ALPHA,
-          gl.DST_ALPHA,
-          gl.ONE_MINUS_DST_ALPHA,
-          gl.CONSTANT_COLOR,
-          gl.ONE_MINUS_CONSTANT_COLOR,
-          gl.CONSTANT_ALPHA,
-          gl.ONE_MINUS_CONSTANT_ALPHA,
-          gl.SRC_ALPHA_SATURATE
-        ];
-        const blendEquations = [
-          gl.FUNC_ADD,
-          gl.FUNCT_SUBTRACT,
-          gl.FUNC_REVERSE_SUBTRACT
-        ];
-        let renderer = game.sys.game.renderer;
-        window.rendererBlendModes = {};
-        function addBlendingMode(name, params) {
-          let srcRGBIndex = params[0]; // default: 1
-          let dstRGBIndex = params[1]; // default: 7
-          let srcAlphaIndex = params[2]; // default: 1 
-          let dstAlphaIndex = params[3]; // default: 1
-          let equationIndex = params[4]; // default: 0
-          let newMode = [
-            blendConstants[srcRGBIndex],
-            blendConstants[dstRGBIndex],
-            blendConstants[srcAlphaIndex],
-            blendConstants[dstAlphaIndex]
-          ];
-          let modeIndex = renderer.addBlendMode(newMode, blendEquations[equationIndex]);
-          window.rendererBlendModes[name] = modeIndex;
-        }
-        
-        // add blend modes
-        addBlendingMode("Normal", [1, 7, 1, 1, 0]);
-        addBlendingMode("None", [1, 10, 1, 1, 0]);
-        addBlendingMode("Screen", [2, 8, 1, 1, 0]);
-        addBlendingMode("Dodge", [4, 1, 1, 1, 0]);
-        addBlendingMode("Burn", [3, 7, 2, 1, 0]);
-        
         // add layers and objects to structure
         levelData.layers.forEach(function(data) {
           Object.keys(data.objects || {}).forEach(function(objectID) {
