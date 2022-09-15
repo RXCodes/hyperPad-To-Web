@@ -38,4 +38,5 @@ function setBlendingMode(object, mode) {
     case "None":
       object.setBlendMode(Phaser.BlendModes.SKIP_CHECK);
       break;
+  }
 }
