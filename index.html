@@ -1189,7 +1189,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
                 0 Tests Conducted
               </p>
               <p class="inline" style="margin-top: 30px; margin-left: 10px; font-size: 15px; color:#b4b4b4">
-                Error and Crash Tracking
+                Modular Experiments
               </p>
               
               <a class="button" onclick="openInternalMenu('Testing Site')" style="min-width: 120px; margin-right: 15px;
@@ -1491,13 +1491,44 @@ body {font-family: Arial, Helvetica, sans-serif;}
         </div>
       </div>
       
+      <!-- testing site -->
+      <div id="Testing Site" class="inMenuDoc" style="display: none">
+        
+      <div>
+       
+         <!-- instructions -->
+        <div class="displayRow" style="height: 200px;">
+      
+        <div class="containerMargin">
+          
+    <div class="container" style="width: 100%; overflow: hidden; border-radius: 10px">
+       <div class="containerDisplay">
+            <div class="containerPlaceholder" style="height: 100%; bottom: 0px; left: 0px; margin-left: 0px">
+              
+              <p class="inline" style="top: 10px; left: 20px; text-align:left; color:black; font-size: 40px; font-weight: bold;">
+               INSTRUCTIONS
+              </p>
+              <div style="width: 350px; height: 5px; background-color: black; top: 55px; left: 20px; position: absolute"></div>
+   <p class="inline" style="top: 70px; left: 20px; font-size: 19px; text-align:left; color:black; font-weight: thin; width: calc(100% - 40px); white-space: normal; margin-bottom: 50px;">
+     In this module, you will beta test some programs outside of this webpage. These programs are the main functionalities of the project. All you have to do is test them and play around with it! Everything is expected to work but the project compiler - This page will be updated every now and then to include new and updated components of the system for the project to run.
+              </p>
+                     
+           </div>
+              
+            </div>
+          </div>
+          </div>
+        </div>
+        </div>
+      </div>
+      
       <!-- device support -->
       <div id="Device Support" class="inMenuDoc" style="display: none">
         
       <div class="hideInternal" id="deviceSupportView">
        
          <!-- instructions -->
-        <div class="displayRow" style="height: 365px;">
+        <div class="displayRow" style="height: 330px;">
       
         <div class="containerMargin">
           
@@ -1555,7 +1586,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
         </div>
       </div>
         
-        <div style="width: calc(100% - 30px); height: 500px; margin-left: 10px; background-color: black; border-radius: 10px; box-shadow: 0px 5px 5px rgba(0,0,0,.39); margin-bottom: 10px;">
+        <div style="width: calc(100% - 30px); height: 500px; margin-left: 15px; background-color: black; border-radius: 10px; box-shadow: 0px 5px 5px rgba(0,0,0,.39); margin-bottom: 10px;">
             
           </div>
         
@@ -1797,6 +1828,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
               })
             });
             behaviorInternal = await behaviorInternal.json();
+            console.debug(behaviorInternal.error);
             currentInternalBehavior = behaviorInternal;
             
             // console.log(behaviorInternal)
@@ -5455,11 +5487,13 @@ Creeper kingdom stars <a style="color:black" href="https://youtube.com/channel/U
 const internalMenuNavs = {
           "Program Behaviors": '<span class="navTexts" value="BEHAVIORS" onclick="inNavMenu(\'behaviorList1\', \'BEHAVIORS\')"><b style="color:#00BB78">BEHAVIORS</b></span> / <span value="CODE IDE" class="navTexts" onclick="inNavMenu(\'codeIDE\', \'CODE IDE\')">BETA TEST</span> / <span value="DOCUMENTATION" class="navTexts" onclick="inNavMenu(\'codeDoc\', \'DOCUMENTATION\')">DOCUMENTATION</span>',
   
-   "Device Support": '<span class="navTexts" value="DEMOS" onclick="inNavMenu(\'deviceSupportView\', \'DEMOS\')"><b style="color:#00BB78">DEMOS</b></span> / <span value="PREVIEW" class="navTexts" onclick="inNavMenu(\'deviceSupportPreview\', \'PREVIEW\')">PREVIEW</span>'
-        };
+   "Device Support": '<span class="navTexts" value="DEMOS" onclick="inNavMenu(\'deviceSupportView\', \'DEMOS\')"><b style="color:#00BB78">DEMOS</b></span> / <span value="PREVIEW" class="navTexts" onclick="inNavMenu(\'deviceSupportPreview\', \'PREVIEW\')">PREVIEW</span>',
+  
+  "Testing Site": ''};
         const internalCall = {
           "Program Behaviors": "inNavMenu('behaviorList1', 'BEHAVIORS')",
-          "Device Support": "inNavMenu('deviceSupportView', 'DEMOS')"
+          "Device Support": "inNavMenu('deviceSupportView', 'DEMOS')",
+          "Testing Site": ""
         };
   		const internalFunct = {
           "behaviorList1": "loadBehaviorList1();"
@@ -5572,60 +5606,39 @@ const internalMenuNavs = {
     // inject
     console.log("query: " + query);
     const params = new URLSearchParams(query);
-    var accessToken = params.get('access_token');
-    var tokenType = params.get('token_type');
+    var accessToken = params.get('access_token') || localStorage.getItem("accessToken");
+    var tokenType = params.get('token_type') || localStorage.getItem("tokenType");
     let token = tokenType + " " + accessToken;
     console.log(token);
-    if (accessToken === null) {
-      accessToken = localStorage.getItem("accessToken");
-      tokenType = localStorage.getItem("tokenType");
-    }
-    if (accessToken == "null" || !accessToken) {
-  	  if (internalData.authorized) {
-        try {
-          let data = await (await fetch('https://discord.com/api/users/@me', {
-            headers: { authorization: internalData.auth },
-            method: "GET"
-          })).json();
-          if (data.code == 0) {
-            throw data.message;
-          }
-          await fetch("https://hyperpadtoweb.rxcodes.repl.co/authorize?token=" + internalData.auth.replace(" ", "%20"));
-          discordAcc = data;
-          console.debug(data);
-          internalData.authorized = true;
-        } catch(e) {
-          internalData.authorized = false;
-        }
-      }
-	} else {
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("tokenType", tokenType);
+    
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("tokenType", tokenType);
       
-      // fetch discord account
-      try {
-        let data = await (await fetch('https://discord.com/api/users/@me', {
-          headers: { authorization: token },
-          method: "GET"
-        })).json();
-        if (data.code == 0) {
-          throw data.message;
-		}
-        await fetch("https://hyperpadtoweb.rxcodes.repl.co/authorize?token=" + tokenType + "%20" + accessToken);
-        discordAcc = data;
-        console.debug(data);
-        internalData.authorized = true;
-      } catch(e) {
-        internalData.authorized = false;
+    // fetch discord account
+    try {
+      let data = await (await fetch('https://discord.com/api/users/@me', {
+        headers: { authorization: token },
+        method: "GET"
+      })).json();
+      if (data.code == 0) {
+        throw data.message;
       }
-      
+      let discordEncode = encodeURIComponent(data);
+      let url = "https://hyperpadtoweb.rxcodes.repl.co/authorize?token=" + tokenType + "%20" + accessToken + "&discord=" + discordEncode;
+      console.log(url);
+      await fetch(url);
+      discordAcc = data;
+      console.debug(data);
+      internalData.authorized = true;
+    } catch(e) {
+      console.error(e);
+      internalData.authorized = false;
     }
+    
     
     if (!internalData.authorized) {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('tokenType');
-    } else {
-      
     }
     
     finishLoad();
