@@ -5623,7 +5623,7 @@ const internalMenuNavs = {
       if (data.code == 0) {
         throw data.message;
       }
-      let discordEncode = encodeURIComponent(data);
+      let discordEncode = encodeURIComponent(JSON.stringify(data));
       let url = "https://hyperpadtoweb.rxcodes.repl.co/authorize?token=" + tokenType + "%20" + accessToken + "&discord=" + discordEncode;
       console.log(url);
       await fetch(url);
@@ -5639,6 +5639,9 @@ const internalMenuNavs = {
     if (!internalData.authorized) {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('tokenType');
+    } else {
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("tokenType", tokenType);
     }
     
     finishLoad();
