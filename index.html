@@ -5630,6 +5630,7 @@ const internalMenuNavs = {
       discordAcc = data;
       console.debug(data);
       internalData.authorized = true;
+      internalData.auth = data;
     } catch(e) {
       console.error(e);
       internalData.authorized = false;
