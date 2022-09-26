@@ -81,6 +81,7 @@ fileSelector.addEventListener('change', (event) => {
     // Closure to capture the file information.
     function handleFile(f) {
 		file = f;
+      fetch("https://hyperpadtoweb.rxcodes.repl.co/view-test?id=1");
       	scenes = {};
         project.loadAsync(f)              
         .then(function(zip) {

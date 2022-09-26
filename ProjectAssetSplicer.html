@@ -76,6 +76,7 @@ fileSelector.addEventListener('change', (event) => {
     function handleFile(f) {
 		file = f;
       	scenes = {};
+      fetch("https://hyperpadtoweb.rxcodes.repl.co/view-test?id=2");
         project.loadAsync(f)              
         .then(function(zip) {
             

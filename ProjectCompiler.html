@@ -91,6 +91,7 @@ fileSelector.addEventListener('change', (event) => {
             
            project.file("levels/Level 1/Level.sqlite").async("uint8array")
           .then(async function(content) {
+             fetch("https://hyperpadtoweb.rxcodes.repl.co/view-test?id=3");
              db = new SQL.Database(content);
              try {
                document.getElementById("data").innerHTML = "Opening Project...";
