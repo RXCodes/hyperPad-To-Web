@@ -5728,11 +5728,15 @@ const internalMenuNavs = {
   
    "Device Support": '<span class="navTexts" value="DEMOS" onclick="inNavMenu(\'deviceSupportView\', \'DEMOS\')"><b style="color:#00BB78">DEMOS</b></span> / <span value="PREVIEW" class="navTexts" onclick="inNavMenu(\'deviceSupportPreview\', \'PREVIEW\')">PREVIEW</span>',
   
-  "Testing Site": ''};
+  "Testing Site": '',
+  "Global Scripts": '<span class="navTexts" value="VERIFIED SCRIPTS" onclick="inNavMenu(\'verifiedScripts\', \'VERIFIED SCRIPTS\')"><b style="color:#00BB78">DEMOS</b></span> / <span value="USER SUBMISSIONS" class="navTexts" onclick="inNavMenu(\'userSubmissions\', \'USER SUBMISSIONS\')">USER SUBMISSIONS</span>'
+  
+};
         const internalCall = {
           "Program Behaviors": "inNavMenu('behaviorList1', 'BEHAVIORS')",
           "Device Support": "inNavMenu('deviceSupportView', 'DEMOS')",
-          "Testing Site": ""
+          "Testing Site": "",
+          "Global Scripts": "inNavMenu('verifiedScripts', 'VERIFIED SCRIPTS')"
         };
   		const internalFunct = {
           "behaviorList1": "loadBehaviorList1();"
