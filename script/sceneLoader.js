@@ -135,8 +135,8 @@ async function loadLevel(index) {
             let xPos = objData.xPosition / 100;
             let yPos = screenHeight - (objData.yPosition / 100);
             if (objData.relativePosition) {
-              xPos *= screenWidth;
-              yPos *= screenHeight;
+              xPos = screenWidth * (objData.xPosition / 100);
+              yPos = screenHeight * (objData.yPosition / 100);
             }
             console.log(xPos, yPos);
             
