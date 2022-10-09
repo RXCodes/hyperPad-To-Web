@@ -147,26 +147,46 @@ async function loadLevel(index) {
               origin: [objData.anchorX, objData.anchorY], // anchor
               depth: objData.zOrder, // z order
               flipX: objData.flipX, // x flip
-              flipY: objData.flipY // y flip
+              flipY: objData.flipY, // y flip
+              label: objData.id, // object id
+              shape: {
+                type: 'rectangle',
+                width: objData.scaleXPercent * 0.64,
+                height: objData.scaleYPercent * 0.64
+              }
             };
             if (objData.type == "Empty") {
               
               switch (objData.shape) {
                 case "Circle":
                   object = game.add.circle(xPos, yPos, objData.scaleXPercent * 0.64);
+                  properties.shape = {
+                    type: 'circle',
+                    radius: objData.scaleXPercent * 0.64
+                  };
                   break;
                 case "Polygon":
                   object = game.add.polygon(xPos, yPos, objData.polygonCollisionsString);
+                  properties.shape = {
+                    type: 'fromVerts',
+                    verts: objData.polygonCollisionsString,
+                    flagInternal: true
+                  };
                   break;
                 default:
-                  object = game.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64); 
+                  object = game.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64);
+                  properties.shape = {
+                    type: 'rectangle',
+                    width: objData.scaleXPercent * 0.64,
+                    height: objData.scaleYPercent * 0.64
+                  };
                   break;
               }
             }
             
             // for unsupported object types, spawn an empty object instead
             if (object == null) {
-              object = game.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64, properties);
+              object = game.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64);
             }
             
             // additional object properties
@@ -184,7 +204,7 @@ async function loadLevel(index) {
             
             // add game object to matter.js as a rigid body for wall and physics objects
             if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
-              game.matter.add.gameObject(object);
+              game.matter.add.gameObject(object, properties);
               
               // set physics properties
               object.setFriction(objData.friction);
@@ -194,7 +214,7 @@ async function loadLevel(index) {
               
             }
             
-            // matter.js properties
+            // object properties
             setColor(object, color[0], color[1], color[2], color[3]);
             object.setAngle(objData.rotation);
 
