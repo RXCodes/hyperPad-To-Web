@@ -154,7 +154,8 @@ async function loadLevel(index) {
                 type: 'rectangle',
                 width: objData.scaleXPercent * 0.64,
                 height: objData.scaleYPercent * 0.64
-              }
+              },
+              zOrder: objData.zOrder
             };
             if (objData.type == "Empty") {
               
@@ -168,7 +169,8 @@ async function loadLevel(index) {
                   console.log("circle");
                   break;
                 case "Polygon":
-                  object = game.add.polygon(xPos, yPos, objData.polygonCollisions, 1, 1);
+                  object = game.add.polygon(0, 0, objData.polygonCollisions, 1, 1);
+                  object.setPosition(xPos, yPos, objData.zOrder);
                   properties.shape = {
                     type: 'fromVertices',
                     verts: objData.polygonCollisionsString,
@@ -217,9 +219,14 @@ async function loadLevel(index) {
               
             }
             
-            // object properties
+            // visual object properties
             setColor(object, color[0], color[1], color[2], color[3]);
             object.setAngle(objData.rotation);
+            object.setDepth(objData.zOrder);
+            object.setFlipX(objData.flipX);
+            object.setFlipY(objData.flipY);
+            object.setAnchor(objData.anchorX, objData.anchorY);
+            object.setVisibility(objData.visible);
 
             // add object to layer group
             gameLayers[layerData.UUID].instance.add([object]);
