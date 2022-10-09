@@ -224,7 +224,7 @@ async function loadLevel(index) {
             object.setAngle(objData.rotation);
             object.setDepth(objData.zOrder);
             object.setFlip(objData.flipX, objData.flipY);
-            object.setAnchor(objData.anchorX, objData.anchorY);
+            object.setOrigin(objData.anchorX, objData.anchorY);
             object.setVisibility(objData.visible);
 
             // add object to layer group
