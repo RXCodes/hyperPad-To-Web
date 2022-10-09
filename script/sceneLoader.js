@@ -223,8 +223,7 @@ async function loadLevel(index) {
             setColor(object, color[0], color[1], color[2], color[3]);
             object.setAngle(objData.rotation);
             object.setDepth(objData.zOrder);
-            object.setFlipX(objData.flipX);
-            object.setFlipY(objData.flipY);
+            object.setFlip(objData.flipX, objData.flipY);
             object.setAnchor(objData.anchorX, objData.anchorY);
             object.setVisibility(objData.visible);
 
