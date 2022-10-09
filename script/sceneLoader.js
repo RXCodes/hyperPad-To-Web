@@ -180,7 +180,7 @@ async function loadLevel(index) {
                     width: objData.scaleXPercent * 0.64,
                     height: objData.scaleYPercent * 0.64
                   };
-                  break;
+                  
               }
             }
             
