@@ -138,7 +138,7 @@ async function loadLevel(index) {
               xPos = screenWidth * (objData.xPosition / 100);
               yPos = screenHeight * (objData.yPosition / 100);
             }
-            console.log(xPos, yPos);
+            console.log(screenWidth, screenHeight, xPos, yPos);
             
             // spawn object
             let object = null;
