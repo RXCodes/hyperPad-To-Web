@@ -161,6 +161,7 @@ async function loadLevel(index) {
                 default:
                   object = game.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64, properties); 
                   break;
+              }
             }
             
             // for unsupported object types, spawn an empty object instead
