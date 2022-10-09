@@ -132,8 +132,8 @@ async function loadLevel(index) {
             gameLayers[layerData.UUID].instance.setActive(layerData.visible);
 
             // set up object for layer
-            let xPos = objData.xPosition / 100;
-            let yPos = screenHeight - (objData.yPosition / 100);
+            let xPos = objData.xPosition;
+            let yPos = screenHeight - objData.yPosition;
             if (objData.relativePosition) {
               xPos = screenWidth * (objData.xPosition / 100);
               yPos = screenHeight - (screenHeight * (objData.yPosition / 100));
@@ -160,7 +160,7 @@ async function loadLevel(index) {
               
               switch (objData.shape) {
                 case "Circle":
-                  object = game.add.circle(xPos, yPos, objData.collisionArea[0][0] / 2 * 0.64, 1, 1);
+                  object = game.add.circle(xPos, yPos, objData.collisionArea[0][0], 1, 1);
                   properties.shape = {
                     type: 'circle',
                     radius: objData.collisionArea[0][0]
