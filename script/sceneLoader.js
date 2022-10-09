@@ -261,10 +261,11 @@ async function loadLevel(index) {
   // initialize game
   window.game = new Phaser.Game(config);
   window.game.canvas.style.position = "fixed";
-  window.game.canvas.style.top = "50%";
-  window.game.canvas.style.left = "50%";
-  window.game.canvas.style["margin-top"] = "-50%";
-  window.game.canvas.style["margin-left"] = "-50%";
+  window.game.canvas.style.top = "0px";
+  window.game.canvas.style.left = "0px";
+  window.game.canvas.style["margin-top"] = "0px";
+  window.game.canvas.style["margin-left"] = "0px";
+  window.game.canvas.style.padding = "0px";
   window.game.canvas.style.width = "window.innerWidth";
   console.log("Loaded game");
     
