@@ -134,6 +134,10 @@ async function loadLevel(index) {
             // set up object for layer
             let xPos = objData.xPosition / 100;
             let yPos = screenHeight - (objData.yPosition / 100);
+            if (objData.relativePosition) {
+              xPos *= screenWidth;
+              yPos *= screenHeight;
+            }
             
             // spawn object
             let object = null;
@@ -146,7 +150,17 @@ async function loadLevel(index) {
               flipY: objData.flipY // y flip
             };
             if (objData.type == "Empty") {
-              object = game.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64, properties); 
+              
+              switch (objData.shape) {
+                case "Circle":
+                  object = game.add.circle(xPos, yPos, objData.scaleXPercent * 0.64, properties);
+                  break;
+                case "Polygon":
+                  object = game.add.polygon(xPos, yPos, objData.collisionArea, properties);
+                  break;
+                default:
+                  object = game.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64, properties); 
+                  break;
             }
             
             // for unsupported object types, spawn an empty object instead
