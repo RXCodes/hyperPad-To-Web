@@ -153,13 +153,13 @@ async function loadLevel(index) {
               
               switch (objData.shape) {
                 case "Circle":
-                  object = game.add.circle(xPos, yPos, objData.scaleXPercent * 0.64, properties);
+                  object = game.add.circle(xPos, yPos, objData.scaleXPercent * 0.64);
                   break;
                 case "Polygon":
-                  object = game.add.polygon(xPos, yPos, objData.polygonCollisions, properties);
+                  object = game.add.polygon(xPos, yPos, objData.polygonCollisionsString);
                   break;
                 default:
-                  object = game.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64, properties); 
+                  object = game.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64); 
                   break;
               }
             }
