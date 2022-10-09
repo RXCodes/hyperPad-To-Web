@@ -168,7 +168,7 @@ async function loadLevel(index) {
                   console.log("circle");
                   break;
                 case "Polygon":
-                  object = game.add.polygon(xPos, yPos, objData.polygonCollisionsString, 1, 1);
+                  object = game.add.polygon(xPos, yPos, objData.polygonCollisions, 1, 1);
                   properties.shape = {
                     type: 'fromVertices',
                     verts: objData.polygonCollisionsString,
