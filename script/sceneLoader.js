@@ -159,14 +159,14 @@ async function loadLevel(index) {
               
               switch (objData.shape) {
                 case "Circle":
-                  object = game.add.circle(xPos, yPos, objData.scaleXPercent * 0.64);
+                  object = game.add.circle(xPos, yPos, objData.scaleXPercent * 0.64, 1, 1);
                   properties.shape = {
                     type: 'circle',
                     radius: objData.scaleXPercent * 0.64
                   };
                   break;
                 case "Polygon":
-                  object = game.add.polygon(xPos, yPos, objData.polygonCollisionsString);
+                  object = game.add.polygon(xPos, yPos, objData.polygonCollisionsString, 1, 1);
                   properties.shape = {
                     type: 'fromVertices',
                     verts: objData.polygonCollisionsString,
@@ -174,7 +174,7 @@ async function loadLevel(index) {
                   };
                   break;
                 default:
-                  object = game.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64);
+                  object = game.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64, 1, 1);
                   properties.shape = {
                     type: 'rectangle',
                     width: objData.scaleXPercent * 0.64,
