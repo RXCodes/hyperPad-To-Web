@@ -168,7 +168,7 @@ async function loadLevel(index) {
                 case "Polygon":
                   object = game.add.polygon(xPos, yPos, objData.polygonCollisionsString);
                   properties.shape = {
-                    type: 'fromVerts',
+                    type: 'fromVertices',
                     verts: objData.polygonCollisionsString,
                     flagInternal: true
                   };
