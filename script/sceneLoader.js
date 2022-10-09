@@ -173,7 +173,7 @@ async function loadLevel(index) {
                   object.setPosition(xPos, yPos, objData.zOrder);
                   properties.shape = {
                     type: 'fromVertices',
-                    verts: objData.polygonCollisionsString,
+                    verts: objData.polygonCollisions,
                     flagInternal: true
                   };
                   console.log("polygon");
