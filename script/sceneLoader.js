@@ -150,7 +150,7 @@ async function loadLevel(index) {
               flipX: objData.flipX, // x flip
               flipY: objData.flipY, // y flip
               label: objData.id, // object id
-              shape: {
+              shape: { // collisions
                 type: 'rectangle',
                 width: objData.scaleXPercent * 0.64,
                 height: objData.scaleYPercent * 0.64
