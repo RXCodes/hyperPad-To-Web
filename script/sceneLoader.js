@@ -204,7 +204,7 @@ async function loadLevel(index) {
             
             // add game object to matter.js as a rigid body for wall and physics objects
             if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
-              game.matter.add.gameObject(object, properties);
+              game.matter.add.gameObject(object);
               
               // set physics properties
               object.setFriction(objData.friction);
