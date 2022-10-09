@@ -136,7 +136,7 @@ async function loadLevel(index) {
             let yPos = screenHeight - (objData.yPosition / 100);
             if (objData.relativePosition) {
               xPos = screenWidth * (objData.xPosition / 100);
-              yPos = 0 - (screenHeight * (objData.yPosition / 100));
+              yPos = screenHeight - (screenHeight * (objData.yPosition / 100));
             }
             console.log(screenWidth, screenHeight, xPos, yPos);
             
@@ -160,10 +160,10 @@ async function loadLevel(index) {
               
               switch (objData.shape) {
                 case "Circle":
-                  object = game.add.circle(xPos, yPos, objData.scaleXPercent * 0.64, 1, 1);
+                  object = game.add.circle(xPos, yPos, objData.collisionArea[0][0] / 2 * 0.64, 1, 1);
                   properties.shape = {
                     type: 'circle',
-                    radius: objData.scaleXPercent * 0.64
+                    radius: objData.collisionArea[0][0]
                   };
                   console.log("circle");
                   break;
