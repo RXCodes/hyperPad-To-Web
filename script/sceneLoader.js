@@ -160,7 +160,7 @@ async function loadLevel(index) {
               
               switch (objData.shape) {
                 case "Circle":
-                  object = game.add.circle(xPos, yPos, objData.collisionArea[0][0], 1, 1);
+                  object = game.add.circle(xPos, yPos, objData.collisionArea[0][0] * (objData.scaleYPercent / 100), 1, 1);
                   properties.shape = {
                     type: 'circle',
                     radius: objData.collisionArea[0][0]
