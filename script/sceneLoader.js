@@ -176,7 +176,6 @@ async function loadLevel(index) {
                     verts: objData.polygonCollisions,
                     flagInternal: true
                   };
-                  object.setFlip(objData.flipX, objData.flipY !== true);
                   console.log("polygon");
                   break;
                 default:
@@ -225,7 +224,9 @@ async function loadLevel(index) {
             object.setAngle(objData.rotation);
             object.setDepth(objData.zOrder);
             object.setOrigin(objData.anchorX, objData.anchorY);
-            object.setVisibility(objData.visible);
+            object.visible = objData.visible;
+            object.flipX = objData.flipX;
+            object.flipY = (objData.flipY !== true);
 
             // add object to layer group
             gameLayers[layerData.UUID].instance.add([object]);
