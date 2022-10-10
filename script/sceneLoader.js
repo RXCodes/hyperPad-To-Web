@@ -176,6 +176,7 @@ async function loadLevel(index) {
                     verts: objData.polygonCollisions,
                     flagInternal: true
                   };
+                  object.setFlip(objData.flipX, objData.flipY !== true);
                   console.log("polygon");
                   break;
                 default:
@@ -223,7 +224,6 @@ async function loadLevel(index) {
             setColor(object, color[0], color[1], color[2], color[3]);
             object.setAngle(objData.rotation);
             object.setDepth(objData.zOrder);
-            object.setFlip(objData.flipX, objData.flipY);
             object.setOrigin(objData.anchorX, objData.anchorY);
             object.setVisibility(objData.visible);
 
