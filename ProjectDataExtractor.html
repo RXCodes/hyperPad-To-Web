@@ -357,7 +357,7 @@ window.loadProject = function() {
           r.values.forEach(function(v) {
             points[v[zzI]] = [v[zxI], v[zyI]];
             pointsString.push(v[zxI]);
-            pointsString.push(0 - v[zyI]);
+            pointsString.push(v[zyI]);
           });
           resultObj.polygonCollisions = points;
           resultObj.polygonCollisionsString = pointsString.join(" ");
