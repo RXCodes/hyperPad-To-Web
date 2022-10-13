@@ -138,7 +138,6 @@ async function loadLevel(index) {
               xPos = screenWidth * (objData.xPosition / 100);
               yPos = screenHeight - (screenHeight * (objData.yPosition / 100));
             }
-            console.log(screenWidth, screenHeight, xPos, yPos);
             
             // spawn object
             let object = null;
@@ -166,7 +165,7 @@ async function loadLevel(index) {
                     type: 'circle',
                     radius: objData.collisionArea[0][0]
                   };
-                  console.log("circle");
+                  
                   break;
                 case "Polygon":
                   object = game.add.polygon(0, 0, objData.polygonCollisions, 1, 1);
@@ -177,7 +176,7 @@ async function loadLevel(index) {
                     flagInternal: true
                   };
                   object.setScale(objData.scaleXPercent / 100, objData.scaleYPercent / -100);
-                  console.log("polygon");
+                  
                   break;
                 default:
                   object = game.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64, 1, 1);
@@ -186,8 +185,9 @@ async function loadLevel(index) {
                     width: objData.scaleXPercent * 0.64,
                     height: objData.scaleYPercent * 0.64
                   };
-                  console.log("default");
+                  
               }
+              object.shape = objData.shape;
             }
             
             // for unsupported object types, spawn an empty object instead
