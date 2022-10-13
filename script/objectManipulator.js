@@ -136,7 +136,7 @@ system.spawnObject = function(objData) {
   object.setOrigin(objData.anchorX / 100, objData.anchorY / 100); 
   object.visible = objData.visible;  
   object.flipX = objData.flipX;  
-  object.flipY = (objData.flipY !== true);
+  object.flipY = objData.flipY;
   return object;
 };
 
