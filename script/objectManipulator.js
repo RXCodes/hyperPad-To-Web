@@ -9,8 +9,8 @@ system.moveToPoint = function(object, x, y, z, useRelativePosition) {
   let xPos = x;
   let yPos = window.screenHeight - y;
   if (useRelativePosition) {
-    xPos = window.screenWidth * (objData.xPosition / 100);
-    yPos = window.screenHeight - (window.screenHeight * (objData.yPosition / 100));      
+    xPos = window.screenWidth * (x / 100);
+    yPos = window.screenHeight - (window.screenHeight * (y / 100));      
   }
   if (z == undefined) {
     z = object.zOrder;
