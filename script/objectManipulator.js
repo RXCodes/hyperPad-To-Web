@@ -3,6 +3,22 @@
 // the system variable, responsible for holding global functions
 var system = {};
 
+// move an object to a point
+system.moveToPoint = function(object, x, y, z) {
+  
+  let xPos = x;
+  let yPos = window.screenHeight - y;
+  if (objData.relativePosition) {
+    xPos = window.screenWidth * (objData.xPosition / 100);
+    yPos = window.screenHeight - (window.screenHeight * (objData.yPosition / 100));      
+  }
+  if (z == undefined) {
+    z = object.zOrder;
+  }
+  object.setPosition(x, y, z);
+  
+}
+
 // spawn an object
 system.spawnObject = function(objData) {
              
@@ -45,12 +61,13 @@ system.spawnObject = function(objData) {
         
       case "Polygon":
         let poly = [];
+        let avgX = 0;
+        let avgY = 0;
         objData.polygonCollisions.forEach(function(pos) {
           poly.push(pos[0]);
           poly.push(pos[1] * -1);
         });
         object = game.add.polygon(0, 0, poly, 1, 1);
-        object.setPosition(xPos, yPos, objData.zOrder);
         properties.shape = {
           type: 'fromVertices',
           verts: objData.polygonCollisions,
@@ -76,9 +93,11 @@ system.spawnObject = function(objData) {
   
   // additional object properties
   object.type = objData.type; // object type (Empty, Graphic, etc.)
+  object.zOrder = objData.zOrder; // object z order
   object.id = objData.id; // object id 
   system.setBlendMode(object, objData.blendingMode); // blend mode
   system.setScale(object, objData.scaleXPercent, objData.scaleYPercent, true); // scale (last parameter enables percentage)
+  system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.zOrder); // move the object to its position
   
   // add game object to matter.js as a rigid body for wall and physics objects
   if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
