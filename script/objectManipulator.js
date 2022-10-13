@@ -3,6 +3,18 @@
 // the system variable, responsible for holding global functions
 var system = {};
 
+// move an object from its current position
+system.moveBy = function(object, x, y, useRelativePosition) {
+  
+  let xPos = x;
+  let yPos = window.screenHeight - y;
+  if (useRelativePosition) {
+    xPos = window.screenWidth * (x / 100);
+    yPos = window.screenHeight - (window.screenHeight * (y / 100));      
+  }
+  object.setPosition(xPos, yPos);
+}
+
 // move an object to a point
 system.moveToPoint = function(object, x, y, useRelativePosition) {
   
@@ -12,8 +24,7 @@ system.moveToPoint = function(object, x, y, useRelativePosition) {
     xPos = window.screenWidth * (x / 100);
     yPos = window.screenHeight - (window.screenHeight * (y / 100));      
   }
-  object.setPosition(x, y);
-  
+  object.setPosition(xPos, yPos);
 }
 
 // spawn an object
@@ -71,7 +82,6 @@ system.spawnObject = function(objData) {
           poly.push(pos[1] + avgY);
         });
         object = game.add.polygon(0, 0, poly, 1, 1);
-        system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
         properties.shape = {
           type: 'fromVertices',
           verts: objData.polygonCollisions,
@@ -96,6 +106,7 @@ system.spawnObject = function(objData) {
   }
   
   // additional object properties
+  system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
   object.type = objData.type; // object type (Empty, Graphic, etc.)
   object.zOrder = objData.zOrder; // object z order
   object.id = objData.id; // object id 
