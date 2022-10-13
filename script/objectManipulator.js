@@ -4,20 +4,18 @@
 var system = {};
 
 // move an object from its current position
-system.moveBy = function(object, x, y, useRelativePosition) {
-  
-  let xPos = x;
-  let yPos = window.screenHeight - y;
+system.moveBy = function(object, x, y, useRelativePosition) { 
   if (useRelativePosition) {
-    xPos = window.screenWidth * (x / 100);
-    yPos = window.screenHeight - (window.screenHeight * (y / 100));      
+    x *= window.screenWidth / 100;
+    y *= window.screenHeight / 100;
   }
+  let xPos = object.x + x;
+  let yPos = object.y + y;
   object.setPosition(xPos, yPos);
 }
 
 // move an object to a point
-system.moveToPoint = function(object, x, y, useRelativePosition) {
-  
+system.moveToPoint = function(object, x, y, useRelativePosition) { 
   let xPos = x;
   let yPos = window.screenHeight - y;
   if (useRelativePosition) {
