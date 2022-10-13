@@ -85,7 +85,7 @@ async function loadLevel(index) {
     scene: {
       preload: function() {}, // preload event does nothing yet
       create: function() {
-        let game = this;
+        window.game = this;
         
         // add layers and objects to structure
         levelData.layers.forEach(function(data) {
@@ -172,14 +172,14 @@ async function loadLevel(index) {
   };
   
   // initialize game
-  window.game = new Phaser.Game(config);
-  window.game.canvas.style.position = "absolute";
-  window.game.canvas.style.top = "0px";
-  window.game.canvas.style.left = "0px";
-  window.game.canvas.style["margin-top"] = "0px";
-  window.game.canvas.style["margin-left"] = "0px";
-  window.game.canvas.style.padding = "0px";
-  window.game.canvas.style.width = "window.innerWidth";
+  window.gameWindow = new Phaser.Game(config);
+  window.gameWindow.canvas.style.position = "absolute";
+  window.gameWindow.canvas.style.top = "0px";
+  window.gameWindow.canvas.style.left = "0px";
+  window.gameWindow.canvas.style["margin-top"] = "0px";
+  window.gameWindow.canvas.style["margin-left"] = "0px";
+  window.gameWindow.canvas.style.padding = "0px";
+  window.gameWindow.canvas.style.width = "window.innerWidth";
   console.log("Loaded game");
     
 }
