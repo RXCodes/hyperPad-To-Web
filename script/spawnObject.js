@@ -1,4 +1,13 @@
 system.spawnObject = function(objData) {
+             
+  // calculate position
+  let xPos = objData.xPosition;
+  let yPos = screenHeight - objData.yPosition;
+  if (objData.relativePosition) {
+    xPos = screenWidth * (objData.xPosition / 100);
+    yPos = screenHeight - (screenHeight * (objData.yPosition / 100));      
+  }
+  
   let object = null;
   let properties = {
     visible: objData.visible, // visibility
