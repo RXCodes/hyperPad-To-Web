@@ -58,8 +58,8 @@ async function loadLevel(index) {
   });
 
   // determine window size for game
-  let screenWidth = parseInt(currentAspectRatio.split(",")[0]);
-  let screenHeight = parseInt(currentAspectRatio.split(",")[1]);
+  window.screenWidth = parseInt(currentAspectRatio.split(",")[0]);
+  window.screenHeight = parseInt(currentAspectRatio.split(",")[1]);
   
   // reset data
   gameAudio = {};
@@ -69,8 +69,8 @@ async function loadLevel(index) {
   // configure phaser scene loader
   let config = {
     type: Phaser.AUTO,
-    width: screenWidth,
-    height: screenHeight,
+    width: window.screenWidth,
+    height: window.screenHeight,
     backgroundColor: Phaser.Display.Color.GetColor32(levelData.backgroundColor[0], levelData.backgroundColor[1], levelData.backgroundColor[2], levelData.backgroundColor[3]),
     physics: {
       default: 'matter',
