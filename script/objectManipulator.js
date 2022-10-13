@@ -44,7 +44,12 @@ system.spawnObject = function(objData) {
         break;
         
       case "Polygon":
-        object = game.add.polygon(0, 0, objData.polygonCollisions, 1, 1);
+        let poly = [];
+        objData.polygonCollisions.forEach(function(pos) {
+          poly.push(pos[0]);
+          poly.push(pos[1] * -1);
+        });
+        object = game.add.polygon(0, 0, poly, 1, 1);
         object.setPosition(xPos, yPos, objData.zOrder);
         properties.shape = {
           type: 'fromVertices',
