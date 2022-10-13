@@ -12,9 +12,9 @@ window.projectBase = projectBase; // add reference to the project database to th
 // load a level
 async function loadLevel(index) {
   
-  // kill previous game instance if any
+  // kill previous game window instance if any
   try {
-    window.game.destroy(true, false)
+    window.gameWindow.destroy(true, false)
   } catch(e) {};
   window.currentSceneIndex = index || 0;
   
