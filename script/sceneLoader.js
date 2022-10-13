@@ -10,7 +10,7 @@ window.Phaser = Phaser; // add reference to the plugin to the main window
 window.projectBase = projectBase; // add reference to the project database to the main window
 
 // load a level
-async function loadLevel(index) {
+system.loadLevel = async function(index) {
   
   // kill previous game window instance if any
   try {
@@ -184,4 +184,4 @@ async function loadLevel(index) {
     
 }
 
-loadLevel(0);
+system.loadLevel(0);
