@@ -5,7 +5,7 @@ var gameObjects = {}; // in-game representation of the object (color, scale, att
 var currentSceneIndex = 0; // current scene that the player is in - by default, the player will load into the first scene
 var gameAudio = {}; // the audio being played {key: audioID, value: audioInterface}
 var gameLayers = {}; // the current layers being displayed {key: layerID, value: layerData}
-var game = {}; // the variable holding the instance of the game
+window.game = {}; // the variable holding the instance of the game
 window.Phaser = Phaser; // add reference to the plugin to the main window
 window.projectBase = projectBase; // add reference to the project database to the main window
 
