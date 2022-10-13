@@ -71,6 +71,7 @@ system.spawnObject = function(objData) {
           poly.push(pos[1] + avgY);
         });
         object = game.add.polygon(0, 0, poly, 1, 1);
+        system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
         properties.shape = {
           type: 'fromVertices',
           verts: objData.polygonCollisions,
@@ -100,7 +101,6 @@ system.spawnObject = function(objData) {
   object.id = objData.id; // object id 
   system.setBlendMode(object, objData.blendingMode); // blend mode
   system.setScale(object, objData.scaleXPercent, objData.scaleYPercent, true); // scale (last parameter enables percentage)
-  system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
   
   // add game object to matter.js as a rigid body for wall and physics  
   if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
