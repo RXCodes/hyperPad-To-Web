@@ -1,5 +1,8 @@
 // -- objectManipulator.js: extended functionality to help manipulate objects
 
+// the system variable, responsible for holding global functions
+var system = {};
+
 // spawn an object
 system.spawnObject = function(objData) {
              
