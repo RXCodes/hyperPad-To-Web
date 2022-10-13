@@ -176,7 +176,7 @@ async function loadLevel(index) {
                     verts: objData.polygonCollisions,
                     flagInternal: true
                   };
-                  object.setScale(objData.scaleXPercent * 0.64, objData.scaleYPercent * -0.64);
+                  object.setScale(objData.scaleXPercent / 100, objData.scaleYPercent / -100);
                   console.log("polygon");
                   break;
                 default:
