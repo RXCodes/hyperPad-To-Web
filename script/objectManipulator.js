@@ -1,7 +1,7 @@
 // -- objectManipulator.js: extended functionality to help manipulate objects
 
 // change color of object regardless of type
-function setColor(object, r, g, b, a) {
+system.setColor = function(object, r, g, b, a) {
   
   // graphic objects
   if (object.type == "Graphic") {
@@ -21,7 +21,7 @@ function setColor(object, r, g, b, a) {
 
 
 // change blending mode of an object
-function setBlendMode(object, mode) {
+system.setBlendMode = function(object, mode) {
   switch (mode) {
     case "Normal":
       object.setBlendMode(Phaser.BlendModes.NORMAL);
