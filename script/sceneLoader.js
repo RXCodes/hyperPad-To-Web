@@ -199,14 +199,7 @@ async function loadLevel(index) {
             object.type = objData.type; // object type (Empty, Graphic, etc.)
             object.id = objData.id; // object id 
             
-            setBlendMode(object, objData.blendingMode); // blend mode
-            let color = objData.color;
-            if (color[3] === undefined) {
-              color[3] = 1;
-            }
-            for (let i = 0; i < 4; i++) {
-              color[i] = Math.round(color[i] * 255);
-            }  
+            system.setBlendMode(object, objData.blendingMode); // blend mode
             
             // add game object to matter.js as a rigid body for wall and physics objects
             if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
@@ -221,6 +214,13 @@ async function loadLevel(index) {
             }
             
             // visual object properties
+            let color = objData.color;
+            if (color[3] === undefined) {
+              color[3] = 1;
+            }
+            for (let i = 0; i < 4; i++) {
+              color[i] = Math.round(color[i] * 255);
+            }  
             setColor(object, color[0], color[1], color[2], color[3]);
             object.setAngle(objData.rotation);
             object.setDepth(objData.zOrder);
