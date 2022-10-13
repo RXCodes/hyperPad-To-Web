@@ -25,8 +25,8 @@ system.spawnObject = function(objData) {
     label: objData.id, // object id     
     shape: { // collisions    
       type: 'rectangle',      
-      width: 0.64,            
-      height: 0.64          
+      width: 64,
+      height: 64          
     },          
     zOrder: objData.zOrder // z order          
   };
@@ -36,7 +36,7 @@ system.spawnObject = function(objData) {
     switch (objData.shape) {
     
       case "Circle":
-        object = game.add.circle(xPos, yPos, objData.collisionArea[0][0] * (objData.scaleYPercent / 100), 1, 1);
+        object = game.add.circle(xPos, yPos, objData.collisionArea[0][0], 1, 1);
         properties.shape = {
           type: 'circle',
           radius: objData.collisionArea[0][0]
@@ -54,11 +54,11 @@ system.spawnObject = function(objData) {
         break;
         
       default:   
-        object = game.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64, 1, 1);      
+        object = game.add.rectangle(xPos, yPos, 64, 64, 1, 1);      
         properties.shape = {
           type: 'rectangle',          
-          width: 0.64,          
-          height: 0.64
+          width: 64,          
+          height: 64
         };        
     }    
     object.shape = objData.shape; 
@@ -66,7 +66,7 @@ system.spawnObject = function(objData) {
   
   // for unsupported object types, spawn an empty object instead
   if (object == null) {
-    object = game.add.rectangle(xPos, yPos, 0.64, 0.64); 
+    object = game.add.rectangle(xPos, yPos, 64, 64); 
   }
   
   // additional object properties
@@ -106,7 +106,7 @@ system.spawnObject = function(objData) {
 
 system.setScale = function(object, x, y, usePercentage = false) {
   if (usePercentage) {
-    object.setScale(x, y);
+    object.setScale(x / 100, y / 100);
   } else {
     object.setScale(
       (x * window.projectBase.ptmRatio) / object.width, 
