@@ -4,11 +4,11 @@
 var system = {};
 
 // move an object to a point
-system.moveToPoint = function(object, x, y, z) {
+system.moveToPoint = function(object, x, y, z, useRelativePosition) {
   
   let xPos = x;
   let yPos = window.screenHeight - y;
-  if (objData.relativePosition) {
+  if (useRelativePosition) {
     xPos = window.screenWidth * (objData.xPosition / 100);
     yPos = window.screenHeight - (window.screenHeight * (objData.yPosition / 100));      
   }
@@ -97,9 +97,9 @@ system.spawnObject = function(objData) {
   object.id = objData.id; // object id 
   system.setBlendMode(object, objData.blendingMode); // blend mode
   system.setScale(object, objData.scaleXPercent, objData.scaleYPercent, true); // scale (last parameter enables percentage)
-  system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.zOrder); // move the object to its position
+  system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.zOrder, objData.relativePosition); // move the object to its position
   
-  // add game object to matter.js as a rigid body for wall and physics objects
+  // add game object to matter.js as a rigid body for wall and physics  
   if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
     game.matter.add.gameObject(object);
     
