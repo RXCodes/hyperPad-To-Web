@@ -25,8 +25,8 @@ system.spawnObject = function(objData) {
     label: objData.id, // object id     
     shape: { // collisions    
       type: 'rectangle',      
-      width: objData.scaleXPercent * 0.64,            
-      height: objData.scaleYPercent * 0.64          
+      width: 0.64,            
+      height: 0.64          
     },          
     zOrder: objData.zOrder // z order          
   };
@@ -51,15 +51,14 @@ system.spawnObject = function(objData) {
           verts: objData.polygonCollisions,
           flagInternal: true
         };
-        object.setScale(objData.scaleXPercent / 100, objData.scaleYPercent / -100);     
         break;
         
       default:   
         object = game.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64, 1, 1);      
         properties.shape = {
           type: 'rectangle',          
-          width: objData.scaleXPercent * 0.64,          
-          height: objData.scaleYPercent * 0.64
+          width: 0.64,          
+          height: 0.64
         };        
     }    
     object.shape = objData.shape; 
@@ -67,13 +66,14 @@ system.spawnObject = function(objData) {
   
   // for unsupported object types, spawn an empty object instead
   if (object == null) {
-    object = game.add.rectangle(xPos, yPos, objData.scaleXPercent * 0.64, objData.scaleYPercent * 0.64); 
+    object = game.add.rectangle(xPos, yPos, 0.64, 0.64); 
   }
   
   // additional object properties
   object.type = objData.type; // object type (Empty, Graphic, etc.)
   object.id = objData.id; // object id 
   system.setBlendMode(object, objData.blendingMode); // blend mode
+  system.setScale(object, objData.scaleXPercent, objData.scaleYPercent, true); // scale (last parameter enables percentage)
   
   // add game object to matter.js as a rigid body for wall and physics objects
   if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
@@ -104,6 +104,17 @@ system.spawnObject = function(objData) {
   return object;
 };
 
+system.setScale = function(object, x, y, usePercentage = false) {
+  if (usePercentage) {
+    object.setScale(x, y);
+  } else {
+    object.setScale(
+      (x * window.projectBase.ptmRatio) / object.width, 
+      (y * window.projectBase.ptmRatio) / object.height
+    );
+  }
+}
+
 // change color of object regardless of type
 system.setColor = function(object, r, g, b, a) {
   
@@ -122,7 +133,6 @@ system.setColor = function(object, r, g, b, a) {
     object.setAlpha(a / 255);
   }
 }
-
 
 // change blending mode of an object
 system.setBlendMode = function(object, mode) {
