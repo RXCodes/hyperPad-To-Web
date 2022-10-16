@@ -125,13 +125,38 @@ system.spawnObject = function(objData) {
     color[i] = Math.round(color[i] * 255);
   }  
   system.setColor(object, color[0], color[1], color[2], color[3]); // color
-  object.setAngle(objData.rotation); // rotation
-  object.setDepth(objData.zOrder); // z order
-  object.visible = objData.visible; // object visibility
-  object.flipX = objData.flipX; // x flip
-  object.flipY = objData.flipY; // y flip
+  system.setRotation(object, objData.rotation); // rotation
+  system.setZOrder(object, objData.zOrder); // z order
+  system.setVisibility(object, objData.visible); // object visibility
+  system.setFlipX(object, objData.flipX); // x flip
+  system.setFlipY(object, objData.flipY); // y flip
   return object;
 };
+
+system.setFlipY = function(object, bool) {
+  object.flipY = bool;
+  object.data.flipY = bool;
+}
+
+system.setFlipX = function(object, bool) {
+  object.flipX = bool;
+  object.data.flipX = bool;
+}
+
+system.setVisiblity = function(object, state) {
+  object.visible = state;
+  object.data.visible = state;
+}
+
+system.setZOrder = function(object, z) {
+  object.setDepth(z);
+  object.data.zOrder = z;
+}
+
+system.setRotation = function(object, angle) {
+  object.setAngle(angle);
+  object.data.rotation = angle;
+}
 
 system.setScale = function(object, x, y, usePercentage = false) {
   if (usePercentage) {
