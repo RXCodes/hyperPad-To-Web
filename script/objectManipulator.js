@@ -100,6 +100,12 @@ system.spawnObject = function(objData) {
     object = game.add.rectangle(xPos, yPos, 64, 64); 
   }
   
+  object.data = objData;
+  system.setAnchorPoint(object, objData.anchorX, objData.anchorY); 
+  system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
+  system.setBlendMode(object, objData.blendingMode); // blend mode
+  system.setScale(object, objData.scaleXPercent, objData.scaleYPercent, true); // scale (last parameter enables percentage)
+  
   // add game object to matter.js as a rigid body for wall and physics  
   if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
     game.matter.add.gameObject(object);
@@ -112,11 +118,6 @@ system.spawnObject = function(objData) {
   }
   
   // object properties
-  object.data = objData;
-  system.setAnchorPoint(object, objData.anchorX, objData.anchorY); 
-  system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
-  system.setBlendMode(object, objData.blendingMode); // blend mode
-  system.setScale(object, objData.scaleXPercent, objData.scaleYPercent, true); // scale (last parameter enables percentage)
   let color = objData.color;
   if (color[3] === undefined) {
     color[3] = 1; 
