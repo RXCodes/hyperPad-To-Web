@@ -178,14 +178,14 @@ system.setScale = function(object, x, y, usePercentage = false) {
 system.setColor = function(object, r, g, b, a) {
   
   // graphic objects
-  if (object.type == "Graphic") {
+  if (object.data.type == "Graphic") {
     object.setTint(Phaser.Display.Color.GetColor32(
       r, g, b, a
     ));    
   }
   
   // empty objects
-  if (object.type == "Empty") {
+  if (object.data.type == "Empty") {
     object.fillColor = Phaser.Display.Color.GetColor32(
       r, g, b, a
     );  
