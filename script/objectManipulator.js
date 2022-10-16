@@ -77,7 +77,7 @@ system.spawnObject = function(objData) {
         avgY = avgY / objData.polygonCollisions.length;
         objData.polygonCollisions.forEach(function(pos) {
           poly.push(pos[0]);
-          poly.push((pos[1] * -1);
+          poly.push((pos[1] * -1));
         });
         object = game.add.polygon(avgX, avgY, poly, 1, 1);
         properties.shape = {
