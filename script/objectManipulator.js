@@ -32,7 +32,7 @@ system.moveToPoint = function(object, x, y, useRelativePosition) {
 system.setAnchorPoint = function(object, x, y) {
   let collisionOffsetX = (object.data.collisionCenterX - 32) / object.width;
   let collisionOffsetY = (object.data.collisionCenterY - 32) / object.height;
-  object.setOrigin((x / 100) - collisionOffsetX, (y / 100)) + collisionOffsetY;
+  object.setOrigin((x / 100) + collisionOffsetX, (y / 100)) - collisionOffsetY;
   object.data.xAnchor = x;
   object.data.yAnchor = y;
 }
