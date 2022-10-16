@@ -107,9 +107,7 @@ system.spawnObject = function(objData) {
   }
   
   // object properties
-  let collisionOffsetX = (objData.collisionCenterX - 32) / object.width;
-  let collisionOffsetY = (objData.collisionCenterY - 32) / object.height;
-  object.setOrigin((objData.anchorX / 100) + collisionOffsetX, (objData.anchorY / 100)) - collisionOffsetY; 
+  system.setAnchorPoint(objData.anchorX, objData.anchorY); 
   system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
   object.type = objData.type; // object type (Empty, Graphic, etc.)
   object.zOrder = objData.zOrder; // object z order
