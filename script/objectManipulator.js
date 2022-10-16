@@ -30,9 +30,9 @@ system.moveToPoint = function(object, x, y, useRelativePosition) {
 }
 
 system.setAnchorPoint = function(object, x, y) {
-  let collisionOffsetX = (object.data.collisionCenterX - 32) / 32;
-  let collisionOffsetY = (object.data.collisionCenterY - 32) / 32;
-  object.setOrigin((x / 100) + collisionOffsetX, (y / 100)) + collisionOffsetY;
+  let collisionOffsetX = (object.data.collisionCenterX - 32) / 64;
+  let collisionOffsetY = (object.data.collisionCenterY - 32) / 64;
+  object.setOrigin((x / 100) + collisionOffsetX, (y / 100)) - collisionOffsetY;
   object.data.xAnchor = x;
   object.data.yAnchor = y;
 }
@@ -127,7 +127,7 @@ system.spawnObject = function(objData) {
   system.setColor(object, color[0], color[1], color[2], color[3]); // color
   system.setRotation(object, objData.rotation); // rotation
   system.setZOrder(object, objData.zOrder); // z order
-  // system.setVisibility(object, objData.visible); // object visibility
+  system.setVisibility(object, objData.visible); // object visibility
   system.setFlipX(object, objData.flipX); // x flip
   system.setFlipY(object, objData.flipY); // y flip
   return object;
