@@ -143,7 +143,7 @@ system.setFlipX = function(object, bool) {
   object.data.flipX = bool;
 }
 
-system.setVisiblity = function(object, state) {
+system.setVisibility = function(object, state) {
   object.visible = state;
   object.data.visible = state;
 }
