@@ -67,14 +67,8 @@ system.spawnObject = function(objData) {
         
       case "Polygon":
         let poly = [];
-        let avgX = 0;
-        let avgY = 0;
-        objData.polygonCollisions.forEach(function(pos) {
-          avgX += pos[0];
-          avgY += pos[1];
-        });
-        avgX = avgX / objData.polygonCollisions.length;
-        avgY = avgY / objData.polygonCollisions.length;
+        let offsetX = objData.collisionCenterX - 32;
+        let offsetY = objData.collisionCenterY - 32;
         objData.polygonCollisions.forEach(function(pos) {
           poly.push(pos[0]);
           poly.push((pos[1] * -1));
