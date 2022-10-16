@@ -12,6 +12,8 @@ system.moveBy = function(object, x, y, useRelativePosition) {
   let xPos = object.x + x;
   let yPos = object.y + y;
   object.setPosition(xPos, yPos);
+  object.data.xPosition = xPos;
+  object.data.yPosition = yPos;
 }
 
 // move an object to a point
@@ -23,12 +25,16 @@ system.moveToPoint = function(object, x, y, useRelativePosition) {
     yPos = window.screenHeight - (window.screenHeight * (y / 100));      
   }
   object.setPosition(xPos, yPos);
+  object.data.xPosition = xPos;
+  object.data.yPosition = yPos;
 }
 
 system.setAnchorPoint = function(object, x, y) {
-  let collisionOffsetX = (object.collisionCenterX - 32) / object.width;
-  let collisionOffsetY = (object.collisionCenterY - 32) / object.height;
-  object.setOrigin((object.anchorX / 100) - collisionOffsetX, (object.anchorY / 100)) + collisionOffsetY;
+  let collisionOffsetX = (object.data.collisionCenterX - 32) / object.width;
+  let collisionOffsetY = (object.data.collisionCenterY - 32) / object.height;
+  object.setOrigin((x / 100) - collisionOffsetX, (y / 100)) + collisionOffsetY;
+  object.data.xAnchor = x;
+  object.data.yAnchor = y;
 }
 
 // spawn an object
@@ -43,20 +49,13 @@ system.spawnObject = function(objData) {
   }
   
   let object = null;
-  let properties = {
-    visible: objData.visible, // visibility
-    angle: objData.rotation, // rotation
-    origin: [objData.anchorX, objData.anchorY], // anchor
-    depth: objData.zOrder, // z order 
-    flipX: objData.flipX, // x flip
-    flipY: objData.flipY, // y flip         
+  let properties = { // physical properties
     label: objData.id, // object id     
     shape: { // collisions    
       type: 'rectangle',      
       width: 64,
       height: 64          
-    },          
-    zOrder: objData.zOrder // z order          
+    }
   };
   
   if (objData.type == "Empty") {
@@ -113,14 +112,11 @@ system.spawnObject = function(objData) {
   }
   
   // object properties
-  system.setAnchorPoint(objData.anchorX, objData.anchorY); 
+  object.data = objData;
+  system.setAnchorPoint(object, objData.anchorX, objData.anchorY); 
   system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
-  object.type = objData.type; // object type (Empty, Graphic, etc.)
-  object.zOrder = objData.zOrder; // object z order
-  object.id = objData.id; // object id 
   system.setBlendMode(object, objData.blendingMode); // blend mode
   system.setScale(object, objData.scaleXPercent, objData.scaleYPercent, true); // scale (last parameter enables percentage)
-  
   let color = objData.color;
   if (color[3] === undefined) {
     color[3] = 1; 
@@ -128,23 +124,27 @@ system.spawnObject = function(objData) {
   for (let i = 0; i < 4; i++) {
     color[i] = Math.round(color[i] * 255);
   }  
-  system.setColor(object, color[0], color[1], color[2], color[3]);
-  object.setAngle(objData.rotation);
-  object.setDepth(objData.zOrder);
-  object.visible = objData.visible;  
-  object.flipX = objData.flipX;  
-  object.flipY = objData.flipY;
+  system.setColor(object, color[0], color[1], color[2], color[3]); // color
+  object.setAngle(objData.rotation); // rotation
+  object.setDepth(objData.zOrder); // z order
+  object.visible = objData.visible; // object visibility
+  object.flipX = objData.flipX; // x flip
+  object.flipY = objData.flipY; // y flip
   return object;
 };
 
 system.setScale = function(object, x, y, usePercentage = false) {
   if (usePercentage) {
     object.setScale(x / 100, y / 100);
+    object.data.scaleXPercentage = x;
+    object.data.scaleYPercentage = y;
   } else {
     object.setScale(
       (x * window.projectBase.ptmRatio) / object.width, 
       (y * window.projectBase.ptmRatio) / object.height
     );
+    object.data.scaleXPercentage = (x * window.projectBase.ptmRatio) / object.width) * 100;
+    object.data.scaleYPercentage = (y * window.projectBase.ptmRatio) / object.height) * 100;
   }
 }
 
@@ -165,6 +165,8 @@ system.setColor = function(object, r, g, b, a) {
     );  
     object.setAlpha(a / 255);
   }
+  
+  object.data.color = [r, g, b, a];
 }
 
 // change blending mode of an object
@@ -186,4 +188,5 @@ system.setBlendMode = function(object, mode) {
       object.setBlendMode(Phaser.BlendModes.NORMAL);
       break;
   }
+  object.data.blendMode = mode;
 }
