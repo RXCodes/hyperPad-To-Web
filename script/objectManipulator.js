@@ -25,6 +25,12 @@ system.moveToPoint = function(object, x, y, useRelativePosition) {
   object.setPosition(xPos, yPos);
 }
 
+system.setAnchorPoint = function(object, x, y) {
+  let collisionOffsetX = (object.collisionCenterX - 32) / object.width;
+  let collisionOffsetY = (object.collisionCenterY - 32) / object.height;
+  object.setOrigin((object.anchorX / 100) - collisionOffsetX, (object.anchorY / 100)) + collisionOffsetY;
+}
+
 // spawn an object
 system.spawnObject = function(objData) {
              
