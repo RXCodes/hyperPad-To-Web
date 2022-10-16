@@ -67,8 +67,6 @@ system.spawnObject = function(objData) {
         
       case "Polygon":
         let poly = [];
-        let offsetX = objData.collisionCenterX - 32;
-        let offsetY = objData.collisionCenterY - 32;
         objData.polygonCollisions.forEach(function(pos) {
           poly.push(pos[0]);
           poly.push((pos[1] * -1));
@@ -97,14 +95,6 @@ system.spawnObject = function(objData) {
     object = game.add.rectangle(xPos, yPos, 64, 64); 
   }
   
-  // additional object properties
-  system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
-  object.type = objData.type; // object type (Empty, Graphic, etc.)
-  object.zOrder = objData.zOrder; // object z order
-  object.id = objData.id; // object id 
-  system.setBlendMode(object, objData.blendingMode); // blend mode
-  system.setScale(object, objData.scaleXPercent, objData.scaleYPercent, true); // scale (last parameter enables percentage)
-  
   // add game object to matter.js as a rigid body for wall and physics  
   if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
     game.matter.add.gameObject(object);
@@ -116,7 +106,17 @@ system.spawnObject = function(objData) {
     object.setStatic(objData.physicsMode == "Wall");  
   }
   
-  // visual object properties
+  // object properties
+  let collisionOffsetX = (objData.collisionCenterX - 32) / object.width;
+  let collisionOffsetY = (objData.collisionCenterY - 32) / object.height;
+  object.setOrigin((objData.anchorX / 100) + collisionOffsetX, (objData.anchorY / 100)) - collisionOffsetY; 
+  system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
+  object.type = objData.type; // object type (Empty, Graphic, etc.)
+  object.zOrder = objData.zOrder; // object z order
+  object.id = objData.id; // object id 
+  system.setBlendMode(object, objData.blendingMode); // blend mode
+  system.setScale(object, objData.scaleXPercent, objData.scaleYPercent, true); // scale (last parameter enables percentage)
+  
   let color = objData.color;
   if (color[3] === undefined) {
     color[3] = 1; 
@@ -127,7 +127,6 @@ system.spawnObject = function(objData) {
   system.setColor(object, color[0], color[1], color[2], color[3]);
   object.setAngle(objData.rotation);
   object.setDepth(objData.zOrder);
-  object.setOrigin(objData.anchorX / 100, objData.anchorY / 100); 
   object.visible = objData.visible;  
   object.flipX = objData.flipX;  
   object.flipY = objData.flipY;
