@@ -168,8 +168,8 @@ system.setScale = function(object, x, y, usePercentage = false) {
       (x * window.projectBase.ptmRatio) / object.width, 
       (y * window.projectBase.ptmRatio) / object.height
     );
-    object.data.scaleXPercentage = (x * window.projectBase.ptmRatio) / object.width) * 100;
-    object.data.scaleYPercentage = (y * window.projectBase.ptmRatio) / object.height) * 100;
+    object.data.scaleXPercentage = ((x * window.projectBase.ptmRatio) / object.width) * 100;
+    object.data.scaleYPercentage = ((y * window.projectBase.ptmRatio) / object.height) * 100;
   }
 }
 
