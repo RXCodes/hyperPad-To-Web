@@ -110,8 +110,8 @@ system.spawnObject = function(objData, layerInstance) {
   let layerData = layerInstance.data;
   if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
     let physics = game.matter.add.gameObject(object, properties);
-    physics.setCollisionGroup(layerData.zOrder + 1);
-    physics.setCollidesWith(0);
+    object.setCollisionGroup(layerData.zOrder + 1);
+    object.setCollidesWith(0);
     
     // set physics properties
     object.setFriction(objData.friction);
