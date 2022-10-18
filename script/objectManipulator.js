@@ -109,7 +109,7 @@ system.spawnObject = function(objData, layerInstance) {
   // add game object to matter.js as a rigid body for wall and physics  
   let layerData = layerInstance.data;
   if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
-    game.matter.add(object, properties);
+    game.matter.add.gameObject(object, properties);
     object.setCollisionGroup(layerData.zOrder + 1);
     object.setCollidesWith(0);
     
