@@ -79,7 +79,8 @@ system.loadLevel = async function(index) {
           y: -1 * projectBase.yGravity,
           x: projectBase.xGravity,
           debug: true
-        }
+        },
+        enabled: true
       }
     },
     scene: {
