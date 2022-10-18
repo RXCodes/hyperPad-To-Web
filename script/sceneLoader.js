@@ -87,6 +87,9 @@ system.loadLevel = async function(index) {
       create: function() {
         game = this;
         
+        // get global layer
+        levelData.layers.push(projectBase.globalLayer);
+        
         // add layers and objects to structure
         levelData.layers.forEach(function(data) {
           Object.keys(data.objects || {}).forEach(function(objectID) {
@@ -133,6 +136,11 @@ system.loadLevel = async function(index) {
             
             // spawn object
             let object = system.spawnObject(objData);
+            
+            // fix object to screen for UI layers
+            if (layerData.UI) {
+              object.fixToCamera = true;
+            }
 
             // add object to layer group
             gameLayers[layerData.UUID].instance.add([object]);
