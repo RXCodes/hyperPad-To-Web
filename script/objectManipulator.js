@@ -118,6 +118,10 @@ system.spawnObject = function(objData, layerInstance) {
     object.setBounce(objData.bounce);
     object.setMass(objData.mass);
     object.setStatic(objData.physicsMode == "Wall");  
+    setInterval(function() {
+      object.x = objData.xPosition;
+      object.y = objData.yPosition;
+    }, 1000);
   }
   
   // object properties
