@@ -108,7 +108,7 @@ system.spawnObject = function(objData) {
   
   // add game object to matter.js as a rigid body for wall and physics  
   if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
-    game.matter.add.gameObject(object);
+    game.matter.add.gameObject(object, properties);
     
     // set physics properties
     object.setFriction(objData.friction);
