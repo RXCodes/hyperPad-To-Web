@@ -63,7 +63,7 @@ system.spawnObject = function(objData, layerInstance) {
     switch (objData.shape) {
     
       case "Circle":
-        object = game.matter.add.circle(xPos, yPos, objData.collisionArea[0][0], 1, 1);
+        object = game.add.circle(xPos, yPos, objData.collisionArea[0][0], 1, 1);
         properties.shape = {
           type: 'circle',
           radius: objData.collisionArea[0][0]
@@ -76,7 +76,7 @@ system.spawnObject = function(objData, layerInstance) {
           poly.push(pos[0]);
           poly.push((pos[1] * -1));
         });
-        object = game.matter.add.polygon(0, 0, poly, 1, 1);
+        object = game.add.polygon(0, 0, poly, 1, 1);
         properties.shape = {
           type: 'fromVertices',
           verts: objData.polygonCollisions,
@@ -85,7 +85,7 @@ system.spawnObject = function(objData, layerInstance) {
         break;
         
       default:   
-        object = game.matter.add.rectangle(xPos, yPos, 64, 64, 1, 1);      
+        object = game.add.rectangle(xPos, yPos, 64, 64, 1, 1);      
         properties.shape = {
           type: 'rectangle',          
           width: 64,          
@@ -97,7 +97,7 @@ system.spawnObject = function(objData, layerInstance) {
   
   // for unsupported object types, spawn an empty object instead
   if (object == null) {
-    object = game.matter.add.rectangle(xPos, yPos, 64, 64); 
+    object = game.add.rectangle(xPos, yPos, 64, 64); 
   }
   
   object.data = objData;
@@ -109,6 +109,7 @@ system.spawnObject = function(objData, layerInstance) {
   // add game object to matter.js as a rigid body for wall and physics  
   let layerData = layerInstance.data;
   if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
+    game.matter.add(object, properties);
     object.setCollisionGroup(layerData.zOrder + 1);
     object.setCollidesWith(0);
     
