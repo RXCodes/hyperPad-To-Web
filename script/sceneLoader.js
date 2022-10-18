@@ -135,21 +135,7 @@ system.loadLevel = async function(index) {
             gameLayers[layerData.UUID].instance.setActive(layerData.visible);
             
             // spawn object
-            let object = system.spawnObject(objData);
-            
-            // fix object to screen for UI layers
-            if (layerData.UI) {
-              object.fixToCamera = true;
-            }
-
-            // add object to layer group
-            gameLayers[layerData.UUID].instance.add([object]);
-
-            // keep record of object 
-            gameObjects[objData.id] = {
-              data: objData,
-              instance: object
-            };
+            let object = system.spawnObject(objData, gameLayers[layerData.UUID]);
             
             // debugging purposes
             console.log(object);
