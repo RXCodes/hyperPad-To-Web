@@ -38,7 +38,7 @@ system.setAnchorPoint = function(object, x, y) {
 }
 
 // spawn an object
-system.spawnObject = function(objData) {
+system.spawnObject = function(objData, layerInstance) {
              
   // calculate position
   let xPos = objData.xPosition;
@@ -107,9 +107,10 @@ system.spawnObject = function(objData) {
   system.setScale(object, objData.scaleXPercent, objData.scaleYPercent, true); // scale (last parameter enables percentage)
   
   // add game object to matter.js as a rigid body for wall and physics  
+  let layerData = layerInstance.data;
   if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
     game.matter.add.gameObject(object, properties);
-    object.setCollisionGroup(1);
+    object.setCollisionGroup(layerData.zOrder + 1);
     object.setCollidesWith(0);
     
     // set physics properties
@@ -133,6 +134,21 @@ system.spawnObject = function(objData) {
   system.setVisibility(object, objData.visible); // object visibility
   system.setFlipX(object, objData.flipX); // x flip
   system.setFlipY(object, objData.flipY); // y flip
+  
+  // fix object to screen for UI layers
+  if (layerData.UI) {
+    object.fixToCamera = true;
+  }
+
+  // add object to layer group
+  layerInstance.instance.add([object]);
+
+  // keep record of object 
+  gameObjects[objData.id] = {
+    data: objData,
+    instance: object
+  };
+  
   return object;
 };
 
