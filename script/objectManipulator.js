@@ -118,10 +118,12 @@ system.spawnObject = function(objData, layerInstance) {
     object.setBounce(objData.bounce);
     object.setMass(objData.mass);
     object.setStatic(objData.physicsMode == "Wall");  
+    
+    // check to see if position can be updated (remove in final product)
     setInterval(function() {
-      object.x = objData.xPosition;
-      object.y = objData.yPosition;
-    }, 1000);
+      object.x = objData.xPosition + Math.random() - 0.5;
+      object.y = objData.yPosition + Math.random() - 0.5;
+    }, 100);
   }
   
   // object properties
