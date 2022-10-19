@@ -54,8 +54,8 @@ system.spawnObject = function(objData, layerInstance) {
     label: objData.id, // object id     
     shape: { // collisions    
       type: 'rectangle',      
-      width: 64,
-      height: 64,
+      width: 64 * (objData.scaleXPercentage / 100),
+      height: 64 * (objData.scaleYPercentage / 100),
       flagInternal: true
     }
   };
@@ -65,24 +65,28 @@ system.spawnObject = function(objData, layerInstance) {
     switch (objData.shape) {
     
       case "Circle":
+        let scaleFactor = Math.max((objData.scaleXPercentage / 100), (objData.scaleYPercentage / 100));
         object = game.add.circle(xPos, yPos, objData.collisionArea[0][0], 1, 1);
         properties.shape = {
           type: 'circle',
-          radius: objData.collisionArea[0][0],
+          radius: objData.collisionArea[0][0] * scaleFactor,
           flagInternal: true
         };
         break;
         
       case "Polygon":
         let poly = [];
+        let polyTransformed = [];
         objData.polygonCollisions.forEach(function(pos) {
           poly.push(pos[0]);
           poly.push((pos[1] * -1));
+          polyTransformed.push(pos[0]);
+          polyTransformed.push((pos[1] * -1));
         });
         object = game.add.polygon(0, 0, poly, 1, 1);
         properties.shape = {
           type: 'fromVertices',
-          verts: objData.polygonCollisions,
+          verts: polyTransformed,
           flagInternal: true
         };
         break;
@@ -91,8 +95,8 @@ system.spawnObject = function(objData, layerInstance) {
         object = game.add.rectangle(xPos, yPos, 64, 64, 1, 1);      
         properties.shape = {
           type: 'rectangle',          
-          width: 64,          
-          height: 64,
+          width: 64 * (objData.scaleXPercentage / 100),
+          height: 64 * (objData.scaleYPercentage / 100),
           flagInternal: true
         };        
     }     
@@ -196,6 +200,13 @@ system.setScale = function(object, x, y, usePercentage = false) {
     object.setScale(x / 100, y / 100);
     object.data.scaleXPercentage = x;
     object.data.scaleYPercentage = y;
+    
+    // circles take the length / width of the largest side
+    if (object.data.shape == "Circle") {
+      let scaleFactor = Math.max(x / 100), (y / 100));
+      object.setScale(scaleFactor, scaleFactor);
+    }
+    
   } else {
     object.setScale(
       (x * window.projectBase.ptmRatio) / object.width, 
@@ -203,6 +214,13 @@ system.setScale = function(object, x, y, usePercentage = false) {
     );
     object.data.scaleXPercentage = ((x * window.projectBase.ptmRatio) / object.width) * 100;
     object.data.scaleYPercentage = ((y * window.projectBase.ptmRatio) / object.height) * 100;
+    
+    // circles take the length / width of the largest side
+    if (object.data.shape == "Circle") {
+      let scaleFactor = Math.max((x * window.projectBase.ptmRatio) / object.width, 
+      (y * window.projectBase.ptmRatio) / object.height);
+      object.setScale(scaleFactor, scaleFactor);
+    }
   }
 }
 
