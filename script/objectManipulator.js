@@ -150,10 +150,11 @@ system.spawnObject = function(objData, layerInstance) {
     object.setMass(objData.mass);
     object.setStatic(objData.physicsMode == "Wall");  
     
-    // reset attributes for physics objects
+    // reset rotation for physics objects
     system.setRotation(object, objData.rotation); // rotation
-    system.setZOrder(object, objData.zOrder); // z order
-    system.setScale(object, objData.scaleXPercent, objData.scaleYPercent, true); // scale (last parameter enables percentage)
+    
+    // fix collision hitbox
+    // ...
   }
 
   // keep record of object 
