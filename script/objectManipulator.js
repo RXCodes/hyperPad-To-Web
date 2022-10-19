@@ -54,8 +54,8 @@ system.spawnObject = function(objData, layerInstance) {
     label: objData.id, // object id     
     shape: { // collisions    
       type: 'rectangle',      
-      width: 64 * (objData.scaleXPercentage / 100),
-      height: 64 * (objData.scaleYPercentage / 100),
+      width: 64 * (objData.scaleXPercent / 100),
+      height: 64 * (objData.scaleYPercent / 100),
       flagInternal: true
     }
   };
@@ -80,8 +80,8 @@ system.spawnObject = function(objData, layerInstance) {
         objData.polygonCollisions.forEach(function(pos) {
           poly.push(pos[0]);
           poly.push((pos[1] * -1));
-          polyTransformed.push(pos[0] * (objData.scaleXPercentage / 100));
-          polyTransformed.push((pos[1] * -1) * (objData.scaleYPercentage / 100));
+          polyTransformed.push(pos[0] * (objData.scaleXPercent / 100));
+          polyTransformed.push((pos[1] * -1) * (objData.scaleYPercent / 100));
         });
         object = game.add.polygon(0, 0, poly, 1, 1);
         properties.shape = {
@@ -95,8 +95,8 @@ system.spawnObject = function(objData, layerInstance) {
         object = game.add.rectangle(xPos, yPos, 64, 64, 1, 1);      
         properties.shape = {
           type: 'rectangle',          
-          width: 64 * (objData.scaleXPercentage / 100),
-          height: 64 * (objData.scaleYPercentage / 100),
+          width: 64 * (objData.scaleXPercent / 100),
+          height: 64 * (objData.scaleYPercent / 100),
           flagInternal: true
         };        
     }     
@@ -107,8 +107,8 @@ system.spawnObject = function(objData, layerInstance) {
     object = game.add.rectangle(xPos, yPos, 64, 64); 
     properties.shape = {
        type: 'rectangle',          
-       width: 64 * (objData.scaleXPercentage / 100),
-       height: 64 * (objData.scaleYPercentage / 100),
+       width: 64 * (objData.scaleXPercent / 100),
+       height: 64 * (objData.scaleYPercent / 100),
        flagInternal: true
     };        
   }
