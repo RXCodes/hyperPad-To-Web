@@ -39,6 +39,7 @@ system.setAnchorPoint = function(object, x, y) {
 
 // spawn an object
 system.spawnObject = function(objData, layerInstance) {
+  let layerData = layerInstance.data;
              
   // calculate position
   let xPos = objData.xPosition;
@@ -106,19 +107,6 @@ system.spawnObject = function(objData, layerInstance) {
   system.setBlendMode(object, objData.blendingMode); // blend mode
   system.setScale(object, objData.scaleXPercent, objData.scaleYPercent, true); // scale (last parameter enables percentage)
   
-  // add game object to matter.js as a rigid body for wall and physics  
-  let layerData = layerInstance.data;
-  if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
-    let rigidBody = Phaser.Physics.Matter.MatterGameObject(game.matter.world, object, properties, true);
-    object.setCollisionCategory(layerInstance.collisionCategory);
-    
-    // set physics properties
-    object.setFriction(objData.friction);
-    object.setBounce(objData.bounce);
-    object.setMass(objData.mass);
-    object.setStatic(objData.physicsMode == "Wall");  
-  }
-  
   // object properties
   let color = objData.color;
   if (color[3] === undefined) {
@@ -141,6 +129,18 @@ system.spawnObject = function(objData, layerInstance) {
 
   // add object to layer group
   layerInstance.instance.add([object]);
+  
+  // add game object to matter.js as a rigid body for wall and physics  
+  if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
+    let rigidBody = Phaser.Physics.Matter.MatterGameObject(game.matter.world, object, properties, true);
+    object.setCollisionCategory(layerInstance.collisionCategory);
+    
+    // set physics properties
+    object.setFriction(objData.friction);
+    object.setBounce(objData.bounce);
+    object.setMass(objData.mass);
+    object.setStatic(objData.physicsMode == "Wall");  
+  }
 
   // keep record of object 
   gameObjects[objData.id] = {
