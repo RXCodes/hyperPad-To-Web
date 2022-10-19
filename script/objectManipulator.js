@@ -200,7 +200,7 @@ system.setScale = function(object, x, y, usePercentage = false) {
     
     // circles take the length / width of the largest side
     if (object.data.shape == "Circle") {
-      let scaleFactor = Math.max(x / 100), (y / 100));
+      let scaleFactor = Math.max((x / 100), (y / 100));
       object.setScale(scaleFactor, scaleFactor);
     }
     
