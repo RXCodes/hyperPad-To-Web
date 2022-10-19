@@ -76,8 +76,8 @@ system.loadLevel = async function(index) {
       default: 'matter',
       matter: {
         gravity: { // use the project's gravity settings
-          y: -1 * projectBase.gravityY,
-          x: projectBase.gravityX,
+          y: -1 * projectBase.gravityY / projectBase.ptmRatio,
+          x: projectBase.gravityX / projectBase.ptmRatio,
           debug: true
         },
         enabled: true
