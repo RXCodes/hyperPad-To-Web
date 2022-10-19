@@ -92,8 +92,7 @@ system.spawnObject = function(objData, layerInstance) {
           width: 64,          
           height: 64
         };        
-    }    
-    object.shape = objData.shape; 
+    }     
   }
   
   // for unsupported object types, spawn an empty object instead
