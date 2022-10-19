@@ -135,6 +135,7 @@ system.spawnObject = function(objData, layerInstance) {
     // let rigidBody = Phaser.Physics.Matter.MatterGameObject(game.matter.world, object, properties, true);
     game.matter.add.gameObject(object);
     object.setCollisionCategory(layerInstance.collisionCategory);
+    object.setCollidesWith([layerInstance.collisionCategory]);
     
     // set physics properties
     object.setFriction(objData.friction);
