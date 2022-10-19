@@ -156,9 +156,6 @@ system.spawnObject = function(objData, layerInstance) {
     
     // reset rotation for physics objects
     system.setRotation(object, objData.rotation); // rotation
-    
-    // fix collision hitbox
-    // ...
   }
 
   // keep record of object 
