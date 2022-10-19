@@ -65,7 +65,7 @@ system.spawnObject = function(objData, layerInstance) {
     switch (objData.shape) {
     
       case "Circle":
-        let scaleFactor = Math.max((objData.scaleXPercentage / 100), (objData.scaleYPercentage / 100));
+        let scaleFactor = Math.max((objData.scaleXPercent / 100), (objData.scaleYPercent / 100));
         object = game.add.circle(xPos, yPos, objData.collisionArea[0][0], 1, 1);
         properties.shape = {
           type: 'circle',
