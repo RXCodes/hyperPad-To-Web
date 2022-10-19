@@ -141,7 +141,7 @@ system.spawnObject = function(objData, layerInstance) {
   // add game object to matter.js as a rigid body for wall and physics  
   if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
     // let rigidBody = Phaser.Physics.Matter.MatterGameObject(game.matter.world, object, properties, true);
-    game.matter.add.gameObject(object, properties);
+    object.setBody(properties);
     object.setCollisionCategory(layerInstance.collisionCategory);
     object.setCollidesWith([layerInstance.collisionCategory]);
     
