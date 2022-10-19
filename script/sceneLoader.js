@@ -127,6 +127,7 @@ system.loadLevel = async function(index) {
         sortedLayers.forEach(function(layerData) {
           console.log("loading layer: " + layerData);
           gameLayers[layerData.UUID].instance = game.add.layer(); // add layer
+          gameLayers[layerData.UUID].collisionCategory = game.matter.world.nextCategory();
           console.log(layerData);
           layerData.objects.forEach(function(objectID) {
             let objData = JSON.parse(JSON.stringify(gameObjects[objectID].data));
