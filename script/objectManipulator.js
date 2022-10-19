@@ -135,6 +135,9 @@ system.spawnObject = function(objData, layerInstance) {
     game.matter.add.gameObject(object);
     object.setCollisionCategory(layerInstance.collisionCategory);
     object.setCollidesWith([layerInstance.collisionCategory]);
+    setInterval(function() {
+      console.debug(object.x, object.y);
+    }, 100);
     
     // set physics properties
     object.setFriction(objData.friction);
