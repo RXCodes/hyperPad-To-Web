@@ -55,7 +55,8 @@ system.spawnObject = function(objData, layerInstance) {
     shape: { // collisions    
       type: 'rectangle',      
       width: 64,
-      height: 64          
+      height: 64,
+      flagInternal: true
     }
   };
   
@@ -67,7 +68,8 @@ system.spawnObject = function(objData, layerInstance) {
         object = game.add.circle(xPos, yPos, objData.collisionArea[0][0], 1, 1);
         properties.shape = {
           type: 'circle',
-          radius: objData.collisionArea[0][0]
+          radius: objData.collisionArea[0][0],
+          flagInternal: true
         };
         break;
         
@@ -90,7 +92,8 @@ system.spawnObject = function(objData, layerInstance) {
         properties.shape = {
           type: 'rectangle',          
           width: 64,          
-          height: 64
+          height: 64,
+          flagInternal: true
         };        
     }     
   }
@@ -98,6 +101,12 @@ system.spawnObject = function(objData, layerInstance) {
   // for unsupported object types, spawn an empty object instead
   if (object == null) {
     object = game.add.rectangle(xPos, yPos, 64, 64); 
+    properties.shape = {
+       type: 'rectangle',          
+       width: 64,          
+       height: 64,
+       flagInternal: true
+    };        
   }
   
   object.data = objData;
