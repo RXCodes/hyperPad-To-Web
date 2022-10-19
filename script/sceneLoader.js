@@ -76,11 +76,18 @@ system.loadLevel = async function(index) {
       default: 'matter',
       matter: {
         gravity: { // use the project's gravity settings
-          y: -1.3 * projectBase.gravityY / projectBase.ptmRatio,
-          x: 1.3 * projectBase.gravityX / projectBase.ptmRatio,
+          y: -1 * projectBase.gravityY / projectBase.ptmRatio,
+          x: 1 * projectBase.gravityX / projectBase.ptmRatio,
           debug: true
         },
-        enabled: true
+        enabled: true,
+        positionIterations: projectBase.physicsIterations,
+        velocityIterations: projectBase.physicsIterations,
+        constraintIterations: projectBase.physicsIterations
+      },
+      fps: {
+        target: projectBase.physicsRefreshRate,
+        panicMax: projectBase.physicsRefreshRate + 60
       }
     },
     scene: {
