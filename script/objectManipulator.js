@@ -59,7 +59,7 @@ system.spawnObject = function(objData, layerInstance) {
     
       case "Circle":
         let scaleFactor = Math.max((objData.scaleXPercent / 100), (objData.scaleYPercent / 100));
-        object = game.add.circle(xPos, yPos, objData.collisionArea[0][0], 1, 1);
+        object = game.add.circle(0, 0, objData.collisionArea[0][0], 1, 1);
         properties.shape = {
           type: 'circle',
           radius: objData.collisionArea[0][0] * scaleFactor,
@@ -85,7 +85,7 @@ system.spawnObject = function(objData, layerInstance) {
         break;
         
       default:   
-        object = game.add.rectangle(xPos, yPos, 64, 64, 1, 1);      
+        object = game.add.rectangle(0, 0, 64, 64, 1, 1);      
         properties.shape = {
           type: 'rectangle',          
           width: 64 * (objData.scaleXPercent / 100),
@@ -97,7 +97,7 @@ system.spawnObject = function(objData, layerInstance) {
   
   // for unsupported object types, spawn an empty object instead
   if (object == null) {
-    object = game.add.rectangle(xPos, yPos, 64, 64); 
+    object = game.add.rectangle(0, 0, 64, 64); 
     properties.shape = {
        type: 'rectangle',          
        width: 64 * (objData.scaleXPercent / 100),
