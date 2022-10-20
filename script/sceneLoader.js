@@ -147,7 +147,9 @@ system.loadLevel = async function(index) {
             let object = system.spawnObject(objData, gameLayers[layerData.UUID]);
             
             // debugging purposes
-            console.log(object);
+            if (object.data.shape == "Polygon") {
+              console.log(object);
+            }
 
           });
         });
