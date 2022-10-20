@@ -35,7 +35,6 @@ system.loadLevel = async function(index) {
   
   // load the level data
   let levelData = projectBase.levels[currentSceneIndex] || {};
-  console.log(levelData);
 
   // find most compatible aspect ratio
   let supportedAspectRatios = {
@@ -94,6 +93,7 @@ system.loadLevel = async function(index) {
       preload: function() {}, // preload event does nothing yet
       create: function() {
         game = this;
+        window.game = this;
         
         // get global layer
         levelData.layers.push(projectBase.globalLayer);
@@ -114,10 +114,8 @@ system.loadLevel = async function(index) {
         let sortedLayers = [];
         let sortLayersIndex = {};
         levelData.layers.forEach(function(layer) {
-          console.log(layer);
           sortLayersIndex[layer.zOrder * -1] = layer;
         });
-        console.log(sortLayersIndex);
         let sortedLayersIndex = Object.keys(sortLayersIndex).sort(function(a, b) {
           if (a === Infinity) 
             return 1; 
@@ -132,13 +130,10 @@ system.loadLevel = async function(index) {
         
         // load layers with objects
         sortedLayers.forEach(function(layerData) {
-          console.log("loading layer: " + layerData);
           gameLayers[layerData.UUID].instance = game.add.layer(); // add layer
           gameLayers[layerData.UUID].collisionCategory = game.matter.world.nextCategory();
-          console.log(layerData);
           layerData.objects.forEach(function(objectID) {
             let objData = JSON.parse(JSON.stringify(gameObjects[objectID].data));
-            console.log(JSON.stringify(objData));
 
             // hide layer if inactive
             gameLayers[layerData.UUID].instance.setActive(layerData.visible);
