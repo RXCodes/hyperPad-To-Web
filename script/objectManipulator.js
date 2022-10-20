@@ -161,7 +161,6 @@ system.spawnObject = function(objData, layerInstance) {
   system.setVisibility(object, objData.visible); // object visibility
   system.setFlipX(object, objData.flipX); // x flip
   system.setFlipY(object, objData.flipY); // y flip
-  
   return object;
 };
 
@@ -186,7 +185,7 @@ system.setZOrder = function(object, z) {
 }
 
 system.setRotation = function(object, angle) {
-  object.setAngle(angle - 90);
+  object.setAngle(angle + 90);
   object.data.rotation = angle;
 }
 
