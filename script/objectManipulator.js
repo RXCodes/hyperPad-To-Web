@@ -150,17 +150,15 @@ system.spawnObject = function(objData, layerInstance) {
     object.setStatic(objData.physicsMode == "Wall");  
     
     // polygons
-    if (object.data.shape == "Polygon") {
+    if (objData.shape == "Polygon") {
+      console.debug("Polygon!");
       system.setAnchorPoint(object, objData.anchorX, objData.anchorY); 
       system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
     }
   }
 
   // keep record of object 
-  gameObjects[objData.id] = {
-    data: objData,
-    instance: object
-  };
+  gameObjects[objData.id] = object;
  
   return object;
 };
