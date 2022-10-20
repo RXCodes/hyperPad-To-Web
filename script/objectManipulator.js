@@ -28,6 +28,8 @@ system.moveToPoint = function(object, x, y, useRelativePosition) {
   object.setPosition(xPos, yPos);
   object.data.xPosition = xPos;
   object.data.yPosition = yPos;
+  object.x = xPos;
+  object.y = yPos;
 }
 
 system.setAnchorPoint = function(object, x, y) {
