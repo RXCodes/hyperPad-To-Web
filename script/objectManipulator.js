@@ -139,7 +139,7 @@ system.spawnObject = function(objData, layerInstance) {
   
   // add game object to matter.js as a rigid body for wall and physics  
   if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
-    object = Phaser.Physics.Matter.MatterGameObject(game.matter.world, object, properties, true);
+    Phaser.Physics.Matter.MatterGameObject(game.matter.world, object, properties, true);
     object.setCollisionCategory(layerInstance.collisionCategory);
     object.setCollidesWith([layerInstance.collisionCategory]);
     
@@ -153,7 +153,7 @@ system.spawnObject = function(objData, layerInstance) {
     if (objData.shape == "Polygon") {
       console.debug("Polygon!");
       system.setAnchorPoint(object, objData.anchorX, objData.anchorY); 
-      system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
+      system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition);
     }
   }
 
