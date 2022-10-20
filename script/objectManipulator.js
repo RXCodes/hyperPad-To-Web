@@ -7,10 +7,10 @@ var system = {};
 system.moveBy = function(object, x, y, useRelativePosition) { 
   if (useRelativePosition) {
     x *= window.screenWidth / 100;
-    y *= window.screenHeight / 100;
+    y *= window.screenHeight / -100;
   }
   let xPos = object.x + x;
-  let yPos = object.y + y;
+  let yPos = object.y - y;
   object.x = xPos;
   object.y = yPos;
   object.data.xPosition = xPos;
@@ -20,10 +20,10 @@ system.moveBy = function(object, x, y, useRelativePosition) {
 // move an object to a point
 system.moveToPoint = function(object, x, y, useRelativePosition) { 
   let xPos = x;
-  let yPos = y;
+  let yPos = window.screenHeight - y;
   if (useRelativePosition) {
     xPos = window.screenWidth * (x / 100);
-    yPos = window.screenHeight * (y / 100);      
+    yPos = window.screenHeight - (window.screenHeight * (y / 100));
   }
   object.setPosition(xPos, yPos);
   object.data.xPosition = xPos;
