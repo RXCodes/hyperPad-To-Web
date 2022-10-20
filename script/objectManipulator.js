@@ -41,15 +41,7 @@ system.setAnchorPoint = function(object, x, y) {
 // spawn an object
 system.spawnObject = function(objData, layerInstance) {
   let layerData = layerInstance.data;
-             
-  // calculate position
-  let xPos = objData.xPosition;
-  let yPos = window.screenHeight - objData.yPosition;
-  if (objData.relativePosition) {
-    xPos = window.screenWidth * (objData.xPosition / 100);
-    yPos = window.screenHeight - (window.screenHeight * (objData.yPosition / 100));      
-  }
-  
+            
   let object = null;
   let properties = { // physical properties
     label: objData.id, // object id     
@@ -115,6 +107,25 @@ system.spawnObject = function(objData, layerInstance) {
   }
   
   object.data = objData;
+  system.setAnchorPoint(object, objData.anchorX, objData.anchorY); 
+  system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
+  system.setBlendMode(object, objData.blendingMode); // blend mode
+  system.setScale(object, objData.scaleXPercent, objData.scaleYPercent, true); // scale (last parameter enables percentage)
+
+  // object properties
+  let color = objData.color;
+  if (color[3] === undefined) {
+    color[3] = 1; 
+  }
+  for (let i = 0; i < 4; i++) {
+    color[i] = Math.round(color[i] * 255);
+  }  
+  system.setColor(object, color[0], color[1], color[2], color[3]); // color
+  system.setRotation(object, objData.rotation); // rotation
+  system.setZOrder(object, objData.zOrder); // z order
+  system.setVisibility(object, objData.visible); // object visibility
+  system.setFlipX(object, objData.flipX); // x flip
+  system.setFlipY(object, objData.flipY); // y flip
   
   // fix object to screen for UI layers
   if (layerData.UI) {
@@ -142,26 +153,7 @@ system.spawnObject = function(objData, layerInstance) {
     data: objData,
     instance: object
   };
-  
-  system.setAnchorPoint(object, objData.anchorX, objData.anchorY); 
-  system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
-  system.setBlendMode(object, objData.blendingMode); // blend mode
-  system.setScale(object, objData.scaleXPercent, objData.scaleYPercent, true); // scale (last parameter enables percentage)
-
-  // object properties
-  let color = objData.color;
-  if (color[3] === undefined) {
-    color[3] = 1; 
-  }
-  for (let i = 0; i < 4; i++) {
-    color[i] = Math.round(color[i] * 255);
-  }  
-  system.setColor(object, color[0], color[1], color[2], color[3]); // color
-  system.setRotation(object, objData.rotation); // rotation
-  system.setZOrder(object, objData.zOrder); // z order
-  system.setVisibility(object, objData.visible); // object visibility
-  system.setFlipX(object, objData.flipX); // x flip
-  system.setFlipY(object, objData.flipY); // y flip
+ 
   return object;
 };
 
