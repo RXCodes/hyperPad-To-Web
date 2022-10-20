@@ -80,7 +80,7 @@ system.spawnObject = function(objData, layerInstance) {
         });
         object = game.add.polygon(0, 0, poly, 1, 1);
         properties.shape = {
-          type: 'fromVertices',
+          type: 'fromVerts',
           verts: polyTransformed,
           flagInternal: true
         };
