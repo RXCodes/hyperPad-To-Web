@@ -19,10 +19,10 @@ system.moveBy = function(object, x, y, useRelativePosition) {
 // move an object to a point
 system.moveToPoint = function(object, x, y, useRelativePosition) { 
   let xPos = x;
-  let yPos = window.screenHeight - y;
+  let yPos = y;
   if (useRelativePosition) {
     xPos = window.screenWidth * (x / 100);
-    yPos = window.screenHeight - (window.screenHeight * (y / 100));      
+    yPos = window.screenHeight * (y / 100);      
   }
   object.setPosition(xPos, yPos);
   object.data.xPosition = xPos;
@@ -114,25 +114,6 @@ system.spawnObject = function(objData, layerInstance) {
   }
   
   object.data = objData;
-  system.setAnchorPoint(object, objData.anchorX, objData.anchorY); 
-  system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
-  system.setBlendMode(object, objData.blendingMode); // blend mode
-  system.setScale(object, objData.scaleXPercent, objData.scaleYPercent, true); // scale (last parameter enables percentage)
-
-  // object properties
-  let color = objData.color;
-  if (color[3] === undefined) {
-    color[3] = 1; 
-  }
-  for (let i = 0; i < 4; i++) {
-    color[i] = Math.round(color[i] * 255);
-  }  
-  system.setColor(object, color[0], color[1], color[2], color[3]); // color
-  system.setRotation(object, objData.rotation); // rotation
-  system.setZOrder(object, objData.zOrder); // z order
-  system.setVisibility(object, objData.visible); // object visibility
-  system.setFlipX(object, objData.flipX); // x flip
-  system.setFlipY(object, objData.flipY); // y flip
   
   // fix object to screen for UI layers
   if (layerData.UI) {
@@ -153,11 +134,6 @@ system.spawnObject = function(objData, layerInstance) {
     object.setBounce(objData.bounce);
     object.setMass(objData.mass);
     object.setStatic(objData.physicsMode == "Wall");  
-    
-    // reset attributes for physics objects
-    system.setRotation(object, objData.rotation); // rotation
-    system.setAnchorPoint(object, objData.anchorX, objData.anchorY); // anchor
-    system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
   }
 
   // keep record of object 
@@ -165,6 +141,26 @@ system.spawnObject = function(objData, layerInstance) {
     data: objData,
     instance: object
   };
+  
+  system.setAnchorPoint(object, objData.anchorX, objData.anchorY); 
+  system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
+  system.setBlendMode(object, objData.blendingMode); // blend mode
+  system.setScale(object, objData.scaleXPercent, objData.scaleYPercent, true); // scale (last parameter enables percentage)
+
+  // object properties
+  let color = objData.color;
+  if (color[3] === undefined) {
+    color[3] = 1; 
+  }
+  for (let i = 0; i < 4; i++) {
+    color[i] = Math.round(color[i] * 255);
+  }  
+  system.setColor(object, color[0], color[1], color[2], color[3]); // color
+  system.setRotation(object, objData.rotation); // rotation
+  system.setZOrder(object, objData.zOrder); // z order
+  system.setVisibility(object, objData.visible); // object visibility
+  system.setFlipX(object, objData.flipX); // x flip
+  system.setFlipY(object, objData.flipY); // y flip
   
   return object;
 };
@@ -190,7 +186,7 @@ system.setZOrder = function(object, z) {
 }
 
 system.setRotation = function(object, angle) {
-  object.setAngle(angle);
+  object.setAngle(angle - 90);
   object.data.rotation = angle;
 }
 
