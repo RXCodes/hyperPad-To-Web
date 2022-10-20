@@ -2,6 +2,7 @@
 
 // the system variable, responsible for holding global functions
 var system = {};
+window.system = system;
 
 // move an object from its current position
 system.moveBy = function(object, x, y, useRelativePosition) { 
