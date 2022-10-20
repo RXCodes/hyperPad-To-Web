@@ -146,6 +146,12 @@ system.spawnObject = function(objData, layerInstance) {
     object.setBounce(objData.bounce);
     object.setMass(objData.mass);
     object.setStatic(objData.physicsMode == "Wall");  
+    
+    // polygons
+    if (object.data.shape == "Polygon") {
+      system.setAnchorPoint(object, objData.anchorX, objData.anchorY); 
+      system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
+    }
   }
 
   // keep record of object 
