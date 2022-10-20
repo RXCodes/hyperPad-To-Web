@@ -154,6 +154,8 @@ system.spawnObject = function(objData, layerInstance) {
       console.debug("Polygon!");
       system.setAnchorPoint(object, objData.anchorX, objData.anchorY); 
       system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition);
+      object.x = objData.xPosition;
+      object.y = objData.yPosition;
     }
   }
 
