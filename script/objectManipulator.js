@@ -154,8 +154,10 @@ system.spawnObject = function(objData, layerInstance) {
     object.setMass(objData.mass);
     object.setStatic(objData.physicsMode == "Wall");  
     
-    // reset rotation for physics objects
+    // reset attributes for physics objects
     system.setRotation(object, objData.rotation); // rotation
+    system.setAnchorPoint(object, objData.anchorX, objData.anchorY); // anchor
+    system.moveToPoint(object, objData.xPosition, objData.yPosition, objData.relativePosition); // move the object to its position
   }
 
   // keep record of object 
