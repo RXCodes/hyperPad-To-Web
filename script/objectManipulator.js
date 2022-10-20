@@ -71,12 +71,10 @@ system.spawnObject = function(objData, layerInstance) {
         
       case "Polygon":
         let poly = [];
-        let polyTransformed = "";
         objData.polygonCollisions.forEach(function(pos) {
           poly.push(pos[0]);
           poly.push((pos[1] * -1));
         });
-        polyTransformed = polyTransformed.substring(0, polyTransformed.length - 1);
         object = game.add.polygon(0, 0, poly, 1, 1);
         properties.shape = {
           type: 'fromVerts',
