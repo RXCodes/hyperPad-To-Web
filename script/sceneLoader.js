@@ -2,6 +2,7 @@
 
 // initialize object dictionary and initial scene data
 var gameObjects = {}; // in-game representation of the object (color, scale, attributes, tags, etc.) {key: objectID, value: objectData}
+window.gameObjects = gameObjects;
 var currentSceneIndex = 0; // current scene that the player is in - by default, the player will load into the first scene
 var gameAudio = {}; // the audio being played {key: audioID, value: audioInterface}
 var gameLayers = {}; // the current layers being displayed {key: layerID, value: layerData}
