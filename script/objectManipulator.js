@@ -71,12 +71,12 @@ system.spawnObject = function(objData, layerInstance) {
         
       case "Polygon":
         let poly = [];
-        let polyTransformed = [];
+        let polyTransformed = "";
         objData.polygonCollisions.forEach(function(pos) {
           poly.push(pos[0]);
           poly.push((pos[1] * -1));
-          polyTransformed.push(pos[0] * (objData.scaleXPercent / 100));
-          polyTransformed.push((pos[1] * -1) * (objData.scaleYPercent / 100));
+          polyTransformed += (pos[0] * (objData.scaleXPercent / 100)) + " ";
+          polyTransformed += ((pos[1] * -1) * (objData.scaleYPercent / 100)) + " ";
         });
         object = game.add.polygon(0, 0, poly, 1, 1);
         properties.shape = {
