@@ -78,6 +78,7 @@ system.spawnObject = function(objData, layerInstance) {
           polyTransformed += (pos[0] * (objData.scaleXPercent / 100)) + " ";
           polyTransformed += ((pos[1] * -1) * (objData.scaleYPercent / 100)) + " ";
         });
+        polyTransformed = polyTransformed.substring(0, polyTransformed.length - 1);
         object = game.add.polygon(0, 0, poly, 1, 1);
         properties.shape = {
           type: 'fromVerts',
