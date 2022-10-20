@@ -11,7 +11,8 @@ system.moveBy = function(object, x, y, useRelativePosition) {
   }
   let xPos = object.x + x;
   let yPos = object.y + y;
-  object.setPosition(xPos, yPos);
+  object.x = xPos;
+  object.y = yPos;
   object.data.xPosition = xPos;
   object.data.yPosition = yPos;
 }
@@ -24,7 +25,8 @@ system.moveToPoint = function(object, x, y, useRelativePosition) {
     xPos = window.screenWidth * (x / 100);
     yPos = window.screenHeight * (y / 100);      
   }
-  object.setPosition(xPos, yPos);
+  object.x = xPos;
+  object.y = yPos;
   object.data.xPosition = xPos;
   object.data.yPosition = yPos;
 }
