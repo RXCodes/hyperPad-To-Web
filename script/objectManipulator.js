@@ -25,8 +25,7 @@ system.moveToPoint = function(object, x, y, useRelativePosition) {
     xPos = window.screenWidth * (x / 100);
     yPos = window.screenHeight * (y / 100);      
   }
-  object.x = xPos;
-  object.y = yPos;
+  object.setPosition(xPos, yPos);
   object.data.xPosition = xPos;
   object.data.yPosition = yPos;
 }
@@ -127,7 +126,7 @@ system.spawnObject = function(objData, layerInstance) {
   
   // add game object to matter.js as a rigid body for wall and physics  
   if (objData.physicsMode == "Wall" || objData.physicsMode == "Physics") {
-    Phaser.Physics.Matter.MatterGameObject(game.matter.world, object, properties, true);
+    object = Phaser.Physics.Matter.MatterGameObject(game.matter.world, object, properties, true);
     object.setCollisionCategory(layerInstance.collisionCategory);
     object.setCollidesWith([layerInstance.collisionCategory]);
     
