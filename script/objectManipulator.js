@@ -70,8 +70,8 @@ system.spawnObject = function(objData, layerInstance) {
       case "Polygon":
         let poly = [];
         let polyTransformed = [];
-        let collisionOffsetX = (object.data.collisionCenterX - 32);
-        let collisionOffsetY = (object.data.collisionCenterY - 32);
+        let collisionOffsetX = (objData.collisionCenterX - 32);
+        let collisionOffsetY = (objData.collisionCenterY - 32);
         objData.polygonCollisions.forEach(function(pos) {
           poly.push(pos[0] + collisionOffsetX);
           poly.push((pos[1] * -1) + collisionOffsetY);
