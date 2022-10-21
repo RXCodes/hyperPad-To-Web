@@ -75,13 +75,11 @@ system.spawnObject = function(objData, layerInstance) {
         objData.polygonCollisions.forEach(function(pos) {
           poly.push(pos[0]);
           poly.push((pos[1] * -1));
-          polyTransformed.push(pos[0] * objData.scaleXPercent);
-          polyTransformed.push((pos[1] * -1) * objData.data.scaleYPercentage);
         });
         object = game.add.polygon(0, 0, poly, 1, 1);
         properties.shape = {
           type: 'fromVerts',
-          verts: polyTransformed.join(" "),
+          verts: poly.join(" "),
           flagInternal: true
         };
         break;
