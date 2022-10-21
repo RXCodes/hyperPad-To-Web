@@ -33,9 +33,7 @@ system.moveToPoint = function(object, x, y, useRelativePosition) {
 }
 
 system.setAnchorPoint = function(object, x, y) {
-  let collisionOffsetX = (object.data.collisionCenterX - 32) / 64;
-  let collisionOffsetY = (object.data.collisionCenterY - 32) / 64;
-  object.setOrigin((x / 100) - collisionOffsetX, (y / 100) + collisionOffsetY);
+  object.setOrigin((x / 100), (y / 100));
   object.data.xAnchor = x;
   object.data.yAnchor = y;
 }
@@ -72,9 +70,11 @@ system.spawnObject = function(objData, layerInstance) {
       case "Polygon":
         let poly = [];
         let polyTransformed = [];
+        let collisionOffsetX = (object.data.collisionCenterX - 32);
+        let collisionOffsetY = (object.data.collisionCenterY - 32);
         objData.polygonCollisions.forEach(function(pos) {
-          poly.push(pos[0]);
-          poly.push((pos[1] * -1));
+          poly.push(pos[0] + collisionOffsetX);
+          poly.push((pos[1] * -1) + collisionOffsetY);
         });
         object = game.add.polygon(0, 0, poly, 1, 1);
         properties.shape = {
